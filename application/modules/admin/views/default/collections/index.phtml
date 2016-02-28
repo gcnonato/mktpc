@@ -1,0 +1,146 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/collection.png">
+		<?php echo $this->translate('Collection');?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	
+	<div class="clear"></div>
+</div>
+
+
+<p class="info">
+	<?php echo $this->translate('Collection Manager');?>.<br>
+	<strong><?php echo $this->translate('Note: If you delete an entry, information will be lost.');?></strong>
+</p>
+
+
+<table cellspacing="0" cellpadding="0" class="display dragable_table" id="sort_order">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th width="20" class="left">#</th>
+			<th class="left"><?php echo $this->translate('Name');?></th>
+			<th class="left"><?php echo $this->translate('User');?></th>
+			<th class="left"><?php echo $this->translate('Items');?></th>
+			<th width="20"><?php echo $this->translate('Public view');?></th>
+			<th width="20"><?php echo $this->translate('View');?></th>
+			<th width="20"><?php echo $this->translate('Delete');?></th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->collections) { ?>
+	<?php foreach($this->collections AS $collection) { ?>
+		<tr id="<?php echo $collection['id'];?>">
+			<td><?php echo $collection['id'];?>.</td>
+			<td><?php echo $collection['name'];?></td>
+			<td><?php echo $collection['username'];?></td>
+			<td><?php echo $collection['items'];?></td>
+
+			<td align="center">
+				<img src="cms/<?php echo $module;?>/images/<?php echo ($collection['public'] == 'true' ? 'yes.png' : 'no.png');?>" class="tooltip"  alt="" title="<?php echo ($collection['public'] == 'true' ? $this->translate('Yes') : $this->translate('No'));?>" />
+			</td>
+			<td align="center">
+				<a href="<?php echo $collection['href'];?>" target="_blank"><img title="<?php echo $this->translate('View');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/view.png"></a>
+			</td>
+			<td align="center">
+				<a id="item_<?php echo $collection['id'];?>" class="delete" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a>
+			</td>
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="7">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+<?php if($this->pagination) { ?>
+<br />
+<div class="fleft">
+<?php echo $this->translate('Page');?> <b><?php echo $this->page_num;?></b> <?php echo $this->translate('from');?> <b><?php echo $this->total_pages;?></b> (<b><?php echo $this->total_rows;?></b> <?php echo $this->translate('records');?>)
+</div>
+<div class="pagination fright">
+	<?php echo $this->pagination;?>
+</div>
+<div class="clear"></div>
+<?php } ?>
+
+<script type="text/javascript"> 
+// <![CDATA[
+
+
+
+changeStatus = function(id) {
+	$.ajax({
+        type: 'post',
+        url: "<?php echo $module;?>/collections/changeStatus",
+        data: 'id=' + id,
+        beforeSend: function () {
+			$('#'+id).animate({
+                'backgroundColor': '#FFBFBF'
+            }, 400);
+        },
+        success: function () {
+        	$.get(window.location.href, function(data){
+        		$('#'+id).html($(data).find('#'+id).html());
+        		setTimeout(function(){
+        			$("#"+id+"").animate({'backgroundColor': 'transparent'}, 400).find('.tooltip').simpletooltip();
+        			deleteInit();
+        		}, 500);
+        	});
+        }
+	});
+};
+
+$(document).ready(function(){
+	deleteInit();
+});
+
+function deleteInit() {
+	$('a.delete').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/collections/delete",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+}
+// ]]>
+</script>

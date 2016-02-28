@@ -1,0 +1,260 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/extensions.png">
+		<?php echo $this->translate('Simple Single Sign-On');?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<div class="clear"></div>
+</div>
+
+
+
+<p class="info">
+	<?php echo $this->translate('Simple Single Sign-On Manager');?>.<br>
+</p>
+
+<form name="admin_form" id="admin_form" method="post" action="">
+
+	<input name="singlesignon[singlesignon_position]" value="top" type="hidden">
+	<input name="singlesignon[singlesignon_sort_order]" value="0" type="hidden">
+
+	<table cellspacing="0" cellpadding="0" class="formtable">
+		<tr>
+			<td width="150"><?php echo $this->translate('Status');?>: </td>
+			<td>
+				<select class="inputbox"  name="singlesignon[singlesignon_status]">
+					<?php if($this->singlesignon_status) { ?>
+					<option selected="selected" value="1"><?php echo $this->translate('Enabled');?></option>
+					<option value="0"><?php echo $this->translate('Disabled');?></option>
+					<?php } else { ?>
+					<option value="1"><?php echo $this->translate('Enabled');?></option>
+					<option selected="selected" value="0"><?php echo $this->translate('Disabled');?></option>
+					<?php } ?>
+				</select>
+        	</td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('Enable Single Sign-On');?>: </td>
+			<td>
+				<select class="inputbox"  name="singlesignon[singlesignon_enable_login]">
+					<?php if($this->singlesignon_enable_login) { ?>
+					<option selected="selected" value="1"><?php echo $this->translate('Yes');?></option>
+					<option value="0"><?php echo $this->translate('No');?></option>
+					<?php } else { ?>
+					<option value="1"><?php echo $this->translate('Yes');?></option>
+					<option selected="selected" value="0"><?php echo $this->translate('No');?></option>
+					<?php } ?>
+				</select>
+        	</td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('Enable Drop Down Menu');?>: </td>
+			<td>
+				<select class="inputbox"  name="singlesignon[singlesignon_enable_dropdown]">
+					<?php if($this->singlesignon_enable_dropdown) { ?>
+					<option selected="selected" value="1"><?php echo $this->translate('Yes');?></option>
+					<option value="0"><?php echo $this->translate('No');?></option>
+					<?php } else { ?>
+					<option value="1"><?php echo $this->translate('Yes');?></option>
+					<option selected="selected" value="0"><?php echo $this->translate('No');?></option>
+					<?php } ?>
+				</select>
+        	</td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('Global database');?>: </td>
+			<td>
+				<input name="singlesignon[singlesignon_db_users]" value="<?php echo $this->singlesignon_db_users;?>" type="text">
+        		&nbsp;&nbsp; <img title="<?php echo $this->translate('Global database for getting information for consumers');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+        	</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<p class="msgInfo">
+					<span>
+						<?php echo $this->translate('Information!');?>
+					</span>
+					<?php echo sprintf($this->translate('To use this module, you must specify the full rights user rights "%s" database to Global database'), $this->dbuser);?>.<br>
+				</p>
+			</td>
+		</tr>
+	</table>
+
+	<br />
+
+	<table cellspacing="0" cellpadding="0" class="display dragable_table">
+		<thead>
+			<tr class="nodrop nodrag">
+				<th class="left"><?php echo $this->translate('Domain url');?></th>
+				<th class="left"><?php echo $this->translate('Name');?></th>
+				<th class="left"><?php echo $this->translate('Upload Dir');?></th>
+				<th width="200" class="left"><?php echo $this->translate('Site logo');?></th>
+				<th width="50"><?php echo $this->translate('Delete');?></th>
+			</tr>
+		</thead>
+		<tbody id="single_sign_on_holder">
+		<?php if($this->single_sign_on) { ?>
+		<?php foreach($this->single_sign_on AS $row => $sign) { ?>
+			<tr id="row_help_<?php echo $row;?>">
+				<td>
+					<input style="width: 98%" class="inputbox" type="text" value="<?php echo $sign['url'];?>" name="single_sign_on[<?php echo $row;?>][url]" />
+					<input class="sort_order_hidden" name="single_sign_on[<?php echo $row;?>][sort_order]" value="<?php echo $sign['sort_order'];?>" type="hidden">
+				</td>
+				<td>
+					<input style="width: 98%" class="inputbox" type="text" value="<?php echo $sign['name'];?>" name="single_sign_on[<?php echo $row;?>][name]" />
+				</td>
+				<td <?php if(!is_writable($sign['home_dir']) and $sign['home_dir']): ?>style="background: #F2162C;"<?php endif; ?>>
+					<input style="width: 98%" class="inputbox" type="text" value="<?php echo $sign['home_dir'];?>" name="single_sign_on[<?php echo $row;?>][home_dir]" />
+				</td>
+				<td>
+					<input type="hidden" name="single_sign_on[<?php echo $row;?>][site_logo]" value="<?php echo $sign['site_logo'];?>" id="site_logo<?php echo $row;?>" />
+					<img id="preview_logo<?php echo $row;?>" src="<?php echo ($sign['preview'] ? $sign['preview'] : $this->preview);?>" />
+					<br />
+					<a style="cursor: pointer;" onclick="image_upload('site_logo<?php echo $row;?>', 'preview_logo<?php echo $row;?>');"><?php echo $this->translate('Browse Files'); ?></a>
+					&nbsp;&nbsp;|&nbsp;&nbsp;
+					<a style="cursor: pointer;" onclick="$('#preview_logo<?php echo $row;?>').attr('src', '<?php echo $this->preview; ?>'); $('#site_logo<?php echo $row;?>').attr('value', '');"><?php echo $this->translate('Clear Image'); ?></a>
+				</td>
+				<td align="center">
+					<a class="delete" href="javascript:void(0);" onclick="deleteRowSingleSignOn('#row_help_<?php echo $row;?>');">
+						<img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png">
+					</a>
+				</td>
+			</tr>
+		<?php } ?>
+		<?php } ?>
+		</tbody>
+		<tfoot>
+			<tr class="nodrop nodrag">
+				<td colspan="4" align="center">
+					<a class="button" onclick="addRowSingleSignOn();"><?php echo $this->translate('Add new');?></a>
+				</td>
+			</tr>
+			<tr class="nodrop nodrag">
+				<td colspan="4" align="center">
+					<div class="fright mtop3">
+						<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+						<a class="button" href="<?php echo $module;?>/extensions/"><?php echo $this->translate('Cancel');?></a>
+					</div>
+					<div class="clear"></div>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</form>
+
+
+
+<script type="text/javascript"> 
+// <![CDATA[
+var nums = <?php echo count($this->single_sign_on);?>;
+function addRowSingleSignOn() {
+	nums++;
+	var html = $('#templateSingleSignOn').html();
+	html = html.replace(/\{nums\}/g, nums);
+	$('#single_sign_on_holder').append(html);
+	initDrag();
+}
+// ]]>
+</script>
+<script type="text/javascript"> 
+// <![CDATA[
+function deleteRowSingleSignOn(el) {
+	$(el).remove();
+}
+// ]]>
+</script>
+<script type="text/javascript"> 
+// <![CDATA[
+
+function initDrag() {
+	$('.dragable_table').tableDnD({
+	    onDrop: function(table, row) {
+	        $('.dragable_table tbody tr').each(function(i){
+				$('input.sort_order_hidden', this).val(i);
+		    });
+	    }
+	});
+}
+
+$(document).ready(function(){
+	initDrag();
+});
+// ]]>
+</script>
+<script type="text/javascript"><!--
+function image_upload(field, preview) {
+	$('#dialog').remove();
+	
+	$('#content').prepend('<div id="dialog" style="padding: 3px 0px 0px 0px;"><iframe src="<?php echo $module;?>/filemanager?field=' + encodeURIComponent(field) + '" style="padding:0; margin: 0; display: block; width: 100%; height: 100%;" frameborder="no" scrolling="auto"></iframe></div>');
+	
+	$('#dialog').dialog({
+		title: '<?php echo $this->translate('File Manager');?>',
+		close: function (event, ui) {
+			if ($('#' + field).attr('value')) {
+				$.ajax({
+					url: '<?php echo $module;?>/filemanager/image',
+					type: 'POST',
+					data: 'image=' + encodeURIComponent($('#' + field).val()),
+					dataType: 'text',
+					success: function(data) {
+						$('#' + preview).attr('src',data);
+					}
+				});
+			}
+		},	
+		bgiframe: false,
+		width: 800,
+		height: 400,
+		resizable: false,
+		modal: false
+	});
+};
+//--></script>
+<script type="text/html" id="templateSingleSignOn">
+<tr id="row_help_{nums}">
+	<td>
+		<input style="width: 98%" class="inputbox" type="text" value="" name="single_sign_on[{nums}][url]" />
+		<input class="sort_order_hidden" name="single_sign_on[{nums}][sort_order]" value="{nums}" type="hidden">
+	</td>
+	<td>
+		<input style="width: 98%" class="inputbox" type="text" value="" name="single_sign_on[{nums}][name]" />
+	</td>
+	<td>
+		<input style="width: 98%" class="inputbox" type="text" value="" name="single_sign_on[{nums}][home_dir]" />
+	</td>
+	<td>
+		<input type="hidden" name="single_sign_on[{nums}][site_logo]" value="" id="site_logo{nums}" />
+		<img id="preview_logo{nums}" src="<?php echo $this->preview; ?>" />
+		<br />
+		<a style="cursor: pointer;" onclick="image_upload('site_logo{nums}', 'preview_logo{nums}');"><?php echo $this->translate('Browse Files'); ?></a>
+		&nbsp;&nbsp;|&nbsp;&nbsp;
+		<a style="cursor: pointer;" onclick="$('#preview_logo{nums}').attr('src', '<?php echo $this->preview; ?>'); $('#site_logo{nums}').attr('value', '');"><?php echo $this->translate('Clear Image'); ?></a>
+	</td>
+	<td align="center">
+		<a class="delete" href="javascript:void(0);" onclick="deleteRowSingleSignOn('#row_help_{nums}');">
+			<img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png">
+		</a>
+	</td>
+</tr>
+</script> 

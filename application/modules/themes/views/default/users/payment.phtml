@@ -1,0 +1,70 @@
+<?php echo $this->header_part; ?>
+<div id="content">
+	<div class="breadcrumb">
+		<p><?php
+			$output = array();
+			foreach($this->crumbs as $crumb) {
+				if(isset($crumb['href']))
+					$output[] = '<a href="'. $crumb['href'] .'">'. $crumb['name'] .'</a>';
+				else
+					$output[] = $crumb['name'];
+			}
+			
+			echo implode(' &nbsp;&rsaquo;&nbsp; ', $output);
+		?></p>
+	</div>
+	<?php echo $this->author_header; ?>
+	<div id="main" class="withhead">
+		<h3 class="title-5"><?php echo $this->title; ?></h3>
+		<?php if($this->msg_success) { ?>
+		<p class="msg box-success"><?php echo $this->msg_success; ?></p>
+		<?php } ?>
+		<?php if($this->msg_error) {?>
+		<p class="msg box-error"><?php echo $this->msg_error;?></p>
+		<?php } ?>
+		<div class="deposit">
+			<ul>
+				<?php if($this->payment) { ?>
+				<li id="pay_via">
+					<p class="num">2</p>
+					<div class="cell">
+						<h3 class="title-1"><?php echo $this->translate('Pay via');?> <?php echo $this->payment['name']; ?></h3>
+						<p class="desc"><?php echo $this->translate('You will be transferred to a secure');?> <?php echo $this->payment['key']; ?> <?php echo $this->translate('page');?>.<br /><?php echo $this->translate('After payment your cash will display in the top panel'); ?>.</p>
+						<div class="pay">
+							<p class="logo"><img src="<?php echo $this->payment['logo']; ?>" alt="<?php echo $this->payment['name']; ?>" /></p>
+							<p class="button"><?php echo $this->payment['form']; ?></p>
+							<div class="clear"></div>
+						</div>
+					</div>
+					
+				</li>
+				<?php } ?>
+			</ul>
+		</div>
+	</div>	
+	<div id="sidebar" class="withsteps">
+		<div class="steps">
+			<ul>
+				<li><span class="num">3</span><span class="txt"><?php echo $this->translate('Back to Site'); ?></span></li>
+				<li><span class="num">2</span><span class="txt"><?php echo $this->translate('Make Payment'); ?></span></li>
+				<li><span class="num">1</span><span class="txt"><?php echo $this->translate('Select Amount'); ?></span></li>
+			</ul>
+			<div class="clear"></div>
+		</div>
+		<div class="balance">
+			<h3><?php echo $this->translate('Current balance'); ?></h3>
+			<p class="total"><?php echo $this->total; ?></p>
+		</div>
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<div class="text">
+						<p class="ntp"><?php echo $this->translate('This is current balance of earnings. What you can withdraw'); ?>!</p>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<?php echo $this->footer_part; ?>

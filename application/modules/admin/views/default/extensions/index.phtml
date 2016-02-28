@@ -1,0 +1,80 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/extensions.png">
+		<?php echo $this->translate('Extensions');?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	
+	<div class="clear"></div>
+</div>
+
+
+
+<p class="info">
+	<?php echo $this->translate('Extensions Manager');?>.<br>
+</p>
+
+<table cellspacing="0" cellpadding="0" class="display">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th class="left"><?php echo $this->translate('Extension');?></th>
+			<th class="left"><?php echo $this->translate('Status');?></th>
+			<th class="left"><?php echo $this->translate('Sort');?></th>
+			<th width="100"><?php echo $this->translate('Action');?></th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->extensions) { ?>
+	<?php foreach($this->extensions AS $extension) { ?>
+		<tr>
+			<td><?php echo $extension['name'];?></td>
+			<td><?php echo $extension['status'];?></td>
+			<td><?php echo $extension['sort'];?></td>
+            
+			<td align="center">
+				<?php if(!$extension['installed']) { ?>
+				<a href="<?php echo $extension['install'];?>">
+					<img title="<?php echo $this->translate('Install');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/install.png">
+				</a>
+				<?php } else { ?>
+				<a href="<?php echo $extension['uninstall'];?>">
+					<img title="<?php echo $this->translate('Uninstall');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/uninstall.gif">
+				</a>
+				<a href="<?php echo $extension['edit'];?>">
+					<img title="<?php echo $this->translate('Edit');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/edit.png">
+				</a>
+				<?php } ?>
+			</td>
+			
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="4">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>

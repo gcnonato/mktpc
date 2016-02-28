@@ -1,0 +1,82 @@
+<div id="sidebar" class="withhead" style="margin-top:20px">
+	<div class="box">
+		<div class="pad">
+			<div class="content">
+				<h3 class="title"><?php echo $this->add_link_head; ?></h3>
+				<div class="license">
+					<?php if($this->rules_link) { ?>
+					<p class="mgnb20px"><?php echo $this->translate('Read this first!'); ?> <a href="<?php echo $this->rules_link; ?>"><?php echo $this->translate('Forum rules'); ?></a></p>
+					<?php } ?>
+					<p class="buynow">
+						<a class="button-blue" href="<?php echo $this->post_link; ?>"><?php echo $this->add_link_head; ?></a>
+					</p>
+				</div>
+			</div>	
+		</div>
+	</div>
+	<div class="box">
+		<div class="pad">
+			<div class="content">
+				<h3 class="title"><?php echo $this->translate('Search'); ?></h3>
+				<p class="license">
+					<form id="serach_c" method="get" action="<?php echo $this->srch_link; ?>" class="search">
+						<p><input type="text" name="keyword_comment" value="<?php echo $this->translate('Keyword'); ?>" /></p>
+						<p class="submit"><input type="submit" value="<?php echo $this->translate('Search'); ?>"></p>
+					</form>
+				</p>
+			</div>	
+		</div>
+	</div>
+	<div class="box">
+		<div class="pad">
+			<div class="content">
+				<h3 class="title"><?php echo $this->translate('Active threads'); ?></h3>
+				<div class="license">
+					<?php if($this->threads) { ?>
+					<p>
+						<ul class="last_threads">
+						<?php foreach($this->threads as $thread) { ?>
+						<li>
+							<p><a href="<?php echo $thread['href']; ?>"><?php echo $thread['name']; ?></a><br /><?php echo $thread['cnt']; echo $thread['cnt'] == 1 ? ' '. $this->translate('reply') : ' '. $this->translate('replies'); ?><?php if(isset($thread['lusername'])) { ?>, <a href="<?php echo $thread['lasthref']; ?>"><?php echo $this->translate('last by') .' '. $thread['lusername']; ?></a><br /><?php echo $thread['datetime']; ?><?php } ?></p>
+						</li>
+						<?php } ?>
+						</ul>
+					</p>
+					<?php } else { ?>
+					<p><?php echo $this->translate('No active threads yet'); ?></p>
+					<?php } ?>
+				</div>
+			</div>	
+		</div>
+	</div>
+	<?php if(JO_Session::get('user_id') && $this->recent_threads) { ?>
+	<div class="box">
+		<div class="pad">
+			<div class="content">
+				<h3 class="title"><?php echo $this->translate('Your recent threads'); ?></h3>
+				<div class="license">
+					<p>
+						<ul class="last_threads">
+						<?php foreach($this->recent_threads as $rthread) { ?>
+						<li>
+							<p><a href="<?php echo $rthread['href']; ?>"><?php echo $rthread['name']; ?></a><br /><?php echo $thread['cnt']; echo $rthread['cnt'] == 1 ? ' '. $this->translate('reply') : ' '. $this->translate('replies'); ?><?php if(isset($rthread['lusername'])) { ?>, <a href="<?php echo $rthread['last_href']; ?>"><?php echo $this->translate('last by') .' '. $rthread['lusername']; ?></a><br /><?php echo $rthread['datetime']; ?><?php } ?></p>
+						</li>
+						<?php } ?>
+						</ul>
+					</p>
+				</div>
+			</div>	
+		</div>
+	</div>
+	<?php } ?>
+	<div class="box">
+		<div class="pad">
+			<div class="content">
+				<h3 class="title"><?php echo $this->translate('Subscribe'); ?></h3>
+				<p class="icon rss">
+					<a href="<?php echo $this->rss_link; ?>" rel="external"><?php echo $this->translate('All Forum Messages Feed'); ?></a>
+				</p>
+			</div>	
+		</div>
+	</div>
+</div>

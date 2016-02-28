@@ -1,0 +1,28 @@
+<div id="main" class="withhead">
+	<h3 class="title-5"><?php echo $this->formtitle?></h3>
+	<?php if(isset($this->msg_success)) { ?>
+	<p id="msg" class="msg<?php echo isset($this->msg_success) ? ' box-success' : ''; ?>"><?php echo isset($this->msg_success) ? $this->msg_success : ''; ?></p>
+	<?php } ?>
+	<?php if(isset($this->error)) { ?>
+	<p id="msg" class="msg<?php echo isset($this->error) ? ' box-error' : ''; ?>"><?php echo isset($this->error) ? $this->error : ''; ?></p>
+	<?php } ?>
+	<form action="" method="post" style="padding-top: 15px;" class="form">
+		<p><?php echo $this->translate('Choose the licences that your items are sold under. Note that not all licences will be used for all types of items. The Standard Single-Use Licence is mandatory.'); ?></p>
+		<div class="check">
+			<p class="label"></p>
+			<div class="pack">
+				<p><input id="f1" name="license[extended]" type="checkbox" value="extended"<?php echo isset($this->license['extended']) ? ' checked="checked"' : ''; ?> /><label for="f1"><?php echo $this->translate('Full License'); ?></label></p>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="check">
+			<p class="label"></p>
+			<div class="pack">
+				<p><input id="f2" name="license[personal]" type="checkbox" value="personal"<?php echo isset($this->license['personal']) ? ' checked="checked"' : ''; ?> /><label for="f2"><?php echo $this->translate('Personal Use License'); ?></label></p>
+			</div>
+			<div class="clear"></div>
+		</div>
+        <p class="submit"><input type="submit" value="<?php echo $this->translate('Save Changes'); ?>" /></p>
+	</form>
+</div>
+<?php echo $this->settings_box; ?>

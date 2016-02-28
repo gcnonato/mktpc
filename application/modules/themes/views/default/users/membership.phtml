@@ -1,0 +1,91 @@
+<?php echo $this->header_part; ?>
+
+<div id="content">
+	<div class="breadcrumb">
+		<p><?php
+			$output = array();
+			foreach($this->crumbs as $crumb) {
+				if(isset($crumb['href']))
+					$output[] = '<a href="'. $crumb['href'] .'">'. $crumb['name'] .'</a>';
+				else
+					$output[] = $crumb['name'];
+			}
+			
+			echo implode(' &nbsp;&rsaquo;&nbsp; ', $output);
+		?></p>
+	</div>
+	<?php echo $this->author_header; ?>
+	<div id="main" class="withhead">
+		<h3 class="title-5"><?php echo $this->translate('Membership prepaid cash'); ?></h3>
+		<?php if($this->msg_success) { ?>
+		<p class="msg box-success"><?php echo $this->msg_success; ?></p>
+		<?php } ?>
+		<?php if($this->msg_error) {?>
+		<p class="msg box-error"><?php echo $this->msg_error;?></p>
+		<?php } ?>
+		<div class="deposit">
+			<form action="<?php echo $this->membership_link; ?>" method="post">
+			<ul>
+				<li>
+					<p class="num">1</p>
+					<div class="cell">
+						<h3 class="title-1"><?php echo $this->translate('Select amount'); ?></h3>
+						<p class="desc"><?php echo $this->translate('Payments are in US dollars ($), are non-refundable and will expire one month from your last deposit.'); ?></p>
+						<div class="amount">
+							<?php if($this->membership) { ?>
+							<?php $cnt = count($this->membership); ?>
+							<?php for($i = 0; $i < $cnt; $i++) { ?>
+							<p class="member"><input type="radio" value="<?php echo $this->membership[$i]['price']; ?>" name="amount" id="r-<?php echo $i; ?>" /><label for="r-<?php echo $i; ?>"><?php echo $this->membership[$i]['formated_price']; ?> <?php echo $this->membership[$i]['description'];?></label></p>
+							<?php } ?>
+							<?php } ?>
+						</div>
+					</div>
+					<div class="clear"></div>
+				</li>
+				<?php if($this->payments) { ?>
+				<li id="pay_via" class="hide">
+					<p class="num">2</p>
+					<?php foreach($this->payments as $payment) { ?>
+					<div class="cell">
+						<h3 class="title-1"><?php echo $this->translate('Pay via');?> <?php echo $payment['name']; ?></h3>
+						<p class="desc"><?php echo $this->payment['description'];?></p>
+						<div class="pay">
+							<p class="logo"><img src="<?php echo $payment['logo']; ?>" alt="<?php echo $payment['name']; ?>" /></p>
+							<p class="button"><input type="submit" name="<?php echo $payment['key']; ?>" value="<?php echo $this->translate('Pay Now'); ?>" class="button-blue" /></p>
+							<div class="clear"></div>
+						</div>
+					</div>
+					<?php } ?>
+				</li>
+				<?php } ?>
+			</ul>
+			</form>
+		</div>
+	</div>	
+	<div id="sidebar" class="withsteps">
+		<div class="steps">
+			<ul>
+				<li><span class="num">3</span><span class="txt"><?php echo $this->translate('Back to Site'); ?></span></li>
+				<li><span class="num">2</span><span class="txt"><?php echo $this->translate('Make Payment'); ?></span></li>
+				<li><span class="num">1</span><span class="txt"><?php echo $this->translate('Select Amount'); ?></span></li>
+			</ul>
+			<div class="clear"></div>
+		</div>
+		<div class="balance">
+			<h3><?php echo $this->translate('Current balance'); ?></h3>
+			<p class="total"><?php echo $this->user['total']; ?></p>
+		</div>
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<div class="text">
+						<p class="ntp"><?php echo $this->translate('This is current balance of earnings. What you can withdraw'); ?>!</p>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<?php echo $this->footer_part; ?>

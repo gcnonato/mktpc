@@ -1,0 +1,114 @@
+<?php echo $this->header_part; ?>
+
+<div id="content">
+	<div class="breadcrumb">
+		<p><?php
+			$output = array();
+			foreach($this->crumbs as $crumb) {
+				if(isset($crumb['href']))
+					$output[] = '<a href="'. $crumb['href'] .'">'. $crumb['name'] .'</a>';
+				else
+					$output[] = $crumb['name'];
+			}
+			
+			echo implode(' &nbsp;&rsaquo;&nbsp; ', $output);
+		?></p>
+	</div>
+	<div class="titlehead inner">
+		<h2 class="title-3"><?php echo $this->item['name']; ?></h2>
+		<div class="clear"></div>
+	</div>
+	<div class="stats nomemberbox">
+		<p><a href="<?php echo $this->item_link; ?>" class="active"><?php echo $this->translate('Item Details'); ?></a> 
+			<?php if($this->faq_link) { ?>
+			<a href="<?php echo $this->faq_link; ?>"><?php echo $this->translate('Faq'); ?></a> 
+			<?php } ?>
+			<a href="<?php echo $this->comment_link; ?>"><?php echo $this->translate('Comments'); ?></a> 
+			<?php if($this->edit_link) { ?>
+			<a href="<?php echo $this->edit_link; ?>"><?php echo $this->translate('Edit'); ?></a> 
+			<?php } ?>
+			<?php if($this->delete_link) { ?>
+				<a href="#" onclick="javascript: if(confirm('<?php echo $this->translate('Are you sure you want to delete the item? Once deleted it can not ne restored again!'); ?>')){ window.location.href='<?php echo $this->delete_link; ?>';} return false;"><?php echo $this->translate('Delete'); ?></a>
+			<?php } ?>
+		</p>
+		<div class="clear"></div>
+	</div>
+	<?php if(JO_Session::get('user_id')) { ?>
+	<div id="item_pay">
+		<form action="" method="post" id="pay_form">
+			<p class="hide"><input type="hidden" value="<?php echo $this->item['id']; ?>" name="item_id" /></p>
+			<p class="hide"><input type="hidden" value="" id="licence" name="licence" /></p>
+		</form>
+		<?php if($this->membership_link) { ?>
+		<p class="payment_method" id="id3">
+			<a href="<?php echo $this->membership_pay_link; ?>" class="button-blue" id="pay_member" rel="<?php echo $this->translate('
+Please review the item attributes to ensure this item suits your needs. We can only issue a refund if the item does not work as described on the item page. By clicking okay you will immediately purchase this item.'); ?>"><?php echo $this->translate('Membership'); ?></a>
+			<span class="pd"><?php echo $this->translate('Buy a pre-paid package for a limited number of downloads and receive great discounts.'); ?></span>
+			<a href="<?php echo $this->membership_link; ?>"><?php echo $this->translate('Become member'); ?></a>
+		</p>
+		<?php } ?>
+		<p class="payment_method" id="id2">
+			<a href="<?php echo $this->deposit_link; ?>" class="button-blue" id="pay_deposit" rel="<?php echo $this->translate('
+Please review the item attributes to ensure this item suits your needs. We can only issue a refund if the item does not work as described on the item page. By clicking okay you will immediately purchase this item.'); ?>"><?php echo sprintf($this->translate('Use Pre-paid Deposits (Save %s)'), $this->your_profit); ?></a>
+			<span class="pd"><?php echo $this->translate('Pay'); ?> <?php echo $this->prepaid_price; ?> <?php echo $this->translate('from your account ballance'); ?>: <?php echo $this->usertotal; ?></span>
+			<a href="<?php echo $this->deposit; ?>"><?php echo $this->translate('Make deposit'); ?></a>
+		</p>
+		<p class="payment_method" id="id1">
+			<a href="<?php echo $this->payment_link; ?>" class="button-blue" id="pay_payment"><?php echo $this->translate('Buy Now'); ?></a>
+			<?php echo $this->translate('You will be redirected to the choice of payment method for') .' '. $this->item['price']; ?><br />
+			<?php if($this->payments) { ?>
+			<?php foreach($this->payments as $payment) { ?>
+			<img src="<?php echo $payment['logo']; ?>" alt="<?php echo $payment['name']; ?>" />
+			<?php } ?>
+			<?php } ?>
+		</p>
+		<a href="#" id="close_payment" class="delete"></a>
+	</div>
+	<div class="clear"></div>
+	<?php } ?>
+	<div id="main" class="withhead">
+		<?php if(isset($this->msg_success)) { ?>
+		<p id="msg" class="item_msg box-success"><?php echo $this->msg_success; ?></p>
+		<?php } ?>
+		<?php if(isset($this->msg_error)) { ?>
+		<p id="msg" class="item_msg box-error"><?php echo $this->msg_error; ?></p>
+		<?php } ?>
+		<div class="product">
+			<p class="thumb">
+				<img src="<?php echo $this->item['big_image']; ?>" alt="<?php echo $this->item['name']; ?>" />
+				<?php if(!empty($this->item['demo_url'])) { ?>
+				<a href="<?php echo $this->item['demo_url']?>" class="labellink viewdemo" rel="external"><?php echo $this->translate('View Demo'); ?></a>
+				<?php } ?>
+				<a href="<?php echo $this->screenshots; ?>" class="labellink gallery" rel="external"><?php echo $this->translate('Gallery'); ?></a>
+			</p>
+			<div class="textbox">
+				<?php echo $this->item['description']; ?>
+		  </div>
+		</div>
+	</div>
+	<?php echo $this->rightside; ?>
+	<div class="clear"></div>
+	<?php if($this->otherItems) {?>
+	<div class="titlehead titleheadproduct">
+		<h2 class="title-5"><?php echo $this->translate('More Items by this author'); ?></h2>
+		<div class="clear"></div>
+	</div>
+	<div class="items">
+		<div class="row rowfirst">
+		<?php $cnt = count($this->otherItems); ?>
+		<?php for($i = 0; $i < $cnt; $i++) { ?>
+			<div class="box<?php echo $i == ($cnt - 1) ? ' last' : ''; ?>">
+				<?php echo $this->otherItems[$i]; ?>
+			</div>
+			<?php } ?>
+			<div class="clear"></div>
+			<span class="pad"><span class="bg"><span class="end"></span></span></span>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<p class="viewall"><a href="<?php echo $this->user['userhref']; ?>"><?php echo $this->translate('View all items'); ?></a></p>	
+	<?php } ?>
+</div>
+<script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>
+
+<?php echo $this->footer_part; ?>

@@ -1,0 +1,30 @@
+<form class="form-for-pay" action="<?php echo $this->url;?>" method="post" id="paypal_form_submit">
+	<input type="hidden" name="cmd" value="_cart" />
+	<input type="hidden" name="upload" value="1" />
+	<input type="hidden" name="charset" value="utf-8" />
+	<input type="hidden" name="redirect_cmd" value="_xclick" />
+	<input type="hidden" name="no_note" value="1" />
+	<input type="hidden" name="rm" value="2" />
+	<input type="hidden" name="paymentaction" value="sale" />
+	<input type="hidden" name="business" value="<?php echo $this->paypal_email;?>" />
+	<input type="hidden" name="item_number_1" value="<?php echo $this->order_info['id'];?>" />
+	<input type="hidden" name="item_name_1" value="<?php echo $this->translate('Membership');?> - #<?php echo $this->order_info['id'];?>" />
+	<input type="hidden" name="amount_1" value="<?php echo (float)$this->order_info['amount'];?>" />
+	<input type="hidden" name="quantity_1" value="1" />
+	<input type="hidden" name="currency_code" value="USD" />
+	<input type="hidden" name="no_shipping" value="1" />
+	<input type="hidden" name="notify_url" value="<?php echo $this->notify_url;?>" />
+	<input type="hidden" name="return" value="<?php echo $this->return;?>" />
+	<input type="hidden" name="cancel_return" value="<?php echo $this->cancel_return;?>" />
+	<input type="hidden" name="image_url" value="" />
+	<input type="hidden" name="email" value="<?php echo $this->email;?>" />
+	<input type="hidden" name="first_name" value="<?php echo $this->first_name;?>" />
+	<input type="hidden" name="last_name" value="<?php echo $this->last_name;?>" />
+	<input type="hidden" name="custom" value="<?php echo $this->order_info['id'];?>" />
+	<input type="hidden" name="amount" value="<?php echo (float)$this->order_info['amount'];?>" />
+	<input type="hidden" name="cs" value="0" />
+	<input type="hidden" name="page_style" value="PayPal" />
+	<button type="submit" class="btn-middle sprite right" />
+		<ins class="sprite"><?php echo $this->translate('PAY');?></ins>
+	</button>
+</form>

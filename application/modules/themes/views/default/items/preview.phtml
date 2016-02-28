@@ -1,0 +1,30 @@
+<?php 
+	$request = $this->getRequest();
+?>
+<script type="text/javascript">
+	$(function() {
+		$('body').parent().css('height', '100%');
+		$('body').css('height', '100%');
+		var div_h = $('#header-bar').height();
+		var body_h = $('body').height() - div_h - 25;
+		$('body').css('height', body_h + 'px');;
+		
+	});
+</script>
+<div id="header-bar"> 
+	<p class="close-header">
+		<a href="<?php echo $this->item['demo_url']; ?>"><span><?php echo $this->translate('Remove the Frame'); ?></span></a>
+		<a href="<?php echo $this->itemhref; ?>"><span><?php echo $this->translate('Buy this item'); ?></span></a>
+		<?php if($this->site_logo) { ?>
+		<a href="<?php echo $request->getBaseUrl();?>" class="site-logo">
+			<img src="uploads/<?php echo $this->site_logo; ?>" alt="Logo"/>
+		</a>
+		<?php } else { ?>
+		<a href="<?php echo $request->getBaseUrl();?>" class="site-logo">
+			<img src="data/themes/images/logo.png" alt="Logo"/>
+		</a>
+		<?php } ?>
+	</p>
+</div>
+<div class="clear"></div>
+<iframe id="preview-frame" src="<?php echo $this->item['demo_url']; ?>" name="preview-frame" frameborder="0" width="100%" height="100%" scroll="auto" style="background-color: #fff;"></iframe>

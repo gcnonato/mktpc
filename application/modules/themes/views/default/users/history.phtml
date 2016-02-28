@@ -1,0 +1,53 @@
+<?php echo $this->header_part; ?>
+<?php echo $this->users_toolbar; ?>
+		<div id="list-left">
+			
+			<h2 class="underlined"><?php echo $this->translate('Deposit History'); ?></h2>
+			<hr />
+			
+			<?php if($this->history): ?>
+	    <table class="general_table" cellpadding="0" cellspacing="0" border="0">
+	      <thead>
+	        <tr>
+	          <th class="sprite_vert"><?php echo $this->translate('Action'); ?></th>
+	          <th class="sprite_vert"><?php echo $this->translate('When'); ?></th>    
+	          <th class="sprite_vert"><?php echo $this->translate('Transaction Id'); ?></th>
+	        </tr>
+	      </thead>
+	      <tbody>
+	      <?php foreach($this->history as $h): ?>
+	      <tr>
+	        <td><?php echo $h['action']; ?></td>
+	        <td><?php echo $h['datetime']; ?></td>
+	        <td><small><?php echo $h['transaction_id']; ?></small><!-- include item number here --></td>
+	      </tr>
+	      <?php endforeach; ?>
+	      </tbody>
+	    </table>
+	    <?php endif; ?>
+			
+			<div class="clr"></div>
+
+		</div> <!-- end of list-left -->
+		
+		<div id="list-right">
+		
+			<div class="box-title">
+				<div class="box_inner">
+					<?php echo $this->translate('Current ballance'); ?>
+				</div>
+			</div>					
+			<div class="box box-to-top">
+				<div class="box_inner2  w176">
+					<h1 class="decorator"><?php echo $this->usertotal; ?></h1>
+				</div>
+			</div>
+			
+			<img src="data/themes/images/common/clipboard.png">
+		
+		</div> <!-- end of list-right -->
+		
+		<div class="clr"></div>
+		
+		
+		<?php echo $this->footer_part; ?>

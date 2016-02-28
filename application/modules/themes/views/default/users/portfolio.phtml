@@ -1,0 +1,92 @@
+<?php echo $this->header_part; ?>
+<?php if(isset($this->users_toolbar) and !is_array($this->users_toolbar)): ?>
+<?php echo $this->users_toolbar; ?>
+<?php endif;?>
+<div class="wrap">
+    <div class="content">
+			
+			<form class="left order" method="get" action="">
+				<p class="left mr10"><?php echo $this->translate('Order by')?>:</p>
+				<select name="sort_by" onchange="this.form.submit()">
+    			<option value="published_at"<?php if($this->getRequest()->getRequest('sort_by')=='published_at'): ?>selected="selected"<?php endif; ?>><?php echo $this->translate('Date'); ?></option>
+					<option value="name"<?php if($this->getRequest()->getRequest('sort_by')=='name'): ?>selected="selected"<?php endif; ?>><?php echo $this->translate('Title'); ?></option>
+					<option value="root_category"<?php if($this->getRequest()->getRequest('sort_by')=='root_category'): ?>selected="selected"<?php endif; ?>><?php echo $this->translate('Category'); ?></option>
+					<option value="average_rating"<?php if($this->getRequest()->getRequest('sort_by')=='average_rating'): ?>selected="selected"<?php endif; ?>><?php echo $this->translate('Rating'); ?></option>
+					<option value="sales_count"<?php if($this->getRequest()->getRequest('sort_by')=='sales_count'): ?>selected="selected"<?php endif; ?>><?php echo $this->translate('Sales'); ?></option>
+					<option value="cost"<?php if($this->getRequest()->getRequest('sort_by')=='cost'): ?>selected="selected"<?php endif; ?>><?php echo $this->translate('Price'); ?></option>
+				</select>
+				<a href="javascript: void(0);" onclick="submitOrder(this);" title="" class="arrow-<?php if($this->getRequest()->getRequest('order')=='asc'): ?>up<?php else: ?>down<?php endif; ?>"><img src="data/themes/images/arrow_<?php if($this->getRequest()->getRequest('order')=='asc'): ?>up<?php else: ?>down<?php endif; ?>.png"  alt="" /></a>
+	      <input id="order-type" name="order" type="hidden" value="<?php if($this->getRequest()->getRequest('order')=='asc'): ?>asc<?php else: ?>desc<?php endif; ?>" />
+			</form>
+			 <div class="pagination">
+        <ul>
+            <?php echo $this->pagination; ?>
+        </ul>
+        </div><!--pagination -->
+			<div class="clr"></div>	
+			<div class="listing-holder left">
+			<?php if($this->items) { ?>
+				<?php foreach($this->items as $foo => $i) { ?>
+				<?php echo $i;?>
+				<?php } ?>
+			<?php } else { ?>
+				<div class="box-info"><?php echo $this->translate('No items found'); ?></div>
+			<?php } ?>
+			
+			<div class="clr"></div>
+
+			 <div class="pagination">
+        <ul>
+            <?php echo $this->pagination; ?>
+        </ul>
+        </div><!--pagination -->
+			<div class="clr"></div>	
+			
+		</div> <!-- end of list-left -->
+		</div>
+		<div class="sidebar">
+    		<a class="blue-btn left mr10 list-btn active" href="javascript: void(0);" id="blist"><span><?php echo $this->translate('List'); ?></span></a>
+    	<a class="blue-btn left grid-btn" href="javascript: void(0);" id="bgrid"><span><?php echo $this->translate('Grid'); ?></span></a>
+			<div class="clr"></div>
+			
+			<div class="user-details mt15">
+				<div class="box_inner" style="padding: 10px">
+				<a href="<?php echo $this->deposit; ?>" title="">
+					<h2 class="left mr5" style="line-height: 19px;"><?php echo $this->right_discount; ?></h2>
+					<p><?php echo $this->translate('off any item when you use prepaid deposits!'); ?></p>
+				</a>
+				<div class="clr"></div>
+			</div> <!-- end of two-off -->		
+			</div>
+			<div class="box-title m0 mt10">
+				<div class="box_inner">
+					<?php echo $this->translate('About the author'); ?>
+				</div>
+			</div>	
+			 <div class="user-details">
+				<div class="box_inner" style="padding: 5px;">
+				
+					<a href="<?php echo $this->user['userhref']; ?>" class="left">
+						<img alt="<?php echo $this->user['username']; ?>" class="" src="<?php echo $this->user['avatar']; ?>" />		  
+					</a>
+					
+					<div class="user-icons w98 left mt10 ml5 mr5">
+			      		<?php $z = 0;?>
+                       	<?php foreach($this->user_badges as $b): ?>
+                       	<?php $z++; ?>
+            		      	<img src="<?php echo $b['photo']; ?>" alt="<?php echo $b['name']; ?>" title="<?php echo $b['name']; ?>" class="tooltip" />
+            		      	<?php if(count($this->user_badges) == $z): ?> <br /><?php endif; ?>
+            	      	<?php endforeach; ?>
+			      </div>
+			      	
+					<br class="clr" />
+		      		<strong class="user"><a href="<?php echo $this->user['userhref']; ?>"><?php echo $this->user['username']; ?></a> </strong>	
+				</div>
+			</div>			
+		
+		</div> <!-- end of list-right -->
+		</div>
+		<div class="clr"></div>
+		
+		
+		<?php echo $this->footer_part; ?>

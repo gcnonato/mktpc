@@ -1,0 +1,178 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/places.png">
+		<?php if($this->level == 1) { ?>
+		Управление на градове
+		<?php } else { ?>
+		Управление на квартали за "<?php echo $this->title;?>"
+		<?php } ?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span>Успешно!</span>Информацията беше променена успешно!</span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<div class="fright mtop3">
+		<a class="button" href="javascript:void(0);" onclick="multiActionSelected('changeStatusMulti');">Смени статуса</a>
+		<a class="button" href="javascript:void(0);" onclick="multiActionSelected('deleteMulti');">Изтрии</a>
+		<?php if($this->level > 1) { ?>
+		<a class="button" href="<?php echo $module;?>/places/">Към градове</a>
+		<?php } ?>
+		<a class="button" href="<?php echo $this->create_action;?>">Добави нов запис</a>
+	</div>
+	<div class="clear"></div>
+</div>
+
+
+<p class="info">
+	Тук може да управлявате градовете и кварталите.<br>
+	<strong>Забележка: Ако изтриете някой запис, информацията за него ще бъде загубена.</strong>
+</p>
+
+
+<table cellspacing="0" cellpadding="0" class="display dragable_table" id="sort_order">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th width="20">
+				<input type="checkbox" class="check_all_list" />
+			</th>
+			<th width="20" class="left">#</th>
+			<th class="left">
+				<a href="javascript:void(0);" onclick="sortByName(<?php echo ($this->parent_id ? $this->parent_id : '0');?>);">
+					<?php echo ($this->level == 1 ? 'Град' : 'Квартал');?>
+				</a>
+			</th>
+			<th width="50">Статус</th>
+			<?php if($this->level == 1) { ?>
+			<th width="50">Квартали</th>
+			<?php } ?>
+			<th width="50">Редакция</th>
+			<th width="50">Изтриване</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->places) { ?>
+	<?php foreach($this->places AS $place) { ?>
+		<tr id="<?php echo $place['place_id'];?>">
+			<td>
+				<input type="checkbox" class="check_list" name="action_check[]" value="<?php echo $place['place_id'];?>" />
+			</td>
+			<td><?php echo $place['place_id'];?>.</td>
+			<td><?php echo $place['title'];?></td>
+			<td align="center">
+				<a href="javascript:void(0);" onclick="changeStatus(<?php echo $place['place_id'];?>);">
+					<img src="cms/<?php echo $module;?>/images/<?php echo ($place['status'] ? 'yes.png' : 'no.png');?>" class="tooltip"  alt="" title="<?php echo ($place['status'] ? 'Активен' : 'Неактивен');?>" />
+				</a>
+			</td>
+			<?php if($this->level == 1) { ?>
+			<td align="center"><a href="<?php echo $place['childrens'];?>"><img title="Преглед на квартали" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/folder.png"></a></td>
+			<?php } ?>
+			<td align="center"><a href="<?php echo $place['edite'];?>"><img title="Редакция на записа" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/edit.png"></a></td>
+			<td align="center">
+				<a id="item_<?php echo $place['place_id'];?>" class="delete" href="javascript:void(0);"><img title="Изтриване на записа" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a>
+			</td>
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="<?php if($this->level == 2) { echo 6; } else { echo 7; } ?>">
+				<div class="msgAlert"><span>Внимание!</span>Няма намерени записи...</div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+
+<script type="text/javascript"> 
+// <![CDATA[
+
+function sortByName(parent_id) {
+	$.post('<?php echo $module;?>/places/sort_order_by_name/', {'parent_id' : parent_id}, function() {
+		window.location = window.location.href;
+	});
+}
+
+$(document).ready(function() {       
+	$('.dragable_table').tableDnD({
+        onDrop: function(table, row) {
+	        $.post('<?php echo $module;?>/places/sort_order/', $.tableDnD.serialize(), function(data){
+				if(data) {
+					if($("#fader").size()) {
+						$("#fader").remove();  
+					}
+					$('.info_line.top .title').after('<div id="fader" class="fleft mleft30"><div class="msgOk"><span>Успешно!</span>Информацията беше променена успешно!</div></div>');
+					setTimeout(function() {
+						$("#fader").customFadeOut("slow" ,    
+						function() {       
+							$("#fader").remove();  
+						});
+					},
+					2000);
+				}
+		    });
+	    }
+	});
+
+	$('a.delete').click(function (e) {
+        if (confirm("Найстина ли желаете да изтриете този запис?")) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/places/delete/",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+});
+
+changeStatus = function(id) {
+	$.ajax({
+        type: 'post',
+        url: "<?php echo $module;?>/places/changeStatus",
+        data: 'id=' + id,
+        beforeSend: function () {
+			$('#'+id).animate({
+                'backgroundColor': '#FFBFBF'
+            }, 400);
+        },
+        success: function () {
+        	$.get(window.location.href, function(data){
+        		$('#'+id).html($(data).find('#'+id).html());
+        		setTimeout(function(){
+        			$("#"+id+"").animate({'backgroundColor': 'transparent'}, 400).find('.tooltip').simpletooltip();
+        		}, 500);
+        	});
+        }
+	});
+};
+
+// ]]>
+</script>

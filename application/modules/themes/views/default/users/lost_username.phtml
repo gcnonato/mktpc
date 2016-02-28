@@ -1,0 +1,53 @@
+<?php echo $this->header_part; ?>
+
+<div id="content">
+	<div class="breadcrumb">
+		<p><a href="<?php echo $this->getRequest()->getBaseUrl(); ?>"><?php echo $this->translate('Home'); ?></a> &nbsp;&rsaquo;&nbsp; <?php echo $this->translate('Forgotten username'); ?></p>
+	</div>
+	<div id="main" class="withhead">
+		<div class="textboard">
+			<h3 class="ntm"><?php echo $this->translate('Forgotten username'); ?></h3>
+		</div>
+		<form action="" method="post" style="padding-top: 15px;" class="form">
+			<?php if(isset($this->msg_error)) { ?>
+			<p class="checkerror box-error"><?php echo $this->msg_error; ?></p>
+			<?php } ?>
+			<?php if(!is_null($this->msg_success)) { ?>
+			<p class="checkerror box-success"><?php echo $this->msg_success; ?></p>
+			<?php } ?>
+			<?php if(isset($this->error)) { ?>
+			<p class="small errormessage"><?php echo $this->error; ?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="f1" class="label"><?php echo $this->translate('Email'); ?> *<br class="hide" /></label>
+				<input type="text" name="email" id="f1" value="<?php echo $this->email;?>" <?php echo isset($this->error) ? 'class="errorborder" ' : '' ;?>/>				
+				<a href="#" class="tooltip" title="<?php echo $this->translate('Fill the email you have signed up and we will send you our usename'); ?>">?</a>
+			</p>
+			<p class="submit"><input type="submit" name="send" value="<?php echo $this->translate('send'); ?>" /></p>
+			<p class="formlinks"><?php echo $this->translate('Forgotten'); ?> <a href="<?php echo $this->reset_password; ?>"><?php echo $this->translate('Password'); ?></a> | <a href="<?php echo $this->new_account; ?>"><?php echo $this->translate('Create Account'); ?></a></p>
+		</form>
+	</div>
+	<div id="sidebar">
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Current Stats'); ?></h3>
+					<div class="rates">
+						<div class="column">
+							<h4><?php echo $this->usersCount?></h4>
+							<p class="label"><?php echo $this->usersCount; ?> <?php echo $this->usersCount > 1 ? $this->translate('members') : $this->translate('member'); ?></p>
+						</div>
+						<div class="column border">
+							<h4><?php echo $this->itemsCount?></h4>
+							<p class="label"><?php echo $this->itemsCount > 1 ? $this->translate('Items') : $this->translate('Item'); ?></p>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<?php echo $this->footer_part; ?>

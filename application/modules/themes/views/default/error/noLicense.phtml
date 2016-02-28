@@ -1,0 +1,32 @@
+<?php echo $this->header_part; ?>
+
+<div class="title-line">
+		<div class="wrap">
+            <h2 class="title">License error!</h2>
+		</div><!--wrap -->            
+    </div><!--title-line -->
+
+<div class="space20"></div>
+
+<div class="downloads1">
+	<div class="listing-holder w965">
+		
+		<div class="product-holder w920">
+					
+				<?php if($this->errors) { ?>
+				<ul>
+					<?php foreach($this->errors AS $error) { ?>
+					<li><?php echo $error;?></li>
+					<?php } ?>
+				</ul>
+				<?php } ?>
+				
+				<div class="clr"></div>
+		</div> <!-- end of box -->
+		<div class="clr"></div> 
+	
+	</div>
+</div>
+			
+
+<?php echo $this->footer_part; ?>

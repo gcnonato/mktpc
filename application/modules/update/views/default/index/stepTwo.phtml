@@ -1,0 +1,99 @@
+<?php 
+/* @var $request JO_Request */
+$request = $this->getRequest();
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="<?php echo JO_Registry::forceGet('config_language');?>" xml:lang="<?php echo JO_Registry::forceGet('config_language');?>">
+<head>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>UPDATER FROM v1.11 TO v2.0 FOR ThemeClone</title>
+	<base href="<?php echo $request->getBaseUrl();?>" />
+	<link rel="stylesheet" type="text/css" href="http://cloneforest.com/scripts_data/updater/css/_styles.css"/>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script>!window.jQuery && document.write('<script src="http://code.jquery.com/jquery-1.4.2.min.js"><\/script>');</script>
+	
+</head>
+
+<body>
+
+	<div class="top-line">
+		<div class="wrap">
+			<div class="logo-holder left">
+				<img src="http://cloneforest.com/scripts_data/updater/images/logo.png" alt="" title=""/>
+				<div class="clr"></div>
+			</div>
+			
+			<div class="clr"></div>
+		</div><!--wrap-->
+
+	</div><!--top-line -->
+    	
+	<div class="clr"></div>
+	
+	<div class="wrap"> 
+
+		<?php if($this->msg_error) { ?>
+		<div class="box box-error">
+			<?php if(is_array($this->msg_error)) { ?>
+				<ul>
+				<?php foreach($this->msg_error as $msg) { ?>
+					<li><?php echo $msg; ?></li>
+				<?php } ?>
+				</ul>
+			<?php } else { ?>
+				<?php echo $this->msg_error; ?>
+			<?php } ?>
+		</div>
+		<?php } ?>
+		
+		<?php if($this->msg_success) { ?>
+		<div class="box box-success">
+			<?php if(is_array($this->msg_success)) { ?>
+				<ul>
+				<?php foreach($this->msg_success as $msg) { ?>
+					<li><?php echo $msg; ?></li>
+				<?php } ?>
+				</ul>
+			<?php } else { ?>
+				<?php echo $this->msg_success; ?>
+			<?php } ?>
+		</div>
+		<?php } ?>
+
+		<div class="clr"></div>
+
+		<div class="listing-holder left w981">
+		
+			<form id="upload-form" method="post" enctype="multipart/form-data">
+	    
+	    		<h2 class="title">UPDATER FROM v1.11 TO v2.0 FOR ThemeClone</h2>
+				
+				<div class="p">
+					<h5 class="decorator">Empty data from new system!</h5>
+					<br /><br />
+					<?php if(!$this->msg_error && !$this->msg_success) { ?>
+					<img src="http://cloneforest.com/scripts_data/updater/images/common/loading.gif" alt="" />
+					<?php } ?><br /><br />
+					<div class="clr"></div>
+				</div>
+				
+				
+			</form>
+
+		</div> <!-- end of item-left -->
+
+		<div class="clr"></div>
+
+	</div> <!-- end of wrap -->
+	<div class="clr space20"></div>
+	
+	<div class="copyright">
+		<div class="wrap">
+			<p class="right"><a href="http://cloneforest.com" title="marketplace script" target="_blank">Marketplace script</a> from CloneForest</p>
+		</div><!--wrap -->            
+	</div><!--copyright -->
+
+
+</body>
+</html>

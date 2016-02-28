@@ -1,0 +1,207 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+<form name="admin_form" id="admin_form" method="post" action="">
+
+<input name="topbanner[topbanner_position]" value="top" type="hidden">
+<input name="topbanner[topbanner_sort_order]" value="0" type="hidden">
+<input name="topbanner[topbanner_status]" value="1" type="hidden">
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/extensions.png">
+		<?php echo $this->translate('Top banner');?>
+	</h3>
+	
+	<?php if($this->error_warning) { ?>
+	<span id="fader" class="fleft mleft30">
+		<span class="msgError"><span><?php echo $this->translate('Error!');?></span><i class="error_text"><?php echo $this->error_warning;?></i></span>
+	</span>
+	<?php } ?>
+	
+	<div class="fright mtop3">
+		<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+		<a class="button" href="<?php echo $this->cancle;?>"><?php echo $this->translate('Cancel');?></a>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+
+	<table cellspacing="0" cellpadding="0" class="formtable">
+		<tbody>
+			<tr>
+				<td width="150"><?php echo $this->translate('Name');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+				<td>
+					<input type="text" size="70" value="<?php echo $this->name;?>" class="inputbox"  name="name" />
+        			
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Url');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+				<td>
+					<input type="text" size="70" value="<?php echo $this->url;?>" class="inputbox"  name="url" />
+        			
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('HTML code');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+				<td>
+					<textarea rows="8" cols="68" name="html" class="inputbox"><?php echo $this->html;?></textarea>
+        		</td>
+			</tr>
+			
+			<tr>
+				<td><?php echo $this->translate('Photo');?>:</td>
+				<td>
+					<input type="hidden" name="photo" value="<?php echo $this->photo; ?>" id="site_logo" />
+					<img id="preview_logo" src="<?php echo $this->preview;?>" />
+					<br />
+					<a style="cursor: pointer;" onclick="image_upload('site_logo', 'preview_logo');"><?php echo $this->translate('Browse Files'); ?></a>
+					&nbsp;&nbsp;|&nbsp;&nbsp;
+					<a style="cursor: pointer;" onclick="$('#preview_logo').attr('src', '<?php echo $this->preview_no_image; ?>'); $('#site_logo').attr('value', '');"><?php echo $this->translate('Clear Image'); ?></a>
+				</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Close option enabled');?>: </td>
+				<td>
+					<select class="inputbox"  name="close">
+						<?php if($this->close == 'true') { ?>
+						<option selected="selected" value="true"><?php echo $this->translate('Yes');?></option>
+						<option value="false"><?php echo $this->translate('No');?></option>
+						<?php } else { ?>
+						<option value="true"><?php echo $this->translate('Yes');?></option>
+						<option selected="selected" value="false"><?php echo $this->translate('No');?></option>
+						<?php } ?>
+					</select>
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Background color');?>: </td>
+				<td>
+					<input type="text" size="70" value="<?php echo $this->background;?>" class="inputbox" id="colorpick"  name="background" />
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('From');?>: </td>
+				<td>
+					<input type="text" size="70" id="from_date" value="<?php echo $this->from;?>" class="inputbox datepicer"  name="from" />
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('To');?>: </td>
+				<td>
+					<input type="text" size="70" id="to_date" value="<?php echo $this->to;?>" class="inputbox datepicer"  name="to" />
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Width in pixels');?>: </td>
+				<td>
+					<input type="text" size="70" value="<?php echo $this->width;?>" class="inputbox"  name="width" />
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Height in pixels');?>: </td>
+				<td>
+					<input type="text" size="70" value="<?php echo $this->height;?>" class="inputbox"  name="height" />
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Cookie life in days');?>: </td>
+				<td>
+					<input type="text" size="70" value="<?php echo $this->cookie;?>" class="inputbox"  name="cookie" />
+        		</td>
+			</tr>
+			
+		</tbody>
+	</table>
+
+	
+	<div class="info_line bottom">
+		<div class="fright mtop3">
+			<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+			<a class="button" href="<?php echo $this->cancle;?>"><?php echo $this->translate('Cancel');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+	
+	<div class="clear"></div>
+	
+</form>
+
+
+
+<script type="text/javascript"> 
+//<![CDATA[
+	$(document).ready(function(){
+		
+		var dates = $( ".datepicer" ).datepicker({
+			dateFormat : 'dd.mm.yy',
+			numberOfMonths: 1,
+			onSelect: function( selectedDate ) {
+				var option = this.id == "from_date" ? "minDate" : "maxDate",
+					instance = $( this ).data( "datepicker" ),
+					date = $.datepicker.parseDate(
+						instance.settings.dateFormat ||
+						$.datepicker._defaults.dateFormat,
+						selectedDate, instance.settings );
+				dates.not( this ).datepicker( "option", option, date );
+			}
+		});
+
+	});
+	//]]>
+</script>
+
+<script type="text/javascript"><!--
+function image_upload(field, preview) {
+	$('#dialog').remove();
+	
+	$('#content').prepend('<div id="dialog" style="padding: 3px 0px 0px 0px;"><iframe src="<?php echo $module;?>/filemanager?field=' + encodeURIComponent(field) + '" style="padding:0; margin: 0; display: block; width: 100%; height: 100%;" frameborder="no" scrolling="auto"></iframe></div>');
+	
+	$('#dialog').dialog({
+		title: '<?php echo $this->translate('File Manager');?>',
+		close: function (event, ui) {
+			if ($('#' + field).attr('value')) {
+				$.ajax({
+					url: '<?php echo $module;?>/filemanager/image',
+					type: 'POST',
+					data: 'image=' + encodeURIComponent($('#' + field).val()),
+					dataType: 'text',
+					success: function(data) {
+						$('#' + preview).attr('src',data);
+					}
+				});
+			}
+		},	
+		bgiframe: false,
+		width: 800,
+		height: 400,
+		resizable: false,
+		modal: false
+	});
+};
+//--></script>
+
+<link rel="stylesheet" href="cms/assets/colorpicker/css/colorpicker.css" type="text/css" />
+<script type="text/javascript" src="cms/assets/colorpicker/colorpicker.js"></script>
+<script type="text/javascript" src="cms/assets/colorpicker/eye.js"></script>
+<script type="text/javascript" src="cms/assets/colorpicker/utils.js"></script>
+<script type="text/javascript" src="cms/assets/colorpicker/layout.js?ver=1.0.2"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#colorpick').ColorPicker({
+		onSubmit: function(hsb, hex, rgb, el) {
+			$(el).val(hex);
+			$(el).ColorPickerHide();
+		},
+		onBeforeShow: function () {
+			$(this).ColorPickerSetColor(this.value);
+		}
+	})
+	.bind('keyup', function(){
+		$(this).ColorPickerSetColor(this.value);
+	});
+});
+</script>

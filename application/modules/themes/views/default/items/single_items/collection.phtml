@@ -1,0 +1,36 @@
+<div class="row<?php echo isset($this->item['without_bt']) ? ' collection' : ''; ?>">
+	<p class="thumb">
+		<a href="<?php echo  $this->item['href']; ?>"><img src="<?php echo $this->item['photo']; ?>" alt="<?php echo $this->item['name']; ?>" /></a>
+		<?php if(isset($this->item['edit_public_href'])) { ?>
+		<span class="buttons"><a href="<?php echo $this->item['public'] == 'false' ? $this->item['edit_public_href'] : '#" onclick="javascript: void(0); return false;'; ?>" class="button-silver<?php echo $this->item['public'] == 'false' ? ' active' : ''?>"><?php echo $this->translate('Public'); ?></a> <a href="<?php echo $this->item['public'] == 'true' ? $this->item['edit_public_href'] : '#" onclick="javascript: void(0); return false;'; ?>" class="button-silver<?php echo $this->item['public'] == 'true' ? ' active' : ''?>"><?php echo $this->translate('Private'); ?></a></span>
+		<?php } ?>
+	</p>
+	<div class="info">
+		<?php if(!isset($this->item['rv_button'])) { ?>
+		<h4 class="title"><a href="<?php echo  $this->item['href']; ?>"><?php echo $this->item['name']; ?></a></h4>
+		<?php } else { ?>
+		<h4 class="title"><?php echo $this->item['name']; ?></h4>
+		<?php } ?>
+		<p class="meta"><?php echo $this->item['text']; ?><br /><?php echo $this->translate('by'); ?> <a href="<?php echo  $this->item['userhref']; ?>"><?php echo $this->item['username']; ?></a></p>
+		<div class="price">
+			<p class="total"><?php echo $this->item['votes']; ?> <?php echo $this->item['votes'] == 1 ? $this->translate('Vote') : $this->translate('Votes'); ?></p>
+			<p class="stars"><?php echo isset($this->item['rating']) && $this->item['rating'] > 0 ? str_repeat('<img src="data/themes/images/star.png" alt="Star" />', $this->item['rating']) : ''?></p>
+			<?php if(!$this->item['rate'] && JO_Session::get('user_id')) { ?>
+			<div class="clear"></div>
+			<div class="basic" id="5_<?php echo $this->item['id']; ?>"></div>
+			<?php } ?>
+			<?php if(!isset($this->item['rv_button'])) { ?>
+			<p class="buttons"><a href="<?php echo $this->item['href']; ?>" class="button-blue"><?php echo $this->translate('View items'); ?></a></p>
+			<div class="clear"></div>
+			<p class="total"><?php echo $this->item['items']; ?> <?php echo $this->item['items'] == 1 ? $this->translate('Item') : $this->translate('Items'); ?></p>
+			<?php } ?>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<?php if(isset($this->item['delete_href'])) { ?>
+	<a href="#" onclick="javascript: if(confirm('<?php echo $this->item['delete_txt']; ?>')){ window.location.href='<?php echo $this->item['delete_href']; ?>';} return false;" class="close">X</a>
+	<?php } ?>
+	<?php if(!isset($this->item['without_bt'])) { ?>
+	<span class="pad"><span class="bg"><span class="end"></span></span></span>
+	<?php } ?>
+</div>

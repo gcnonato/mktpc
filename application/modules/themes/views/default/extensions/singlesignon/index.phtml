@@ -1,0 +1,22 @@
+<?php ob_start();?>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->ext_css;?>" />
+<script type="text/javascript" src="<?php echo $this->ext_js;?>"></script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+
+<div class="singlesignon-holder left">
+	<ul class="switcher" id="single_sign_on-panel">
+		<?php foreach($this->single_sign_on AS $sine) { ?>
+		<li>
+			<a href="<?php echo $sine['href'];?>">
+				<span class="preview-logo">
+					<?php if($sine['preview']) { ?>
+					<img src="<?php echo $sine['preview'];?>" alt="<?php echo $sine['name'];?>" />
+					<?php } ?>
+				</span>
+				<span class="description"><?php echo $sine['name'];?></span>
+				<br class="clr" />
+			</a>
+		</li>
+		<?php } ?>
+    </ul>
+</div>

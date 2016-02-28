@@ -1,0 +1,31 @@
+<div class="row">
+	<p class="thumb"><a href="<?php echo  $this->item['href']; ?>"><img src="<?php echo $this->item['thumbnail']; ?>" alt="<?php echo $this->item['name']; ?>" /></a></p>
+	<div class="info">
+		<h4 class="title"><a href="<?php echo  $this->item['href']; ?>"><?php echo $this->item['name']; ?></a></h4>
+		<p class="meta"><?php echo $this->translate('by'); ?> <a href="<?php echo  $this->item['userhref']; ?>"><?php echo $this->item['username']; ?></a></p>
+		<?php if(!empty($this->item['categories'])) { ?>
+		<p class="cats"><?php echo $this->translate('categories'); ?>: 
+		<?php $cnt = count($this->item['categories']);?>
+		<?php $cats = array(); ?>
+		<?php for($i = 0; $i < $cnt; $i++) { 
+			$cats[] = '<a href="'. $this->item['categories'][$i]['href'] .'">'. $this->item['categories'][$i]['name'] .'</a>';
+		?>
+		<?php } ?>
+		<?php echo implode(', ', $cats); ?>
+		<?php } ?>
+		<div class="price">
+			<p class="total"><?php if($this->item['free_file']=='false') { ?>
+			<?php echo $this->item['sales']; ?> <?php echo $this->item['sales'] == 1 ? $this->translate('sale') : $this->translate('sales'); ?>, <strong class="big"><?php echo  $this->item['price']; ?></strong>
+			<?php } else {?>
+			<?php echo $this->item['downloads']; ?> <?php echo $this->item['downloads'] == 1 ? $this->translate('download') : $this->translate('downloads'); ?>, <strong class="big"><?php echo $this->translate('free'); ?></strong>
+			<?php } ?></p>
+			<p class="stars"><?php echo $this->item['rating'] > 0 ? str_repeat('<img src="data/themes/images/star.png" alt="Star" />', $this->item['rating']) : ''?></p>
+			<p class="buttons"><?php if(!empty($this->item['demo_url'])) { ?><a href="<?php echo $this->item['demo_url']; ?>" class="button-silver" rel="external"><?php echo $this->translate('View Demo'); ?></a><?php } ?> <a href="<?php echo $this->item['href']; ?>" class="button-blue"><?php echo $this->translate('Buy Now'); ?></a></p>
+		</div>
+	</div>
+	<?php if(isset($this->item['delete_href'])) { ?>
+	<a href="#" onclick="javascript: if(confirm('<?php echo $this->item['delete_txt']; ?>')){ window.location.href='<?php echo $this->item['delete_href']; ?>';} return false;" class="close">X</a>
+	<?php } ?>
+	<div class="clear"></div>
+	<span class="pad"><span class="bg"><span class="end"></span></span></span>
+</div>

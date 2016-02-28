@@ -1,0 +1,189 @@
+<?php echo $this->header_part; ?>
+<script type="text/javascript">
+$(function() {
+	var url = window.location.href;
+	var url_parts = url.split('#');
+	
+	if(url_parts[1] != undefined) {
+		$('#'+url_parts[1]).animate({height: 'show'}, 400);
+	}
+});
+</script>
+<div id="content">
+	<div class="breadcrumb">
+		<p><?php
+			$output = array();
+			foreach($this->crumbs as $crumb) {
+				if(isset($crumb['href']))
+					$output[] = '<a href="'. $crumb['href'] .'">'. $crumb['name'] .'</a>';
+				else
+					$output[] = $crumb['name'];
+			}
+			
+			echo implode(' &nbsp;&rsaquo;&nbsp; ', $output);
+		?></p>
+	</div>
+	<?php echo $this->author_header; ?>
+	<div id="main" class="withhead">
+		<h3 class="title-5"><?php echo $this->translate('Your comments'); ?></h3>
+		<?php if($this->msg_success) { ?>
+		<p class="msg box-success mgnt20px"><?php echo $this->msg_success; ?></p>
+		<?php } ?>
+		<?php if($this->msg_error) {?>
+		<p class="msg box-error"><?php echo $this->msg_error;?></p>
+		<?php } ?>
+		<div class="comments">
+			<?php if($this->comments) { ?>
+			<ul>
+				<?php $i = 0; ?>
+				<?php foreach($this->comments as $comment) { ?>
+				<li class="cmmnt">
+					<p class="avatar ntm"><a href="<?php echo $comment['userhref']; ?>"><img src="<?php echo $comment['avatar']; ?>" alt="<?php echo $comment['username']; ?>" /></a></p>
+					<div class="comment">
+						<?php if($comment['user_id'] == $comment['owner_id']) { ?>
+						<p class="purchased"><span class="author_bg"><?php echo $this->translate('Author'); ?></span></p>
+						<?php } elseif(isset($comment['is_buy'])) { ?>
+						<p class="purchased"><span><?php echo $this->translate('Purchased'); ?></span></p>
+						<?php } ?>
+						<p class="cat"><?php echo $this->translate('for'); ?> <a href="<?php echo $comment['item_href']; ?>"><?php echo $this->translate('Resolute item'); ?></a></p>
+						<h4 class="name"><a href="<?php echo $comment['userhref']; ?>"><?php echo $comment['username']; ?></a> <?php echo $this->translate('SAID'); ?><br /> <?php echo $comment['datetime']; ?></h4>
+						<div class="text mgnb20px"><p><?php echo $comment['comment']; ?></p></div>
+						<?php if(JO_Session::get('user_id')) { ?>
+						<ul class="cat">
+							<?php if(JO_Session::get('username') != $comment['username']) { ?>
+							<li>
+								 <a href="<?php echo $comment['reporthref']; ?>"><?php echo $this->translate('Report'); ?></a>
+							</li>
+							<?php } ?>
+							<?php if(!empty($comment['reply'])) { ?>
+							<li>
+								<a href="#" class="rply" onclick="javascript: $('#c_<?php echo $comment['id']?>').animate({height: 'toggle'}, 400); return false;"><?php echo $this->translate('Answers'); ?></a>
+							</li>
+							<?php } ?>
+							<li class='cmmnt_btns'>
+								<a href="#" class="rply"><?php echo $this->translate('Replay'); ?></a>
+								<div class="dropdown">
+									<form action="<?php echo $comment['replyhref']; ?>" method="post" class="form" style="width: 335px;">
+										<div class="textarea">
+											<textarea name="comment_reply" class="cmmnt_reply" id="rply_<?php echo $i++; ?>" rows="10"></textarea>
+										</div>
+										<div class="clear mgnt20px"></div>
+										<p><input type="submit" name="submit" value="<?php echo $this->translate('Reply'); ?>" class="button-blue" /></p>
+									</form>
+								</div>
+							</li>
+						</ul>
+						<?php } ?>
+					</div>
+					<div class="clear"></div>
+					<?php  if(!empty($comment['reply'])) { ?>
+					<ul class="reply hide" id="c_<?php echo $comment['id']; ?>">
+						<?php foreach($comment['reply'] as $reply) { ?>
+						<li>
+							<div class="comment">
+								<?php if($reply['user_id'] == $comment['owner_id']) { ?>
+								<p class="purchased"><span class="author_bg"><?php echo $this->translate('Author'); ?></span></p>
+								<?php } elseif($reply['is_buy']) { ?>
+								<p class="purchased"><span><?php echo $this->translate('Purchased'); ?></span></p>
+								<?php } ?>
+								<?php if($reply['user_id'] == $this->item['user_id']) { ?>
+								<p class="cat rnd"><?php echo $this->translate('Author'); ?></p>
+								<?php } ?>
+								<p class="small_avatar"><a href="<?php echo $reply['userhref']; ?>"><img src="<?php echo $reply['avatar']; ?>" alt="<?php echo $reply['username']; ?>" /></a></p>
+								<h4 class="name"><a href="<?php echo $reply['userhref']; ?>"><?php echo $reply['username']; ?></a> <?php echo $this->translate('SAID'); ?><br /> <?php echo $reply['datetime']; ?></h4>
+								<div class="text mgnb20px"><p><?php echo $reply['comment']; ?></p></div>
+								<?php if(JO_Session::get('user_id') && JO_Session::get('username') != $reply['username']) { ?>
+								<p class="cat"><a href="<?php echo $reply['reporthref']; ?>"><?php echo $this->translate('Report'); ?></a></p>
+								<?php } ?>
+							</div>
+							<div class="clear"></div>
+						</li>
+						<?php } ?>
+					</ul>
+					<div class="clear"></div>
+					<?php } ?>
+				</li>
+				<?php } ?>
+			</ul>
+			<?php if($this->pagination) { ?>
+			<div class="clear" style="margin-top: 10px;"></div>
+			<div class="pagination bottom">
+				<p><?php echo $this->pagination; ?></p>
+			</div>
+			<?php } ?>
+			<?php } else { ?>
+				<div class="viewall pdgt22px"><p><?php echo $this->translate('No comments'); ?></p></div>
+			<?php } ?>
+		</div>
+	</div>	
+	<div id="sidebar" class="pdgt22px">
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Select category'); ?></h3>
+					<p>
+						<label for="select-1"></label>
+						<select name="category" id="select-1">
+							<?php foreach($this->mainCategories as $category) { ?>
+							<option value="<?php echo $category['href']?>"><?php echo $category['name']?></option>
+							<?php } ?>
+						</select>
+					</p>
+				</div>	
+			</div>
+		</div>
+		<?php if($this->page_upload_item) { ?>
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Help'); ?></h3>
+					<p><?php echo $this->translate('Read more on how to upload and edit your product:'); ?> <a href="<?php echo $this->page_upload_item['href']; ?>"><?php echo $this->page_upload_item['name']; ?></a></p>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+		<div class="balance">
+			<h3><?php echo $this->translate('Current balance'); ?></h3>
+			<p class="total"><?php echo $this->user['total']; ?></p>
+		</div>
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<div class="text">
+						<p class="ntp"><?php echo $this->translate('This is current balance of earnings. What you can withdraw'); ?>!</p>
+					</div>
+				</div>	
+			</div>
+		</div>
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Current Rate'); ?></h3>
+					<div class="rates">
+						<div class="column">
+							<h4><?php echo $this->percent['percent'];?>%</h4>
+							<p class="label"><?php echo $this->translate('Rates'); ?></p>
+							<p class="tip"><a href="#" class="tooltip" title="<?php echo $this->translate('Your rates are determined based on whether you are selling items exclusively on the Marketplaces and on your volume of sales.'); ?>">?</a></p>
+						</div>
+						<div class="column border">
+							<h4><?php echo (int)$this->total_sales_cnt; ?></h4>
+							<p class="label"><?php echo $this->translate('Total Sales'); ?></p>
+						</div>
+						<div class="clear"></div>
+					</div>
+					</ul>
+				</div>	
+			</div>
+		</div>
+		<div class="balance">
+			<h3><?php echo $this->translate('This Week\'s Stats'); ?></h3>
+			<h3 class="err_mgt"><?php echo $this->translate('Earnings'); ?></h3>
+			<p class="total"><?php echo $this->weekStats_earning;?></p>
+			<h3 class="err_mgt"><?php echo $this->translate('Sales'); ?></h3>
+			<p class="total"><?php echo (int)$this->weekStats_sold; ?></p>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<?php echo $this->footer_part;?>

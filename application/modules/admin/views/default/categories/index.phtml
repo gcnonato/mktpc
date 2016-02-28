@@ -1,0 +1,197 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img src="cms/<?php echo $module;?>/images/question-type-multiple-correct.png" alt="" />
+		<?php echo $this->translate('Categories Preview');?> <?php echo ($this->parent_name ? ' › ' . $this->parent_name : '');?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<div class="fright mtop3">
+		<?php if($this->parent_href) { ?>
+		<a class="button" href="<?php echo $this->parent_href;?>"><?php echo $this->translate('Back');?></a>
+		<?php } ?>
+		<a class="button" href="javascript:void(0);" onclick="multiActionSelected('changeStatusMulti');"><?php echo $this->translate('Change the visibility');?></a>
+		<a class="button" href="javascript:void(0);" onclick="multiActionSelected('deleteMulti');"><?php echo $this->translate('Delete selected');?></a>
+		<a class="button" href="<?php echo $module;?>/categories/create/<?php echo ($this->sub_of ? '?sub_of=' . $this->sub_of : '');?>"><?php echo $this->translate('Add new category');?></a>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+
+<form action="<?php echo $module;?>/categories/" method="get" id="testtt">
+
+	<table cellpadding="0" cellspacing="0" class="display dragable_table" id="sort_order">
+		<thead>
+			<tr class="nodrag nodrop">
+				<th width="20">
+					<input type="checkbox" class="check_all_list" />
+				</th>	
+				<th width="20" class="left">#</th>	
+				<th class="left"><?php echo $this->translate('Name');?></th>
+				<?php /* ?>
+				<th width="40"><?php echo $this->translate('Sort');?></th>
+				<?php */ ?>
+				<th width="20"><?php echo $this->translate('Visible');?></th>
+				<th width="20" class="right"><?php echo $this->translate('Subcategories');?></th>
+				<th width="20" class="right"><?php echo $this->translate('Edit');?></th>
+				<th width="20" class="right"><?php echo $this->translate('Delete');?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php if($this->categories) { ?>
+			<?php foreach($this->categories AS $record) { ?>
+			<tr id="<?php echo $record['id'];?>">
+				<td>
+					<input type="checkbox" class="check_list" name="action_check[]" value="<?php echo $record['id'];?>" />
+				</td>
+				<td><?php echo $record['id'];?>.</td>
+				<td><?php echo $record['name'];?></td>
+				<?php /* ?>
+				<td align="center">
+						<a href="<?php echo $record['up'];?>">
+							<img src="cms/<?php echo $module;?>/images/icons/16x16/up.png" alt="" />
+						</a>
+						<a href="<?php echo $record['down'];?>">
+							<img src="cms/<?php echo $module;?>/images/icons/16x16/down.png" alt="" />
+						</a>
+				</td>
+				<?php */ ?>
+				<td align="center">
+					<a href="javascript:void(0);" onclick="changeStatus(<?php echo $record['id'];?>);">
+						<img src="cms/<?php echo $module;?>/images/<?php echo ($record['visible'] == 'true' ? 'yes.png' : 'no.png');?>" class="tooltip"  alt="" title="<?php echo ($record['visible'] == 'true' ? $this->translate('Yes') : $this->translate('No'));?>" />
+					</a>
+				</td>
+				<td align="center">
+						<a href="<?php echo $record['subcategories'];?>"><img src="cms/<?php echo $module;?>/images/folder.png" class="tooltip"  alt="" title="<?php echo $this->translate('Subcategories');?>"/></a>
+				</td>
+				<td align="center">
+						<a href="<?php echo $record['edit'];?>"><img src="cms/<?php echo $module;?>/images/edit.png" class="tooltip"  alt="" title="<?php echo $this->translate('Edit');?>"/></a>
+				</td>
+				<td align="center">
+						<a href="javascript:void(0);" class="delete" id="item_<?php echo $record['id'];?>"><img src="cms/<?php echo $module;?>/images/delete.png" class="tooltip"  alt="" title="<?php echo $this->translate('Delete');?>"/></a>
+				</td>
+			</tr>
+			<?php } ?>
+			<?php } else { ?>
+			<tr class="nodrag nodrop">
+				<td colspan="7">
+					<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+				</td>
+			</tr>
+			<?php } ?>
+		</tbody>
+	</table>
+
+<?php if($this->pagination) { ?>
+<br />
+<div class="fleft">
+<?php echo $this->translate('Page');?> <b><?php echo $this->page_num;?></b> <?php echo $this->translate('from');?> <b><?php echo $this->total_pages;?></b> (<b><?php echo $this->total_rows;?></b> <?php echo $this->translate('records');?>)
+</div>
+<div class="pagination fright">
+	<?php echo $this->pagination;?>
+</div>
+<div class="clear"></div>
+<?php } ?>
+
+</form>
+
+
+
+<script type="text/javascript"> 
+// <![CDATA[
+$(document).ready(function () {
+	deleteInit();
+	dragableInit();
+});
+
+changeStatus = function(id) {
+	$.ajax({
+        type: 'post',
+        url: "<?php echo $module;?>/categories/changeStatus",
+        data: 'id=' + id,
+        beforeSend: function () {
+			$('#'+id).animate({
+                'backgroundColor': '#FFBFBF'
+            }, 400);
+        },
+        success: function () {
+        	$.get(window.location.href, function(data){
+        		$('#'+id).html($(data).find('#'+id).html());
+        		setTimeout(function(){
+        			$("#"+id+"").animate({'backgroundColor': 'transparent'}, 400).find('.tooltip').simpletooltip();
+        			deleteInit();
+        			dragableInit();
+        		}, 500);
+        	});
+        }
+	});
+};
+
+function deleteInit() {
+	$('a.delete').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/categories/delete/",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+}
+
+function dragableInit() {
+	$('.dragable_table').tableDnD({
+        onDrop: function(table, row) {
+	        $.post('<?php echo $module;?>/categories/sort_order/', $.tableDnD.serialize(), function(data){
+				if(data) {
+					if($("#fader").size()) {
+						$("#fader").remove();  
+					}
+					$('.info_line.top .title').after('<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>');
+					setTimeout(function() {
+						$("#fader").customFadeOut("slow" ,    
+						function() {       
+							$("#fader").remove();  
+						});
+					},
+					2000);
+				}
+		    });
+	    }
+	});
+}
+
+// ]]>
+</script>

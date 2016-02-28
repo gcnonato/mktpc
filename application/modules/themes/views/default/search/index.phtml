@@ -1,0 +1,81 @@
+<?php echo $this->header_part; ?>
+
+<div id="content">
+	<div class="breadcrumb">
+		<p><?php
+			$output = array();
+			foreach($this->crumbs as $crumb) {
+				if(isset($crumb['href']))
+					$output[] = '<a href="'. $crumb['href'] .'">'. $crumb['name'] .'</a>';
+				else
+					$output[] = $crumb['name'];
+			}
+			
+			echo implode(' &nbsp;&rsaquo;&nbsp; ', $output);
+		?></p>
+	</div>
+	<div class="titlehead inner border">
+		<h2 class="title-3" style="max-width:720px;"><?php echo $this->searchText; ?></h2>
+		<?php if($this->items) { ?>
+		<p class="results"><?php echo $this->total_result; ?> <?php echo $this->total_result == 1 ? $this->translate('result') : $this->translate('results'); ?> <?php echo $this->translate('in'); ?></p>
+		<div class="filter search">
+			<ul>
+				<li class="last">
+					<a href="#" class="btn" onclick="javascript: void(0); return false;"><span class="arrow"><?php echo $this->cnt_categories; ?> <?php echo $this->subcategories; ?></span></a>
+					<div class="dropdown">
+						<div class="columns">
+							<ul>
+								<?php if($this->categories) { ?>
+								<?php foreach($this->categories as $cat) { ?>
+								<?php if(isset($cat['href'])) { ?>
+								<li><a href="<?php echo $cat['href']; ?>"><?php echo $cat['name']?></a></li>
+								<?php } else { ?>
+								<li style="padding: 1px 30px 3px;"><?php echo $cat['name']?></li>
+								<?php } ?>
+								<?php } ?>
+								<?php } ?>
+							</ul>
+							<div class="clear"></div>
+						</div>
+					</div>
+				</li>
+				<?php if($this->all_cats_link) { ?>
+				<li class="last" style="padding: 0 5px 0 5px;">
+					<a href="<?php echo $this->all_cats_link; ?>" class="btn"><span><?php echo $this->translate('All Categories'); ?></span></a>
+				</li>
+				<?php } ?>
+			</ul>
+			<div class="clear"></div>
+		</div>
+		<?php } ?>
+		<div class="clear"></div>
+	</div>
+	<?php if($this->items) { ?>
+	<div class="options">	
+		<div class="sort" style="width: 650px;">
+			<p><span class="label"><?php echo $this->translate('Sorted by')?>:</span> <a href="<?php echo $this->orders[0]['href']; ?>" class="up<?php echo $this->orders[0]['is_selected'] ? ' active' : ''; ?>"><?php echo $this->orders[0]['name']; ?></a> <a href="<?php echo $this->orders[1]['href']; ?>" class="down<?php echo $this->orders[1]['is_selected'] ? ' active' : ''; ?>"><?php echo $this->orders[1]['name']; ?></a> 
+			<?php foreach($this->sort_by as $sort) { ?>
+			<a href="<?php echo $sort['href']; ?>"<?php echo $sort['is_selected'] ? ' class="active"' : ''; ?>><?php echo $sort['name']; ?></a> 
+			<?php } ?></p>
+			<div class="clear"></div>
+		</div>
+		<div class="pagination">
+			<p><?php echo $this->pagination; ?></p>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="templates">
+		<?php foreach($this->items as $item) { ?>
+		<?php echo $item; ?>
+		<?php } ?>
+	</div>
+	<div class="clear" style="margin-top: 10px;"></div>
+	<div class="pagination bottom">
+		<p><?php echo $this->pagination; ?></p>
+	</div>
+	<?php } else { ?>
+	<div class="viewall"><p><?php echo $this->translate('No items found'); ?></p></div>
+	<?php } ?>
+</div>
+
+<?php echo $this->footer_part;?>

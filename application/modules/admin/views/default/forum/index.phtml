@@ -1,0 +1,208 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/extensions.png">
+		<?php echo $this->translate('Forum Management');?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	
+	<div class="fright mtop3">
+		<a class="button" href="<?php echo $module;?>/forum/create/"><?php echo $this->translate('Add new record');?></a>
+	</div>
+	<div class="clear"></div>
+</div>
+<p class="info">
+	<?php echo $this->translate('Forum');?>.<br>
+</p>
+<div class="tabs mtop3">
+	<ul>
+		<li><a href="#tab_general"><?php echo $this->translate('Threads');?></a></li>
+		<li><a href="#tab_reported"><?php echo $this->translate('Reported comments');?></a></li>
+	</ul> 
+	<div class="clear"></div>
+</div>
+<div id="tab_general">
+	<table cellspacing="0" cellpadding="0" class="display dragable_table" id="sort_order">
+		<thead>
+			<tr class="nodrop nodrag">
+				<th class="left"><?php echo $this->translate('Theme');?></th>
+				<th class="left"><?php echo $this->translate('Sort');?></th>
+				<th width="50"><?php echo $this->translate('Status');?></th>
+				<th width="50"><?php echo $this->translate('Edit');?></th>
+				<th width="50"><?php echo $this->translate('Delete');?></th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php if($this->threads) { ?>
+		<?php foreach($this->threads AS $thread) { ?>
+			<tr id="<?php echo $thread['id'];?>">
+				<td><?php echo $thread['name'];?></td>
+				<td><?php echo $thread['order_index'];?></td>
+		        <td align="center">
+					<a href="javascript:void(0);" onclick="changeStatus(<?php echo $thread['id'];?>);">
+						<img src="cms/<?php echo $module;?>/images/<?php echo ($thread['status'] == 'true' ? 'yes.png' : 'no.png');?>" class="tooltip"  alt="" title="<?php echo ($thread['status'] == 'true' ? $this->translate('Yes') : $this->translate('No'));?>" />
+					</a>
+				</td>
+				<td align="center"><a href="<?php echo $module;?>/forum/edit/?id=<?php echo $thread['id'];?>"><img title="<?php echo $this->translate('Edit');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/edit.png"></a></td>
+				<td align="center"><a id="item_<?php echo $thread['id'];?>" class="delete" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a></td>
+			</tr>
+		<?php } ?>
+		<?php } else { ?>
+			<tr class="nodrop nodrag">
+				<td colspan="5">
+					<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+				</td>
+			</tr>
+		<?php } ?>
+		</tbody>
+	</table>
+</div>
+<div id="tab_reported">
+	<table cellspacing="0" cellpadding="0" class="display">
+		<thead>
+			<tr class="nodrop nodrag">
+				<th class="left"><?php echo $this->translate('Theme');?></th>
+				<th class="left"><?php echo $this->translate('Owner');?></th>
+				<th class="left"><?php echo $this->translate('Comment');?></th>
+				<th class="left"><?php echo $this->translate('Reported by');?></th>
+				<th width="50"><?php echo $this->translate('Report previewed');?></th>
+				<th width="50"><?php echo $this->translate('Delete');?></th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php if($this->comments) { ?>
+		<?php foreach($this->comments AS $comment) { ?>
+			<tr id="<?php echo $comment['id'];?>">
+				<td><?php echo $comment['name'];?></td>
+				<td><?php echo $comment['owner'];?></td>
+				<td><?php echo $comment['comment'];?></td>
+				<td><?php echo $comment['reporter'];?></td>
+		        <td align="center">
+					<a href="javascript:void(0);" onclick="checked(<?php echo $comment['id'];?>);">
+						<img src="cms/<?php echo $module;?>/images/yes.png" class="tooltip"  alt="" title="<?php echo $this->translate('No problem with this comment');?>" />
+					</a>
+				</td>
+				<td align="center"><a id="comment_<?php echo $comment['id'];?>" class="delete" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a></td>
+			</tr>
+		<?php } ?>
+		<?php } else { ?>
+			<tr class="nodrop nodrag">
+				<td colspan="6">
+					<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+				</td>
+			</tr>
+		<?php } ?>
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript"> 
+// <![CDATA[
+$(document).ready(function() {       
+	deleteInit();
+	dragdropInit();
+	$(".tabs ul").idTabs(); 
+});
+function deleteInit() {
+	$('a.delete').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/forum/delete/",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+}
+var changeStatus = function(id) {
+	$.ajax({
+        type: 'post',
+        url: "<?php echo $module;?>/forum/changeStatus",
+        data: 'id=' + id,
+        beforeSend: function () {
+			$('#'+id).animate({
+                'backgroundColor': '#FFBFBF'
+            }, 400);
+        },
+        success: function () {
+        	$.get(window.location.href, function(data){
+        		$('#'+id).html($(data).find('#'+id).html());
+        		setTimeout(function(){
+        			$("#"+id+"").animate({'backgroundColor': 'transparent'}, 400).find('.tooltip').simpletooltip();
+        			deleteInit();
+        		}, 500);
+        	});
+        }
+	});
+};
+var checked = function(id) {
+	$.ajax({
+        type: 'post',
+        url: "<?php echo $module;?>/forum/checked",
+        data: 'id=' + id,
+        beforeSend: function () {
+			$('#'+id).animate({
+                'backgroundColor': '#FFBFBF'
+            }, 400);
+        },
+        success: function () {
+        	$('#'+id).fadeOut(400, function () {
+                $('#'+id).remove();
+            });
+        }
+	});
+};
+function dragdropInit() {
+	$('.dragable_table').tableDnD({
+	    onDrop: function(table, row) {
+	        $.post('<?php echo $module;?>/forum/sort_order/', $.tableDnD.serialize(), function(data){
+				if(data) {
+					if($("#fader").size()) {
+						$("#fader").remove();  
+					}
+					$('.info_line.top .title').after('<div id="fader" class="fleft mleft30"><div class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></div></div>');
+					setTimeout(function() {
+						$("#fader").customFadeOut("slow" ,    
+						function() {       
+							$("#fader").remove();  
+						});
+					},
+					2000);
+				}
+		    });
+	    }
+	});
+}
+// ]]>
+</script>

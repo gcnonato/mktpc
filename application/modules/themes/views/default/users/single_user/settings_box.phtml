@@ -1,0 +1,17 @@
+<div id="sidebar" class="withhead">
+	<div class="box">
+		<div class="pad">
+			<div class="content">
+				<h3 class="title"><?php echo $this->translate('Settings to Edit'); ?></h3>
+				<p>
+					<label for="select-1"></label>
+					<select name="select-1" id="select-1">
+						<?php foreach($this->options as $option) { ?>
+						<option value="<?php echo $option['href']; ?>"<?php echo $option['is_selected'] ? ' selected="selected"' : ''; ?>><?php echo $option['name']; ?></option>
+						<?php } ?>
+					</select>
+				</p>
+			</div>	
+		</div>
+	</div>
+</div>

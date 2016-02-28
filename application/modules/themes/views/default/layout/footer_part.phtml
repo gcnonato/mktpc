@@ -1,0 +1,184 @@
+<div id="bottom">
+
+	<div id="footer">
+
+		<div class="titles">
+
+			<h3 class="title-1 right"><?php echo $this->translate('CloneForest'); ?></h3>
+
+			<h3 class="title-1"><?php echo $this->translate('Categories'); ?></h3>
+
+		</div>
+
+		<?php if(isset($this->mainCategories)) { ?>
+
+		<?php $cnt = count($this->mainCategories); ?>
+
+		<?php for($i = 0; $i < $cnt; $i++) { ?>
+
+		<?php if(!($i%2)) { ?>
+
+		<div class="column">
+
+    	<?php }?>
+
+    	<div class="box">
+
+    		<h4 class="title-2"><?php echo $this->mainCategories[$i]['name'];?></h4>
+
+    		<?php if($this->mainCategories[$i]['sub_cats']) { ?>
+
+    		<ul>
+
+			<?php foreach($this->mainCategories[$i]['sub_cats'] as $sc) { ?>
+
+				<li><a href="<?php echo $sc['href']?>"><?php echo $sc['name']?></a></li>
+
+			<?php } ?>
+
+    		</ul>
+
+    		<?php } ?>
+
+    	</div>
+
+	    <?php if(($i%2) || $i == ($cnt - 1)) { ?>
+
+	    </div>
+
+	    <?php }?>	
+
+    	<?php } ?>
+
+		<?php }?>
+
+		<div class="column">
+
+			<div class="box">
+
+				<h4 class="title-2"><?php echo $this->translate('Help and Support'); ?></h4>
+
+				<ul>
+
+					<li><a href="<?php echo $this->contacts; ?>"><?php echo $this->translate('Contact Support'); ?></a></li>
+
+					<li><a href="<?php echo  $this->about['href']; ?>"><?php echo $this->about['name']; ?></a></li>
+
+				</ul>
+
+			</div>
+
+			<div class="box">
+
+				<h4 class="title-2"><?php echo $this->translate('Socials'); ?></h4>
+
+				<ul class="soc">
+
+					<?php if($this->socials) { ?>
+
+					<?php foreach($this->socials as $social) { ?>
+
+					<li><a href="<?php echo $social['link']; ?>" rel="external"><?php echo $social['photo'] ? '<img src="uploads/socials/'. $social['photo'] .'" alt="'. $social['name'] .'" />' : ''; ?><?php echo $social['name']; ?></a></li>
+
+					<?php } ?>
+
+					<?php } ?>
+
+					<li><a href="<?php echo $this->rss; ?>" rel="external"><img src="data/themes/images/soc-icon-4.png" alt="RSS" /><?php echo $this->translate('RSS Feed'); ?></a></li>
+
+				</ul>
+
+			</div>
+
+			<div class="box">
+
+				<h4 class="title-2" id="bulletin"><?php echo $this->translate('Monthly Newsletter'); ?></h4>
+
+				<?php if($this->msg_success_bulletin) { ?>
+
+				<p class="successmessage_bulletin"><?php echo $this->msg_success_bulletin; ?></p>
+
+				<?php } ?>
+
+				<?php if($this->msg_error_bulletin) { ?>
+
+				<p class="errormessage"><?php echo $this->msg_error_bulletin; ?></p>
+
+				<?php } ?>
+
+				<form action="<?php echo $this->bulletin_link; ?>" method="post" class="newsletter">
+
+					<p class="hide"><input type="hidden" name="subscribe" value="yes" /></p>
+
+					<p>
+
+						<label for="n_name" class="hide"><?php echo $this->translate('First Name'); ?>:<br /></label>
+
+						<input type="text" name="bulletin_fname" id="n_name" value="<?php echo isset($this->data_bulletin['bulletin_fname']) ? $this->data_bulletin['bulletin_fname'] : $this->translate('First Name'); ?>" />
+
+					</p>
+
+					<p>
+
+						<label for="n_lname" class="hide"><?php echo $this->translate('Last Name'); ?>:<br /></label>
+
+						<input type="text" name="bulletin_lname" id="n_lname" value="<?php echo isset($this->data_bulletin['bulletin_lname']) ? $this->data_bulletin['bulletin_lname'] : $this->translate('Last Name'); ?>" />
+
+					</p>
+
+					<p>
+
+						<label for="n_email" class="hide"><?php echo $this->translate('Email'); ?>:<br /></label>
+
+						<input type="text" name="bulletin_email" id="n_email" value="<?php echo isset($this->data_bulletin['bulletin_email']) ? $this->data_bulletin['bulletin_email'] : $this->translate('Email'); ?>" />
+
+					</p>
+
+					<p class="submit"><input type="submit" value="<?php echo $this->translate('SUBSCRIBE'); ?>" /></p>
+
+					<div class="clear"></div>
+
+				</form>
+
+			</div>
+
+		</div>
+
+    	<div class="clear"></div>
+
+	</div>
+
+</div>
+
+<div id="copyright">
+
+	<div class="copywrapper">
+
+		<p class="right"><a href="http://blaxey.com" rel="external">Marketplace</a> from Blaxey</p>
+
+		<address><?php echo $this->translate('Copyright'); ?>&copy; <?php echo date('Y'); ?> <?php echo $this->domain; ?> &nbsp; 
+
+		<?php if(isset($this->footerPages[0])) { ?>
+
+		<?php $lnks = array();?>
+
+        <?php foreach($this->footerPages[0] as $p) { ?>
+
+		<?php $lnks[] = '<a href="'. $p['href'] .'" title=""'. ($p['url'] ? ' rel="external">' : '>') . $p['name'] .'</a>'; ?>
+
+		<?php } ?>
+
+		<?php echo implode(' | ', $lnks);?>
+
+		<?php } ?>
+
+		</address>
+
+	</div>
+
+</div>
+
+
+
+<?php echo $this->extensions_bottom; ?>
+

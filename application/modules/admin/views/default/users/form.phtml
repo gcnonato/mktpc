@@ -1,0 +1,250 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+	ob_start();
+?>
+<link rel="stylesheet" type="text/css" href="cms/assets/vchecks/css/geogoer.vchecks.css" >
+<script type="text/javascript" src="cms/assets/vchecks/jquery.vchecks.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#custom_list").vchecks();
+	});
+</script>
+<?php $this->placeholder('scipts', ob_get_clean());?>
+
+<form name="admin_form" id="admin_form" method="post" action="">
+
+	<div class="info_line top">
+		<h3 class="fleft title">
+			<img alt="" src="cms/<?php echo $module;?>/images/gallery-sml.png">
+			<?php echo $this->translate('Users Preview');?>
+		</h3>
+		
+		<span id="fader" class="fleft mleft30" style="display:none;">
+			<span class="msgError"><span><?php echo $this->translate('Error!')?></span><i class="error_text"></i></span>
+		</span>
+		
+		<div class="fright mtop3">
+			<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+			<a class="button" href="<?php echo $this->cancel_href;?>"><?php echo $this->translate('Cancel');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+
+	<div class="clear"></div>
+	
+	<table cellspacing="0" cellpadding="0" class="formtable">
+		<tbody>
+			<tr>
+				<td width="150"><?php echo $this->translate('Username');?>: </td>
+				<td>
+					<?php echo $this->username;?>
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Names');?>: </td>
+				<td>
+					<?php echo $this->names;?>
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('E-mail');?>: </td>
+				<td>
+					<a href="mailto:<?php echo $this->email;?>"><?php echo $this->email;?></a>
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Exclisive Author');?>: </td>
+				<td>
+					<img title="<?php echo ($this->exclusive_author == 'true' ? 'yes' : 'no');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/<?php echo ($this->exclusive_author == 'true' ? 'yes' : 'no');?>.png"> 
+        		</td>
+			</tr>
+			<?php if($this->avatar) { ?>
+			<tr>
+				<td><?php echo $this->translate('Avatar');?>: </td>
+				<td>
+					<img alt="<?php echo JO_Session::get('username'); ?>" src="<?php echo $this->avatar; ?>" />
+        		</td>
+			</tr>
+			<?php } ?>
+			<tr>
+				<td><?php echo $this->translate('Profile title');?>: </td>
+				<td>
+					<?php echo $this->profile_title;?>
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Description');?>: </td>
+				<td>
+					<?php echo $this->profile_desc;?>
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Country');?>: </td>
+				<td>
+					<?php echo $this->country;?>
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Current city');?>: </td>
+				<td>
+					<?php echo $this->live_city;?>
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Registration');?>: </td>
+				<td>
+					<?php echo $this->register_datetime;?>
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Last login');?>: </td>
+				<td>
+					<?php echo $this->last_login_datetime;?>
+        		</td>
+			</tr>
+			
+		</tbody>
+	</table>
+	<br /><br />
+	<table cellspacing="0" cellpadding="0" class="formtable">
+		<tbody>
+			<tr>
+				<td width="150"><?php echo $this->translate('Deposit');?>:</td>
+				<td>
+					<?php echo $this->deposit; ?>
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Items bought');?>:</td>
+				<td>
+					<?php echo $this->total; ?>
+        		</td>
+			</tr>
+		</tbody>
+	</table>
+	<?php if($this->items) { ?>
+	<table cellspacing="0" cellpadding="0" class="display">
+		<thead>
+			<tr>
+				<th class="left"><?php echo $this->translate('Item');?></th>
+				<th class="right"><?php echo $this->translate('Price');?></th>
+				<th><?php echo $this->translate('Date');?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach($this->items AS $item) { ?>
+			<tr>
+				<td>
+					<a href="<?php echo $item['href'];?>" target="_blank"><?php echo $item['item_name'];?></a>
+				</td>
+				<td class="right"><?php echo $item['price'];?></td>
+				<td align="center"><?php echo $item['datetime'];?></td>
+			</tr>
+			<?php } ?>
+		</tbody>
+	</table>
+	<?php } ?>
+	<br /><br />
+	<table cellspacing="0" cellpadding="0" class="formtable">
+		<tbody>
+			<tr>
+				<td width="150"><?php echo $this->translate('Single commission percent');?>: </td>
+				<td>
+					<input type="text" size="15" value="<?php echo $this->commission_percent;?>" class="inputbox"  name="commission_percent" />
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Password')?>: </td>
+				<td>
+					<input type="text" size="15" value="" class="inputbox"  name="password" />
+        			&nbsp;&nbsp; <img title="<?php echo $this->translate('If you do not want to change the password, leave it blank!');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+        		</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: top;"><?php echo $this->translate('Author status')?>: </td>
+				<td>
+					<input type="text" size="15" value="<?php echo $this->author_status?>" class="inputbox"  name="author_status" />
+        			&nbsp;&nbsp; <img title="<?php echo $this->translate('If you do not want to add author status, leave it blank!');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif"><br />
+					<textarea name="author_status_description" rows="5" cols="40"><?php echo $this->author_status_description?></textarea>
+					&nbsp;&nbsp; <img title="<?php echo $this->translate('Description of the author status');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+				</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Featured Author');?>: </td>
+				<td>
+					<select name="featured_author">
+						<?php if($this->featured_author == 'true') { ?>
+						<option value="true" selected="selected"><?php echo $this->translate('Yes');?></option>
+						<option value="false"><?php echo $this->translate('No');?></option>
+						<?php } else { ?>
+						<option value="true"><?php echo $this->translate('Yes');?></option>
+						<option value="false" selected="selected"><?php echo $this->translate('No');?></option>
+						<?php } ?>
+					</select>
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Status');?>: </td>
+				<td>
+					<select name="status">
+						<option <?php echo ($this->status == 'activate' ? 'selected="selected"' : '');?> value="activate"><?php echo $this->translate('Activated');?></option>
+						<option <?php echo ($this->status == 'waiting' ? 'selected="selected"' : '');?> value="waiting"><?php echo $this->translate('Waiting activation');?></option>
+						<option <?php echo ($this->status == 'banned' ? 'selected="selected"' : '');?> value="banned"><?php echo $this->translate('No');?></option>
+					</select>
+        		</td>
+			</tr>
+			<tr>
+				<td valign="top"><?php echo $this->translate('Badges');?>: </td>
+				<td>
+					<?php if($this->badges_list) { ?>
+					<?php foreach($this->badges_list AS $badge) { ?>
+					<div>
+						<label for="badge_<?php echo $badge['id'];?>">
+							<?php if(in_array($badge['id'], $this->badges)) { ?>
+							<input checked="checked" type="checkbox" value="<?php echo $badge['id'];?>" name="badges[<?php echo $badge['id'];?>]" id="badge_<?php echo $badge['id'];?>" /> 
+							<?php } else { ?>
+							<input type="checkbox" value="<?php echo $badge['id'];?>" name="badges[<?php echo $badge['id'];?>]" id="badge_<?php echo $badge['id'];?>" /> 
+							<?php } ?>
+							<?php if($badge['photo']) { ?>
+							<img alt="" src="uploads/badges/<?php echo $badge['photo'];?>" />
+							<?php } ?>
+							<?php echo $badge['name'];?>
+						</label>
+					</div>
+					<?php } ?>
+					<?php } ?>
+        		</td>
+			</tr>
+			<tr>
+				<td valign="top"><?php echo $this->translate('Groups');?>: </td>
+				<td>
+					<?php if($this->groups_list) { ?>
+					<ul id="custom_list" style="width: 400px;">
+						<?php foreach($this->groups_list AS $group) { ?>
+						<li>
+							
+								<?php if(array_key_exists($group['ug_id'], $this->groups)) { ?>
+								<input checked="checked" id="group-<?php echo $group['ug_id'];?>" name="groups[<?php echo $group['ug_id'];?>]" value="on" type="checkbox" />
+								<?php } else { ?>
+								<input id="group-<?php echo $group['ug_id'];?>" name="groups[<?php echo $group['ug_id'];?>]" value="on" type="checkbox" />
+								<?php } ?>
+								<span><?php echo $group['name'];?></span>
+						</li>
+						<?php } ?>
+					</ul>
+					<?php } ?>
+        		</td>
+			</tr>
+			
+		</tbody>
+	</table>
+		
+	<div class="info_line bottom">
+		<div class="fright mtop3">
+			<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+			<a class="button" href="<?php echo $this->cancel_href;?>"><?php echo $this->translate('Cancel');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+		
+</form>

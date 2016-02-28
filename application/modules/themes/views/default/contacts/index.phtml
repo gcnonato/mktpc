@@ -1,0 +1,71 @@
+<?php echo $this->header_part; ?>
+
+<div id="content">
+	<div class="breadcrumb">
+		<p><a href="<?php echo $this->getRequest()->getBaseUrl(); ?>"><?php echo $this->translate('Home'); ?></a> &nbsp;&rsaquo;&nbsp; <?php echo $this->translate('Contact'); ?></p>
+	</div>
+	<div id="main" class="withhead">
+		<div class="textboard">
+			<h3 class="ntm"><?php echo $this->translate('Send support ticket');?></h3>
+			<p><?php echo $this->translate('Support can take up to 2 days during busy periods to answer your query, but the Wiki may have the answer you need, right now.');?></p>
+		</div>
+		<form action="<?php echo $this->contact_link;?>" method="post" style="padding-top: 15px;" class="form">
+			<?php if(!is_array($this->is_send) && $this->is_send) { ?>
+			<p class="successmessage"><?php echo $this->is_send; ?></p>
+			<?php } ?>
+			<?php if(isset($this->error['uname'])) {?>
+			<p class="small errormessage"><?php echo isset($this->error['uname']) ? $this->error['uname'] : '';?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="f1" class="label"><?php echo $this->translate('Username');?> *<br class="hide" /></label>
+				<input type="text" name="username" id="f1" value="<?php echo isset($this->user['username']) ? $this->user['username'] : '';?>" <?php echo isset($this->error['uname']) ? 'class="errorborder" ' : '' ;?>/>
+				<a href="#" class="tooltip" title="<?php echo $this->translate('Your username on the Marketplaces');?>">?</a>
+			</p>
+			<?php if(isset($this->error['uemail'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['uemail'];?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="f2" class="label"><?php echo $this->translate('E-mail');?> *<br class="hide" /></label>
+				<input type="text" name="email" id="f2" value="<?php echo $this->user['email'];?>" <?php echo isset($this->error['uemail']) ? 'class="errorborder" ' : '' ;?>/>
+				<a href="#" class="tooltip" title="<?php echo $this->translate('We need to know the email address which is registered to your Marketplace account for verification purposes.');?>">?</a>
+			</p>
+			<p class="input">
+				<label for="f3" class="label"><?php echo $this->translate('Your Issue');?><br class="hide" /></label>
+				<select name="issue_id" id="f3">
+					<option value="0"><?php echo $this->translate('- Select an Issue -');?></option>
+					<?php foreach($this->categories AS $category) { ?>
+					<?php if($this->user['issue_id'] == $category['id']) { ?>
+					<option selected="selected" value="<?php echo $category['id'];?>"><?php echo $category['name'];?></option>
+					<?php } else { ?>
+					<option value="<?php echo $category['id'];?>"><?php echo $category['name'];?></option>
+					<?php } ?>
+					<?php } ?>
+				</select>
+				<a href="#" class="tooltip" title="<?php echo $this->translate('Let\'s start with the best category your problem falls into.');?>">?</a>
+			</p>
+			<div class="textarea">
+				<label for="f4" class="label"><?php echo $this->translate('How can we help you?');?><br class="hide" /></label>
+				<textarea name="issue_details" rows="10" cols="40" id="f4" style="width:326px;"><?php echo isset($this->user['issue_details']) ? $this->user['issue_details'] : ''; ?></textarea>
+				<a href="#" class="tooltip" title="<?php echo $this->translate('Please provide as much detail as possible.');?>">?</a>
+				<div class="clear"></div>
+			</div>
+			<p class="submit"><input type="submit" name="submit" value="<?php echo $this->translate('Submit Request');?>" /></p>
+		</form>
+	</div>
+	<div id="sidebar">
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Support Hours');?></h3>
+					<div class="rates">
+						<p><?php echo $this->translate('Support is open 7 days a week. Support tickets will generally be answered within 24 hours, complex issues may take longer.');?></p>
+						<div class="clear"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<?php echo $this->footer_part; ?>

@@ -1,0 +1,152 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/badge.png">
+		<?php echo $this->translate('Badges');?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<div class="fright mtop3">
+		<a class="button" href="<?php echo $module;?>/badges/create/?type=<?php echo $this->filter_type;?>"><?php echo $this->translate('Add new');?></a>
+	</div>
+	<div class="clear"></div>
+</div>
+
+
+
+<p class="info">
+	<?php echo $this->translate('Badges Manager');?>.<br>
+	<strong><?php echo $this->translate('Note: If you delete an entry, information will be lost.');?></strong>
+</p>
+
+<div class="tabs mtop3">
+		<ul>
+			<li><a <?php echo ($this->filter_type == 'system' ? 'class="selected"' : '');?> href="<?php echo $module;?>/badges/?type=system"><?php echo $this->translate('System');?></a></li>
+			<li><a <?php echo ($this->filter_type == 'buyers' ? 'class="selected"' : '');?> href="<?php echo $module;?>/badges/?type=buyers"><?php echo $this->translate('Buyers');?></a></li>
+			<li><a <?php echo ($this->filter_type == 'authors' ? 'class="selected"' : '');?> href="<?php echo $module;?>/badges/?type=authors"><?php echo $this->translate('Authors');?></a></li> 
+			<li><a <?php echo ($this->filter_type == 'referrals' ? 'class="selected"' : '');?> href="<?php echo $module;?>/badges/?type=referrals"><?php echo $this->translate('Referrals');?></a></li> 
+			<?php if(!$this->is_singlesignon) { ?>
+			<li><a <?php echo ($this->filter_type == 'other' ? 'class="selected"' : '');?> href="<?php echo $module;?>/badges/?type=other"><?php echo $this->translate('Other');?></a></li>
+			<?php } ?>
+		</ul> 
+		<div class="clear"></div>
+	</div>
+
+<table cellspacing="0" cellpadding="0" class="display">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th width="20" class="left">#</th>
+			<th class="left"><?php echo $this->translate('Name');?></th>
+			<th width="50"><?php echo $this->translate('Photo');?></th>
+			<th width="50"><?php echo $this->translate('Visible');?></th>
+			<th width="50"><?php echo $this->translate('Edit');?></th>
+			<th width="50"><?php echo $this->translate('Delete');?></th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->badges) { ?>
+	<?php foreach($this->badges AS $badge) { ?>
+		<tr id="<?php echo $badge['id'];?>">
+			<td><?php echo $badge['id'];?>.</td>
+			<td>
+				<?php echo $badge['name'];?> 
+			</td>
+			<td align="center">
+				<?php if($badge['photo']) { ?>
+				<img src="uploads/badges/<?php echo $badge['photo'];?>" alt="" />
+				<?php } ?> 
+			</td>
+			<td align="center">
+				<a href="javascript:void(0);" onclick="changeStatus(<?php echo $badge['id'];?>);">
+					<img src="cms/<?php echo $module;?>/images/<?php echo ($badge['visible'] == 'true' ? 'yes.png' : 'no.png');?>" class="tooltip"  alt="" title="<?php echo ($badge['visible'] == 'true' ? $this->translate('Yes') : $this->translate('No'));?>" />
+				</a>
+			</td>
+            
+			<td align="center"><a href="<?php echo $module;?>/badges/edit/?id=<?php echo $badge['id'];?>&amp;type=<?php echo $badge['type'];?>"><img title="<?php echo $this->translate('Edit');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/edit.png"></a></td>
+			<td align="center">
+				<a id="item_<?php echo $badge['id'];?>" class="delete" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a>
+			</td>
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="6">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+
+<script type="text/javascript"> 
+// <![CDATA[
+$(document).ready(function() {       
+	deleteInit();
+});
+
+function deleteInit() {
+	$('a.delete').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/badges/delete/",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+}
+
+changeStatus = function(id) {
+	$.ajax({
+        type: 'post',
+        url: "<?php echo $module;?>/badges/changeStatus",
+        data: 'id=' + id,
+        beforeSend: function () {
+			$('#'+id).animate({
+                'backgroundColor': '#FFBFBF'
+            }, 400);
+        },
+        success: function () {
+        	$.get(window.location.href, function(data){
+        		$('#'+id).html($(data).find('#'+id).html());
+        		setTimeout(function(){
+        			$("#"+id+"").animate({'backgroundColor': 'transparent'}, 400).find('.tooltip').simpletooltip();
+        			deleteInit();
+        		}, 500);
+        	});
+        }
+	});
+};
+// ]]>
+</script>

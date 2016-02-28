@@ -1,0 +1,596 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<form name="admin_form" id="admin_form" method="post" action="">
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/domain_template.png">
+		<?php echo $this->translate('Management of system settings');?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<span id="fader" class="fleft mleft30" style="display:none;">
+		<span class="msgError"><span><?php echo $this->translate('Error!');?></span><i class="error_text"></i></span>
+	</span>
+	
+	<div class="fright mtop3">
+		<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+		<a class="button" href="<?php echo $module;?>/settings/"><?php echo $this->translate('Cancel');?></a>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+	
+	<div class="tabs mtop3">
+		<ul>
+			<li><a href="#tab_general"><?php echo $this->translate('General');?></a></li>
+			<li><a href="#tab_seo"><?php echo $this->translate('SEO');?></a></li>
+			<li><a href="#tab_option"><?php echo $this->translate('Options');?></a></li>
+			<li><a href="#tab_mail"><?php echo $this->translate('Contacts');?></a></li> 
+			<li><a href="#tab_images"><?php echo $this->translate('Images');?></a></li> 
+			<li><a href="#tab_pages"><?php echo $this->translate('Pages');?></a></li> 
+			<?php if($this->show_domain_tab) { ?>
+			<li><a href="#tab_domains"><?php echo $this->translate('Modules domains');?></a></li> 
+			<?php } ?>
+		</ul> 
+		<div class="clear"></div>
+	</div>
+	
+		<div id="tab_general">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>
+					<tr>
+						<td width="150"><?php echo $this->translate('Referal sum');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->referal_sum;?>" class="inputbox" name="config[referal_sum]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('In this field you can indicate how many products can be purchased by a customer and will be added to the referral commission. For unlimited number of readings commission please enter 0');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Referal percent');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->referal_percent;?>" class="inputbox" name="config[referal_percent]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('Percentage of commission for referrals');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Prepaid price discount');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->prepaid_price_discount;?>" class="inputbox" name="config[prepaid_price_discount]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('From here you can adjust the amount of discount for prepaid purchase. It is possible to enter%. Example: 2% will reduce the price of the product by 2 percent. If you enter only 2 will reduce the price of 2 units of your chosen currency.');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Extended price');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->extended_price;?>" class="inputbox" name="config[extended_price]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('In this field you can enter a value to be multiplied by the amount of product to purchase a full license. In such a purchase, the product is automatically removed from the site');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('No exclusive author percent');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->no_exclusive_author_percent;?>" class="inputbox" name="config[no_exclusive_author_percent]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('This field sets the rate for non-exclusive authors');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Exclusive author percent');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->exclusive_author_percent;?>" class="inputbox" name="config[exclusive_author_percent]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('This field sets the rate for exclusive authors');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Facebook Application ID');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->facebook_appid;?>" class="inputbox" name="config[facebook_appid]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('This field sets the application ID for the \'facebook like\' module');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Facebook Secret');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->facebook_secret;?>" class="inputbox" name="config[facebook_secret]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('This field sets the secret key for the \'facebook like\' module');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('ReCaptcha public key');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->recaptcha_public_key;?>" class="inputbox" name="config[recaptcha_public_key]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('Your public key for recaptcha');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('ReCaptcha private key');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->recaptcha_private_key;?>" class="inputbox" name="config[recaptcha_private_key]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('Your private key for recaptcha');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<?php if(false) { ?>
+					<tr>
+						<td><?php echo $this->translate('Google translate key');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->google_translate_key;?>" class="inputbox" name="config[google_translate_key]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('To begin using the Google APIs, first you need to sign up for an API key. The API key costs nothing, and allows us to contact you directly if we detect an issue with your site.');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<?php } ?>
+				</tbody>
+			</table>
+		</div>
+		
+		<div id="tab_seo">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>
+					<tr>
+						<td width="150"><?php echo $this->translate('Meta title');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->meta_title;?>" class="inputbox" name="config[meta_title]" />
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('It could be said that the title is one of the most important factors for a successful search engine optimization of your website. The title tags should be between 10-60 characters.')?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Meta keywords');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->meta_keywords;?>" class="inputbox" name="config[meta_keywords]" />
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('Lately, the meta keyword tag has become the least important tag for the search engines and especially Google. However, it is an easy way to reinforce once again your most important keywords. We recommend its usage as we believe that it may help the SEO process, especially if you follow the rules mentioned below. The keyword tags should contain between 4 and 10 keywords.');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Meta description');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->meta_description;?>" class="inputbox" name="config[meta_description]" />
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('The description tag should be written in such way that it will show what information your website contains or what your website is about. Write short and clear sentences that will not confuse your visitors. The description tag should be less than 200 characters.');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Google analytics code');?>:</td>
+						<td>
+							<textarea style="width: 405px; height: 80px;" class="inputbox" name="config[google_analytics]"><?php echo $this->google_analytics;?></textarea>
+	        			</td>
+					</tr>
+					
+				</tbody>
+			</table>
+		</div>
+	
+		<div id="tab_mail">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>
+					<tr>
+						<td width="150"><?php echo $this->translate('Admin mail');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<input type="text" title="<?php echo $this->translate('Please enter Admin mail')?>" size="55" value="<?php echo $this->admin_mail;?>" class="inputbox required" name="config[admin_mail]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('On this email will comes all emails that is related to your system');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Report mail');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<input type="text" title="<?php echo $this->translate('Please enter Report mail')?>" size="55" value="<?php echo $this->report_mail;?>" class="inputbox required" name="config[report_mail]" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('Email to reports from the system');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Using SMTP');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="smtp_1">
+									<input <?php echo ($this->mail_smtp == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[mail_smtp]" id="smtp_1" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="smtp_2">
+									<input <?php echo ($this->mail_smtp == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[mail_smtp]" id="smtp_2" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+	        			</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('SMTP host');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->mail_smtp_host;?>" class="inputbox" name="config[mail_smtp_host]" />
+	        			</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('SMTP port');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->mail_smtp_port;?>" class="inputbox" name="config[mail_smtp_port]" />
+	        			</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('SMTP user');?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->mail_smtp_user;?>" class="inputbox" name="config[mail_smtp_user]" />
+	        			</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('SMTP password')?>:</td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->mail_smtp_password;?>" class="inputbox" name="config[mail_smtp_password]" />
+	        			</td>
+					</tr>
+					
+					
+				</tbody>
+			</table>
+		</div>
+		
+		<div id="tab_option">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>
+					
+					<tr>
+						<td width="150"><?php echo $this->translate('Results per page (Administration)');?>: </td>
+						<td><input type="text" size="10" value="<?php echo $this->admin_limit;?>" class="inputbox" name="config[admin_limit]" /></td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Results per page (Site)');?>: </td>
+						<td><input type="text" size="10" value="<?php echo $this->front_limit;?>" class="inputbox" name="config[front_limit]" /></td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Site Template');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<select name="config[template]" class="select">
+								<?php foreach($this->templates AS $template) { ?>
+								<?php if($this->template == $template) { ?>
+								<option selected="selected" value="<?php echo $template;?>"><?php echo $template;?></option>
+								<?php } else { ?>
+								<option value="<?php echo $template;?>"><?php echo $template;?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('Site Template which will be visible to users')?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					
+					<tr>
+						<td width="150"><?php echo $this->translate('System default');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<select name="config[default_module]" class="select">
+								<?php foreach($this->modules AS $modules) { ?>
+								<?php if($this->default_module == $modules) { ?>
+								<option selected="selected" value="<?php echo $modules;?>"><?php echo $modules;?></option>
+								<?php } else { ?>
+								<option value="<?php echo $modules;?>"><?php echo $modules;?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('Main site for the system')?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					
+					<tr>
+						<td width="250"><?php echo $this->translate('Language');?>: </td>
+						<td>
+							<select name="config[config_language_id]" class="select">
+								<?php foreach($this->languages AS $languages) { ?>
+								<?php if($languages['language_id'] == $this->config_language_id) { ?>
+								<option selected="selected" value="<?php echo $languages['language_id'];?>"><?php echo $languages['name'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $languages['language_id'];?>"><?php echo $languages['name'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Currency');?>: <img title="<?php echo $this->translate('This field is required');?>" class="tooltip" alt="<?php echo $this->translate('This field is required');?>" src="cms/<?php echo $module;?>/images/required.gif"></td>
+						<td>
+							<select name="config[config_currency]" class="select">
+								<?php foreach($this->currencies AS $currency) { ?>
+								<?php if($this->config_currency == $currency['code']) { ?>
+								<option selected="selected" value="<?php echo $currency['code'];?>"><?php echo $currency['title'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $currency['code'];?>"><?php echo $currency['title'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        				&nbsp;&nbsp; <img title="<?php echo $this->translate('Default currency. Please note that all prices entered before any change of this option will retain their numerical values. E.g. if there was an item uploaded with price of $100, and you later changed the default currency to Euro, item price will be displayed as 100 Euro.');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Automatically update currency');?>:</td>
+						<td>
+							<span class="input-out">
+								<label for="c_1">
+									<input <?php echo ($this->config_currency_auto_update == 1 ? 'checked="checked"' : '');?> type="radio" value="1" name="config[config_currency_auto_update]" id="c_1" /> <?php echo $this->translate('Yes');?>
+								</label>
+								<label for="c_2">
+									<input <?php echo ($this->config_currency_auto_update == 0 ? 'checked="checked"' : '');?> type="radio" value="0" name="config[config_currency_auto_update]" id="c_2" /> <?php echo $this->translate('No');?>
+								</label>
+							</span>
+						</td>
+					</tr>
+					
+				</tbody>
+			</table>
+		</div>
+		
+		<div id="tab_images">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>	
+					<tr>
+						<td width="150"><?php echo $this->translate('Site logo');?>:</td>
+						<td>
+							<input type="hidden" name="images[site_logo]" value="<?php echo $this->site_logo; ?>" id="site_logo" />
+							<img id="preview_logo" src="<?php echo $this->preview_logo;?>" />
+							<br />
+							<a style="cursor: pointer;" onclick="image_upload('site_logo', 'preview_logo');"><?php echo $this->translate('Browse Files'); ?></a>
+							&nbsp;&nbsp;|&nbsp;&nbsp;
+							<a style="cursor: pointer;" onclick="$('#preview_logo').attr('src', '<?php echo $this->preview; ?>'); $('#site_logo').attr('value', '');"><?php echo $this->translate('Clear Image'); ?></a>
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('No image');?>:</td>
+						<td>
+							<input type="hidden" name="images[no_image]" value="<?php echo $this->no_image; ?>" id="site_no_image" />
+							<img id="preview_no_image" src="<?php echo $this->preview_no_image;?>" />
+							<br />
+							<a style="cursor: pointer;" onclick="image_upload('site_no_image', 'preview_no_image');"><?php echo $this->translate('Browse Files'); ?></a>
+							&nbsp;&nbsp;|&nbsp;&nbsp;
+							<a style="cursor: pointer;" onclick="$('#preview_no_image').attr('src', '<?php echo $this->preview_no_image; ?>'); $('#site_no_image').attr('value', '');"><?php echo $this->translate('Clear Image'); ?></a>
+						</td>
+					</tr>
+					
+				</tbody>
+			</table>
+			<br /><br />
+			
+			<?php foreach($this->generate_watermark_form AS $name => $data) { ?>
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>	
+					<tr>
+						<th colspan="2" style="padding: 5px 0;"><?php echo strtoupper($name);?></th>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate($data['name']);?>: <?php if($data['info']) { ?><img title="<?php echo $this->translate($data['info'])?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif"><?php } ?></td>
+						<td>
+						
+							<input type="hidden" name="images[<?php echo $data['key'];?>]" value="<?php echo $this->{$data['key']}; ?>" id="<?php echo $data['key'];?>" />
+							<img id="preview_<?php echo $data['key'];?>" src="<?php echo $this->{'preview_'.$data['key']};?>" />
+							<br />
+							<a style="cursor: pointer;" onclick="image_upload('<?php echo $data['key'];?>', 'preview_<?php echo $data['key'];?>');"><?php echo $this->translate('Browse Files'); ?></a>
+							&nbsp;&nbsp;|&nbsp;&nbsp;
+							<a style="cursor: pointer;" onclick="$('#preview_<?php echo $data['key'];?>').attr('src', '<?php echo $this->{'default_'.$data['key']}; ?>'); $('#<?php echo $data['key'];?>').attr('value', '');"><?php echo $this->translate('Clear Image'); ?></a>
+						
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<br /><br />
+			<?php } ?>
+			
+			<?php foreach($this->generate_item_image_form AS $name => $form_data) { ?>
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>	
+					<tr>
+						<th colspan="2" style="padding: 5px 0;"><?php echo strtoupper($name);?></th>
+					</tr>
+					<?php foreach($form_data AS $data) { ?>
+					<tr>
+						<td width="150"><?php echo $this->translate($data['name']);?>: <?php if($data['info']) { ?><img title="<?php echo $this->translate($data['info'])?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif"><?php } ?></td>
+						<td>
+							<input class="inputbox" size="5" type="text" name="images[<?php echo $data['key_width'];?>]" value="<?php echo $this->{$data['key_width']}; ?>" /> * 
+							<input class="inputbox" size="5" type="text" name="images[<?php echo $data['key_height'];?>]" value="<?php echo $this->{$data['key_height']}; ?>" />
+						</td>
+					</tr>
+					<?php } ?>
+				</tbody>
+			</table>
+			<br /><br />
+			<?php } ?>
+			
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>	
+					<tr>
+						<td width="150"><?php echo $this->translate('User avatar size /width * height/');?>:</td>
+						<td>
+							<input class="inputbox" size="5" type="text" name="images[user_avatar_width]" value="<?php echo $this->user_avatar_width; ?>" /> * 
+							<input class="inputbox" size="5" type="text" name="images[user_avatar_height]" value="<?php echo $this->user_avatar_height; ?>" />
+							&nbsp;&nbsp; <img title="<?php echo $this->translate('Max. size 120 pixels');?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+						</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('User small avatar size /width * height/');?>:</td>
+						<td>
+							<input class="inputbox" size="5" type="text" name="images[user_avatar2_width]" value="<?php echo $this->user_avatar2_width; ?>" /> * 
+							<input class="inputbox" size="5" type="text" name="images[user_avatar2_height]" value="<?php echo $this->user_avatar2_height; ?>" />
+						</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('User profile photo size /width * height/');?>:</td>
+						<td>
+							<input class="inputbox" size="5" type="text" name="images[user_profile_photo_width]" value="<?php echo $this->user_profile_photo_width; ?>" /> * 
+							<input class="inputbox" size="5" type="text" name="images[user_profile_photo_height]" value="<?php echo $this->user_profile_photo_height; ?>" />
+						</td>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('User public collection photo size /width * height/');?>:</td>
+						<td>
+							<input class="inputbox" size="5" type="text" name="images[user_public_collection_width]" value="<?php echo $this->user_public_collection_width; ?>" /> * 
+							<input class="inputbox" size="5" type="text" name="images[user_public_collection_height]" value="<?php echo $this->user_public_collection_height; ?>" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div id="tab_pages">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>
+					<tr>
+						<td width="150"><?php echo $this->translate('About CloneForest');?>:</td>
+						<td>
+							<select name="pages[page_about]">
+								<?php foreach($this->pages AS $page) { ?>
+								<?php if($this->page_about == $page['id']) { ?>
+								<option selected="selected" value="<?php echo $page['id'];?>"><?php echo $page['name'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $page['id'];?>"><?php echo $page['name'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Upload an item "HELP"');?>:</td>
+						<td>
+							<select name="pages[page_upload_item]">
+								<?php foreach($this->pages AS $page) { ?>
+								<?php if($this->page_upload_item == $page['id']) { ?>
+								<option selected="selected" value="<?php echo $page['id'];?>"><?php echo $page['name'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $page['id'];?>"><?php echo $page['name'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('TERMS OF USAGE');?>:</td>
+						<td>
+							<select name="pages[page_terms]">
+								<?php foreach($this->pages AS $page) { ?>
+								<?php if($this->page_terms == $page['id']) { ?>
+								<option selected="selected" value="<?php echo $page['id'];?>"><?php echo $page['name'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $page['id'];?>"><?php echo $page['name'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Regular Licence');?>:</td>
+						<td>
+							<select name="pages[page_regular_licence]">
+								<?php foreach($this->pages AS $page) { ?>
+								<?php if($this->page_regular_licence == $page['id']) { ?>
+								<option selected="selected" value="<?php echo $page['id'];?>"><?php echo $page['name'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $page['id'];?>"><?php echo $page['name'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Affiliate Program');?>:</td>
+						<td>
+							<select name="pages[page_affiliate_program]">
+								<?php foreach($this->pages AS $page) { ?>
+								<?php if($this->page_affiliate_program == $page['id']) { ?>
+								<option selected="selected" value="<?php echo $page['id'];?>"><?php echo $page['name'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $page['id'];?>"><?php echo $page['name'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate('Forum rules');?>:</td>
+						<td>
+							<select name="pages[page_forum_rules]">
+								<?php foreach($this->pages AS $page) { ?>
+								<?php if($this->page_forum_rules == $page['id']) { ?>
+								<option selected="selected" value="<?php echo $page['id'];?>"><?php echo $page['name'];?></option>
+								<?php } else { ?>
+								<option value="<?php echo $page['id'];?>"><?php echo $page['name'];?></option>
+								<?php } ?>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<?php if($this->show_domain_tab) { ?>
+		<div id="tab_domains">
+		<?php foreach($this->generate_domains_setings_form AS $name => $data) { ?>
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>	
+					<tr>
+						<th colspan="2" style="padding: 5px 0;"><?php echo strtoupper($name);?></th>
+					</tr>
+					<tr>
+						<td width="150"><?php echo $this->translate('Default module domain')?>: <img title="<?php echo $this->translate('Please fill in the domain name in pure form. Without http:// and www. Example example.com')?>" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif"></td>
+						<td>
+							<input class="inputbox" size="55" type="text" name="config[default_domain][<?php echo $name;?>]" value="<?php echo $data['value']; ?>" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<br /><br />
+		<?php } ?>
+		</div>
+		<?php } ?>
+		
+		<div class="info_line bottom">
+			<div class="fright mtop3">
+				<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+				<a class="button" href="<?php echo $module;?>/settings/"><?php echo $this->translate('Cancel');?></a>
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+	</form>
+	
+	
+<script type="text/javascript"> 
+	$(document).ready(function(){
+		$(".tabs ul").idTabs(); 		
+	});
+</script>
+<script type="text/javascript"><!--
+function image_upload(field, preview) {
+	$('#dialog').remove();
+	
+	$('#content').prepend('<div id="dialog" style="padding: 3px 0px 0px 0px;"><iframe src="<?php echo $module;?>/filemanager?field=' + encodeURIComponent(field) + '" style="padding:0; margin: 0; display: block; width: 100%; height: 100%;" frameborder="no" scrolling="auto"></iframe></div>');
+	
+	$('#dialog').dialog({
+		title: '<?php echo $this->translate('File Manager');?>',
+		close: function (event, ui) {
+			if ($('#' + field).attr('value')) {
+				$.ajax({
+					url: '<?php echo $module;?>/filemanager/image',
+					type: 'POST',
+					data: 'image=' + encodeURIComponent($('#' + field).val()),
+					dataType: 'text',
+					success: function(data) {
+						$('#' + preview).attr('src',data);
+					}
+				});
+			}
+		},	
+		bgiframe: false,
+		width: 800,
+		height: 400,
+		resizable: false,
+		modal: false
+	});
+};
+//--></script>
+

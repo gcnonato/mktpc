@@ -1,0 +1,135 @@
+<?php echo $this->header_part; ?>
+
+<div id="content">
+	<div class="breadcrumb">
+		<p><?php
+			$output = array();
+			foreach($this->crumbs as $crumb) {
+				if(isset($crumb['href']))
+					$output[] = '<a href="'. $crumb['href'] .'">'. $crumb['name'] .'</a>';
+				else
+					$output[] = $crumb['name'];
+			}
+			
+			echo implode(' &nbsp;&rsaquo;&nbsp; ', $output);
+		?></p>
+	</div>
+	<?php echo $this->author_header; ?>
+	<div id="main" class="withhead">
+		<h3 class="title-5"><?php echo $this->translate('Referrals'); ?></h3>
+		<table cellpadding="0" cellspacing="0" border="0" class="table-1">
+			<tr>
+				<th><span class="silver"><?php echo $this->translate('Month'); ?></span></th>
+				<th><?php echo $this->translate('Clickthoughs'); ?></th>
+				<th><?php echo $this->translate('Registered'); ?></th>
+				<th><?php echo $this->translate('Deposits'); ?></th>
+				<th class="right"><?php echo $this->translate('Earnings'); ?></th>
+			</tr>
+			<?php if($this->earnings) { ?>
+			<?php foreach($this->earnings as $earning) { ?>
+			<tr>
+				<td><?php echo $earning['date']; ?></td>
+				<td><?php echo $earning['gast']; ?></td>
+				<td><?php echo $earning['register']; ?></td>
+				<td><?php echo $earning['deposit']; ?></td>
+				<td class="right"><?php echo $earning['sales']; ?></td>
+			</tr>
+			<?php } ?>
+			<tr class="totals">
+				<td><?php echo $this->translate('Totals'); ?></td>
+				<td><?php echo $this->total_clicks; ?></td>
+				<td><?php echo $this->total_registred; ?></td>
+				<td><?php echo $this->total_deposits; ?></td>
+				<td class="right"><?php echo $this->total_earnings; ?></td>
+			</tr>	
+			<?php } else { ?>
+			<tr><td colspan="5"><?php echo $this->translate('No results yet'); ?></td></tr>	
+			<?php } ?>
+		</table>
+		<h3 class="title-5 title-5-pad"><?php echo $this->translate('Sales'); ?></h3>
+		<table cellpadding="0" cellspacing="0" border="0" class="table-1">
+			<tr>
+				<th><span class="silver"><?php echo $this->translate('Month'); ?></span></th>
+				<th><span class="silver"><?php echo ucfirst($this->translate('Sales')); ?></span></th>
+				<th class="right"><span class="silver"><?php echo $this->translate('Earnings'); ?></span></th>
+			</tr>
+			<?php if($this->sales) { ?>
+			<?php $i = 0; ?>
+			<?php foreach($this->sales as $sale) { ?>
+			<?php if(isset($sale['total_sales'])) { ?>
+			<tr>
+				<td><a href="#" class="expand" rel="expand-id-<?php echo ++$i; ?>"><?php echo $sale['month']; ?></a></td>
+				<td><?php echo $sale['total_sales']; ?></td>
+				<td class="right"><?php echo $sale['total_earnings']; ?></td>
+			</tr>
+			<?php } else { ?>
+			<tr class="hide expand-id-<?php echo $i; ?>">
+				<td><?php echo $sale['day']; ?></td>
+				<td><?php echo $sale['sales']; ?></td>
+				<td class="right"><?php echo $sale['earnings']; ?></td>
+			</tr>
+			<?php } ?>
+			<?php } ?>
+			<tr class="totals">
+				<td><?php echo $this->translate('Totals'); ?></td>
+				<td><?php echo $this->total_sales_cnt; ?></td>
+				<td class="right"><?php echo $this->total_earnings_cnt; ?></td>
+			</tr>
+			<?php } else { ?>
+			<tr><td colspan="3"><?php echo $this->translate('No results yet'); ?></td></tr>	
+			<?php } ?>
+		</table>
+		<div class="bluebox">
+			<p class="text"><?php echo $this->translate('Total Earnings'); ?></p>
+			<p class="price"><?php echo $this->total; ?></p>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div id="sidebar" class="withhead">
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<p class="icon"><?php echo $this->translate('You can download yours sales and earnings in'); ?> <a href="<?php echo $this->csv_link; ?>">CSV <?php echo $this->translate('format'); ?></a>, <?php echo $this->translate('open it in a spreadsheet and perform your own calculations, graphing, etc'); ?>.</p>
+				</div>	
+			</div>
+		</div>
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Current Rate'); ?></h3>
+					<div class="rates">
+						<div class="column">
+							<h4><?php echo $this->percent['percent'];?>%</h4>
+							<p class="label"><?php echo $this->translate('Rates'); ?></p>
+							<p class="tip"><a href="#" class="tooltip" title="<?php echo $this->translate('Your rates are determined based on whether you are selling items exclusively on the Marketplaces and on your volume of sales.'); ?>">?</a></p>
+						</div>
+						<div class="column border">
+							<h4><?php echo (int)$this->total_sales_cnt; ?></h4>
+							<p class="label"><?php echo $this->translate('Total Sales'); ?></p>
+						</div>
+						<div class="clear"></div>
+					</div>
+					</ul>
+				</div>	
+			</div>
+		</div>
+		<div class="balance">
+			<h3><?php echo $this->translate('Current balance'); ?></h3>
+			<p class="total"><?php echo $this->total_balance; ?></p>
+			<p class="button"><a href="<?php echo $this->withdrawal_link; ?>" class="button-blue"><?php echo $this->translate('Request Payout'); ?></a></p>
+		</div>
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<div class="text">
+						<p class="ntp"><a href="<?php echo $this->history_link; ?>"><?php echo $this->translate('View Account History'); ?></a></p>
+						<p><?php echo $this->translate('Need a tax invoice?'); ?><br /><?php echo $this->translate('Make sure you\'ve added your company name to the'); ?> <a href="<?php echo $this->settings_link; ?>"><?php echo $this->translate('Settings'); ?></a>.</p>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<?php echo $this->footer_part;?>

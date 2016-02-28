@@ -1,0 +1,103 @@
+<?php echo $this->header_part; ?>
+
+<div id="promo">
+	<div class="welcome">
+		<h1 class="title"><?php echo $this->translate('Start Your Own'); ?> <span><?php echo $this->translate('Template'); ?></span> <span class="second"><?php echo $this->translate('Marketplace'); ?></span></h1>
+		<p class="sheet"><a href="<?php echo $this->lastItem['href']; ?>" title="<?php echo $this->lastItem['name']; ?>"><img src="<?php echo $this->lastItem['thumb']; ?>" alt="<?php echo $this->lastItem['name']; ?>" /></a></p>
+		<div class="bluecircle">
+			<h3><?php echo $this->itemsCount; ?></h3>
+			<h4><?php echo $this->itemsCount > 1 ? $this->translate('Items') : $this->translate('Item'); ?></h4>
+			<p><?php echo $this->usersCount; ?> <?php echo $this->usersCount > 1 ? $this->translate('members') : $this->translate('member'); ?></p>
+		</div>
+		<?php if($this->top_categories) { ?>
+		<ul class="features">
+			<?php foreach($this->top_categories as $top_cat) { ?>
+			<li><a href="<?php echo $top_cat['href']; ?>"><?php echo $top_cat['name']; ?></a></li>
+			<?php } ?>
+		</ul>
+		<?php } ?>
+		<?php if($this->freeItems) { ?>
+		<div class="slidertext">
+			<h4 class="title-4"><?php echo $this->translate('Free Items'); ?></h4>
+			<p><?php echo $this->translate('Grab'); ?> <a href="<?php echo $this->freeItems[0]['href']; ?>"><?php echo $this->translate('this month\'s free file'); ?></a> <?php echo $this->translate('from the'); ?> <?php echo $this->freeItems[0]['cat_name']?> <?php echo $this->translate('category')?>!</p>
+		</div>
+		<div id="slides">
+			<div class="slides_container">
+				<?php $cnt = count($this->freeItems); ?>
+				<?php for($i = 0; $i < $cnt; $i++) { ?>
+				<a href="<?php echo $this->freeItems[$i]['href']; ?>"><img src="<?php echo $this->freeItems[$i]['thumb']; ?>" alt="<?php echo $this->freeItems[$i]['name']; ?>" /></a>
+				<?php } ?>
+			</div>
+		</div>
+		<?php } ?>
+	</div>
+</div>
+<div id="content">
+	<div class="titlehead">
+		<h2 class="title-3"><?php echo $this->title_items; ?></h2>
+		<div class="filter">
+			<ul>
+				<li><a href="<?php echo $this->recent_items; ?>" class="btn<?php echo $this->listType == 'recent' ? ' ahover' : ''; ?>"><span><?php echo $this->translate('Recent Items'); ?></span></a></li>
+				<li><a href="<?php echo $this->featured; ?>" class="btn<?php echo $this->listType == 'featured' ? ' ahover' : ''; ?>"><span><?php echo $this->translate('Featured Items'); ?></span></a></li>
+				<li class="last"><a href="<?php echo $this->featuredAuthor; ?>" class="btn<?php echo $this->listType == 'author' ? ' ahover' : ''; ?>"><span><?php echo $this->translate('Featured Author'); ?></span></a></li>
+			</ul>
+			<ul style="margin-left: 17px;">
+				<li class="last<?php echo $this->listType == 'author' ? ' ahover' : ''; ?>">
+					<?php if($this->listType == 'author') { ?>
+					<a href="#" class="btn ahover" onclick="javascript: void(0); return false;">
+					<?php } else { ?>
+					<a href="#" onclick="javascript: void(0); return false;" class="btn">
+					<?php } ?><span class="arrow"><?php echo $this->translate('All Categories'); ?></span></a>
+					<div class="dropdown right">
+						<div class="columns">
+							<ul>
+								<?php if($this->categories) { ?>
+								<?php foreach($this->categories as $cat) { ?>
+								<li><a href="<?php echo $cat['href']; ?>"><?php echo $cat['name']?></a></li>
+								<?php } ?>
+								<?php } ?>
+							</ul>
+							<div class="clear"></div>
+						</div>
+					</div>
+				</li>
+			</ul>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="items">
+		<div class="row<?php echo $this->listType == 'author' ? ' rowauthor' : ''; ?>">
+		<?php $i = 0; ?>
+		<?php if($this->listType == 'author') { ?>
+		<?php $i++; ?>
+		<div class="author">
+			<p class="avatar"><a href="<?php echo $this->all_items['href']; ?>"><img src="<?php echo $this->author['avatar']; ?>" alt="Avatar" /></a></p>
+			<h3><?php echo $this->author['username']?></h3>
+			<p class="desc"><?php echo $this->translate('Author has'); ?> <?php echo $this->author['items']; ?> <?php echo $this->translate('items for sale and has racked up'); ?> <?php echo $this->author['sales']; ?> <?php echo $this->translate('sales'); ?>!</p>
+			<p class="more"><a href="<?php echo $this->all_items['href']; ?>"><?php echo $this->all_items['name']; ?></a></p>
+		</div>
+		<?php } ?>
+		<?php if($this->items) { ?>
+		<?php $cnt = count($this->items);?>
+		<?php for($j = 0; $j < $cnt; $j++, $i++) { ?>
+		<div class="box<?php echo ($i > 0 && (!(($i + 1) % 4))) ? ' last' : '' ; ?>">
+		<?php echo $this->items[$j]; ?>
+		</div>
+		<?php if($i > 0 && (!(($i + 1) % 4))) { ?>
+			<div class="clear"></div>
+			<span class="pad"><span class="bg"><span class="end"></span></span></span>
+		</div>
+		<div class="row">
+		<?php } ?>
+		<?php } ?>
+		<?php } ?>
+			<div class="clear"></div>
+			<span class="pad"><span class="bg"><span class="end"></span></span></span>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<p class="viewall"><a href="<?php echo $this->all_items['href']; ?>"><?php echo $this->all_items['name']; ?></a></p>
+</div>		
+
+<?php echo $this->footer_part; ?>

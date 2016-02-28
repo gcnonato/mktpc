@@ -1,0 +1,172 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/contacts.png">
+		<?php echo $this->translate('Bulletin E-mails');?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<div class="clear"></div>
+</div>
+
+
+<p class="info">
+	<?php echo $this->translate('Bulletin E-mails Manager');?>.<br>
+	<strong><?php echo $this->translate('Note: If you delete an entry, information will be lost.');?></strong>
+</p>
+
+<form action="<?php echo $module;?>/bulletinemails/" method="get" id="testtt">
+<table cellspacing="0" cellpadding="0" class="display">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th width="20" class="left">#</th>
+			<th class="left"><?php echo $this->translate('Name');?></th>
+			<th class="left"><?php echo $this->translate('E-mail');?></th>
+			<th width="20"><?php echo $this->translate('Subscribed');?></th>
+			<th width="20"><?php echo $this->translate('Delete');?></th>
+		</tr>
+		<tr class="search">
+			<th></th>
+			<th class="left">
+				<input class="inputbox" type="text" name="filter_username" value="<?php echo $this->filter_username;?>" size="20" />
+			</th>
+			<th class="left">
+				<input class="inputbox" type="text" name="filter_email" value="<?php echo $this->filter_email;?>" size="20" />
+			</th>
+			<th width="20">
+				<select name="filter_bulletin_subscribe" class="inputbox" style="width: 60px;">
+					<?php if($this->filter_bulletin_subscribe == 'true') { ?>
+					<option value=""></option>
+					<option selected="selected" value="true"><?php echo $this->translate('Yes');?></option>
+					<option value="false"><?php echo $this->translate('No');?></option>
+					<?php } elseif($this->filter_bulletin_subscribe == 'false') { ?>
+					<option value=""></option>
+					<option value="true"><?php echo $this->translate('Yes');?></option>
+					<option selected="selected" value="false"><?php echo $this->translate('No');?></option>
+					<?php } else { ?>
+					<option value=""></option>
+					<option value="true"><?php echo $this->translate('Yes');?></option>
+					<option value="false"><?php echo $this->translate('No');?></option>
+					<?php } ?>
+				</select>
+			</th>
+			<th width="20">
+				<input type="submit" value="<?php echo $this->translate('Filter');?>" class="button">
+				&nbsp; <a href="<?php echo $module;?>/bulletinemails/"><img src="cms/<?php echo $module;?>/images/reload.png" class="tooltip"  alt="" title="<?php echo $this->translate('Reset');?>" /></a>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->categories) { ?>
+	<?php foreach($this->categories AS $category) { ?>
+		<tr id="<?php echo $category['id'];?>">
+			<td><?php echo $category['id'];?>.</td>
+			<td><?php echo $category['firstname'];?> <?php echo $category['lastname'];?></td>
+			<td><?php echo $category['email'];?></td>
+
+			<td align="center">
+				<a href="javascript:void(0);" onclick="changeStatus(<?php echo $category['id'];?>);">
+					<img src="cms/<?php echo $module;?>/images/<?php echo ($category['bulletin_subscribe'] == 'true' ? 'yes.png' : 'no.png');?>" class="tooltip"  alt="" title="<?php echo ($category['bulletin_subscribe'] == 'true' ? $this->translate('Yes') : $this->translate('No'));?>" />
+				</a>
+			</td>
+			<td align="center">
+				<a id="item_<?php echo $category['id'];?>" class="delete" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a>
+			</td>
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="5">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+</form>
+
+<script type="text/javascript"> 
+// <![CDATA[
+$(document).ready(function(){
+	$('#testtt').submit(function(){
+		window.location = $('#testtt').joform();
+		return false;
+	});
+});
+//]]>
+</script>
+<script type="text/javascript"> 
+// <![CDATA[
+
+
+
+changeStatus = function(id) {
+	$.ajax({
+        type: 'post',
+        url: "<?php echo $module;?>/bulletinemails/changeStatus",
+        data: 'id=' + id,
+        beforeSend: function () {
+			$('#'+id).animate({
+                'backgroundColor': '#FFBFBF'
+            }, 400);
+        },
+        success: function () {
+        	$.get(window.location.href, function(data){
+        		$('#'+id).html($(data).find('#'+id).html());
+        		setTimeout(function(){
+        			$("#"+id+"").animate({'backgroundColor': 'transparent'}, 400).find('.tooltip').simpletooltip();
+        			deleteInit();
+        		}, 500);
+        	});
+        }
+	});
+};
+
+$(document).ready(function(){
+	deleteInit();
+});
+
+function deleteInit() {
+	$('a.delete').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/bulletinemails/delete",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+}
+// ]]>
+</script>

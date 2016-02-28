@@ -1,0 +1,72 @@
+<?php echo $this->header_part; ?>
+
+<div id="content">
+	<div class="breadcrumb">
+		<p><?php
+			$output = array();
+			foreach($this->crumbs as $crumb) {
+				if(isset($crumb['href']))
+					$output[] = '<a href="'. $crumb['href'] .'">'. $crumb['name'] .'</a>';
+				else
+					$output[] = $crumb['name'];
+			}
+			
+			echo implode(' &nbsp;&rsaquo;&nbsp; ', $output);
+		?></p>
+	</div>
+	<?php // echo $this->author_header; ?>
+	<?php if($this->categories) { ?>
+	<div id="main" class="withhead">
+		<h3 class="title-5"><?php echo $this->translate('Select category'); ?></h3>
+		<?php if(isset($this->msg_error)) { ?>
+		<p id="msg" class="msg box-error err"><?php echo $this->msg_error; ?></p>
+		<?php } ?>
+		<div id="sidebar" class="withhead lft">
+			<div class="box">
+				<div class="pad">
+					<div class="content">
+						<h3 class="title"><?php echo $this->translate('Select category'); ?></h3>
+						<p>
+							<label for="select-1"></label>
+							<select name="select-1" id="select-1">
+								<?php foreach($this->categories as $category) { ?>
+								<option value="<?php echo $category['href']?>"><?php echo $category['name']?></option>
+								<?php } ?>
+							</select>
+						</p>
+					</div>	
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php } ?>
+	<div id="sidebar" class="withhead">
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Current Rate'); ?></h3>
+					<div class="rates">
+						<div class="column">
+							<h4><?php echo $this->percent['percent'];?>%</h4>
+							<p class="label"><?php echo $this->translate('Rates'); ?></p>
+							<p class="tip"><a href="#" class="tooltip" title="<?php echo $this->translate('Your rates are determined based on whether you are selling items exclusively on the Marketplaces and on your volume of sales.'); ?>">?</a></p>
+						</div>
+						<div class="column border">
+							<h4><?php echo (int)$this->total_sales_cnt; ?></h4>
+							<p class="label"><?php echo $this->translate('Total Sales'); ?></p>
+						</div>
+						<div class="clear"></div>
+					</div>
+					</ul>
+				</div>	
+			</div>
+		</div>
+		<div class="balance">
+			<h3><?php echo $this->translate('Current balance'); ?></h3>
+			<p class="total"><?php echo $this->total_balance; ?></p>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<?php echo $this->footer_part; ?>

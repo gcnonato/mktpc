@@ -1,0 +1,162 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+	ob_start();
+?>
+<script type="text/javascript" src="cms/admin/assets/highcharts/highcharts.js"></script>
+<script type="text/javascript" src="cms/admin/assets/flot/jquery.flot.min.js"></script>
+<?php $this->placeholder('scipts', ob_get_clean());?>
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/reports.png">
+		<?php echo $this->translate('Reports');?>
+	</h3>
+	
+	<div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+<form name="admin_form" id="admin_form" method="get" action="">
+	<table cellspacing="0" cellpadding="0" class="display">
+		<thead>
+			<tr>
+				<th>
+					<?php echo $this->translate('From date');?>
+					<br />
+					<input type="text" name="from" value="<?php echo $this->from;?>" class="datepicker" /> 
+				</th>
+				<th>
+					<?php echo $this->translate('To date');?>
+					<br />
+					<input type="text" name="to" value="<?php echo $this->to;?>" class="datepicker" /> 
+				</th>
+				<th>
+					<input type="submit" value="<?php echo $this->translate('Generate report');?>" class="button" name="submit">
+				</th>
+			</tr>
+		</thead>
+	</table>
+</form>
+<div class="clear"></div>
+
+<?php if($this->reports) { ?>
+
+<div class="clear"><br /></div>
+<div id="placeholder" style="width:100%;height:350px;margin-bottom: 20px;"></div>
+<p id="choices"><?php echo $this->translate('Show or hide options');?></p>  
+<div class="clear"></div>  
+
+<script id="source" type="text/javascript">
+$(function () {
+
+	var datasets = {
+			"<?php echo $this->translate('Total');?>": {
+	      label: "<?php echo $this->translate('Total earnings');?>",
+	      data: [<?php $i=0; foreach($this->reports AS $d => $v) { echo ($i ? ',' : ''); echo '['.$i.', "'.$v['total'].'", "'.$v['total_for'].'"]'; $i++;}?>]
+		  },        
+			"<?php echo $this->translate('Receive');?>": {
+	      label: "<?php echo $this->translate('Users commission');?>",
+	      data: [<?php $i=0; foreach($this->reports AS $d => $v) { echo ($i ? ',' : ''); echo '['.$i.', "'.$v['receive'].'", "'.$v['receive_for'].'"]'; $i++;}?>]
+		  },        
+			"<?php echo $this->translate('Referal');?>": {
+	      label: "<?php echo $this->translate('Referal program sums');?>",
+	      data: [<?php $i=0; foreach($this->reports AS $d => $v) { echo ($i ? ',' : ''); echo '['.$i.', "'.$v['referal'].'", "'.$v['referal_for'].'"]'; $i++;}?>]
+		  },        
+			"<?php echo $this->translate('Win');?>": {
+	      label: "<?php echo $this->translate('Net total');?>",
+	      data: [<?php $i=0; foreach($this->reports AS $d => $v) { echo ($i ? ',' : ''); echo '['.$i.', "'.$v['win'].'", "'.$v['win_for'].'"]'; $i++;}?>]
+		  },
+			"<?php echo $this->translate('Deposit');?>": {
+	      label: "<?php echo $this->translate('Deposit sum');?>",
+	      data: [<?php $i=0; foreach($this->reports AS $d => $v) { echo ($i ? ',' : ''); echo '['.$i.', "'.$v['deposit'].'", "'.$v['deposit_for'].'"]'; $i++;}?>]
+		  },        			         
+			"<?php echo $this->translate('Withdraw');?>": {
+	      label: "<?php echo $this->translate('Paid out sums');?>",
+	      data: [<?php $i=0; foreach($this->reports AS $d => $v) { echo ($i ? ',' : ''); echo '['.$i.', "'.$v['withdraw'].'", "'.$v['withdraw_for'].'"]'; $i++;}?>]
+		  }        			         
+	};
+	
+	var options = {
+		xaxis: { mode: "time", ticks: [<?php $i=0; foreach($this->reports AS $d => $v) { echo ($i ? ',' : ''); echo '['.$i.', "'.$d.'", '.$i.']'; $i++;}?>] },
+		selection: { mode: "xy" },
+		grid: { hoverable: true, clickable: true },
+		series: { lines: { show: true }, points: { show: true } }
+	};
+			
+	var plot = $.plot($("#placeholder"), datasets, options);	
+
+	function showTooltip(x, y, contents) {
+		$('<div id="tooltip">' + contents + '</div>').css( {
+			position: 'absolute',
+			display: 'none',
+			top: y + 5,
+			left: x + 5
+		}).appendTo("body").fadeIn(200);
+	}
+
+	var previousPoint = null;
+  $("#placeholder").bind("plothover", function (event, pos, item) {
+		$("#x").text(pos.x.toFixed(2));
+		$("#y").text(pos.y.toFixed(2));
+
+		if(item) {
+			if(previousPoint != item.datapoint) {
+				previousPoint = item.datapoint;
+	
+				$("#tooltip").remove();
+				var x = item.datapoint[0].toFixed(2), y = item.datapoint[1].toFixed(2);
+				showTooltip(item.pageX, item.pageY, item.series.label + " (" + item.series.data[item.dataIndex][2] + ")");
+			}
+	  }
+		else {
+			$("#tooltip").remove();
+			previousPoint = null;            
+	  }
+  });
+
+  var i = 0;
+  $.each(datasets, function(key, val) {
+      val.color = i;
+      ++i;
+  });
+
+  var choiceContainer = $("#choices");
+  $.each(datasets, function(key, val) {
+      choiceContainer.append('<br/><input type="checkbox" name="' + key +
+                             '" checked="checked" id="id' + key + '">' +
+                             '<label for="id' + key + '">'
+                              + val.label + '</label>');
+  });
+  choiceContainer.find("input").click(plotAccordingToChoices);
+
+  
+  function plotAccordingToChoices() {
+      var data = [];
+
+      choiceContainer.find("input:checked").each(function () {
+          var key = $(this).attr("name");
+          if (key && datasets[key])
+              data.push(datasets[key]);
+      });
+
+      if (data.length > 0)
+          $.plot($("#placeholder"), data, options);
+  }
+
+  plotAccordingToChoices();
+    
+});
+</script>	
+
+<?php } else { ?>
+<br />
+<span id="fader" style="float: none;">
+	<span class="msgInfo"><span><?php echo $this->translate('Error!');?></span><i class="error_text"><?php echo $this->translate('No information available for this period');?></i></span>
+</span>
+<?php } ?>
+<script type="text/javascript"> 
+	$(document).ready(function(){
+		$( ".datepicker" ).datepicker({
+			dateFormat : 'yy-mm-dd'
+		});
+	});
+</script>

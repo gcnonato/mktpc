@@ -1,0 +1,10 @@
+<div class="thumbnails">
+	<?php foreach($this->previewFiles as $index => $f) { ?>
+	<a href="<?php echo $f['href']; ?>" target="preview">
+		<img src="<?php echo $f['file'];?>" />
+	</a>
+	<?php } ?>
+</div>
+<div class="purchase">    
+	<a href="<?php echo $this->itemhref; ?>" target="_top"><img src="data/themes/images/buy_item.png" class="purchase"></a>
+</div>

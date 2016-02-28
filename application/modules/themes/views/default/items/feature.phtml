@@ -1,0 +1,73 @@
+<?php echo $this->header_part; ?>
+<div class="wrap">
+    <div class="content w981">	
+  	 <div class="clr"></div>    
+  	 	
+  	 	<div class="left w728p">
+  	 		<h2 class="title left"><?php echo $this->translate('Current featured item'); ?></h2>  
+		<div class="listing-holder left">
+  		
+	  		
+	  		<?php if($this->topItem): ?>
+	      	<div class="clr"></div>
+			      <?php echo $this->topItem;?>    
+			  <?php endif; ?>
+			  
+			  <div class="clr"></div>
+		  
+		  </div>
+  		<div class="clr"></div>
+  		<h2 class="title left"><?php echo $this->translate('Items Featured in the Last Six Months'); ?></h2>
+  			<div class="listing-holder left">
+     	 <div class="clr"></div>
+  		
+			<?php if($this->items): ?>
+			<?php foreach($this->items as $foo => $i): ?>
+
+				<?php echo $i;?>
+			
+				<?php endforeach; ?>
+			<?php else: ?>
+				<div class="box-info"><?php echo $this->translate('No items found'); ?></div>
+			<?php endif; ?>
+			
+		</div> <!-- end of list-left -->
+  	 	</div>
+  	 	
+		
+		<div class="sidebar">
+			<a class="blue-btn left mr10 list-btn active" href="javascript: void(0);" id="blist"><span><?php echo $this->translate('List'); ?></span></a>
+    	<a class="blue-btn left grid-btn" href="javascript: void(0);" id="bgrid"><span><?php echo $this->translate('Grid'); ?></span></a>
+        <div class="clr"></div>
+			<div class="clr"></div>
+			
+			<div class="box-title">
+				<div class="box_inner">
+					<?php echo $this->translate('Recently Featured Authors'); ?>
+				</div>
+			</div> <!-- end of box-title -->
+			<?php if($this->featuredAuthors): ?>
+			<?php foreach($this->featuredAuthors as $u): ?> 
+				<div class="box box-to-top">
+					<div class="box_inner2 tcenter w176">
+						<a href="<?php echo $u['userhref']; ?>" class="thumbnail">
+							<?php if($u['avatar']): ?>
+							
+							  <img alt="<?php echo $u['username']; ?>" class="" height="80" src="<?php echo $u['avatar']; ?>" width="80" />
+							<?php else: ?>
+								<img alt="<?php echo $u['username']; ?>" class="" height="80" src="data/themes/images/common/default-user.jpg" width="80" />
+							<?php endif; ?>
+						</a>
+						<br />
+						<strong><a href="<?php echo $u['userhref']; ?>"><?php echo $u['username']; ?></a></strong>
+					</div>
+				</div> <!-- end of box -->            				
+		    <?php endforeach; ?>
+		  <?php endif;?>			
+			
+		</div> <!-- end of list-right -->
+		
+		<div class="clr"></div>
+		</div>
+		</div>
+<?php echo $this->footer_part; ?>

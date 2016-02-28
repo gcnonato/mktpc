@@ -1,0 +1,85 @@
+<?php echo $this->header_part; ?>
+
+<div id="content">
+	<div id="main">
+		<div class="breadcrumb">
+			<?php $crumbs = array(); ?>
+			<p><?php foreach($this->crumbs as $crumb) { 
+				$crumbs[] = '<a href="'. $crumb['href'] .'">'. $crumb['name'] .'</a>';
+			}
+			
+			$crumbs[] = $this->page['name'];
+			
+			echo implode(' &nbsp;&rsaquo;&nbsp; ', $crumbs);
+			?>
+		</div>
+		<div class="textbox textpage">
+			<h1><?php echo $this->page['name']; ?></h1>
+			<?php echo $this->page['text']; ?>
+			<div class="clear"></div>
+			<?php if(JO_Registry::forceGet('page_upload_item') == $this->page['id']) { ?>
+			<p><a href="<?php echo $this->quiz_link; ?>" style="float: right;"><?php echo $this->translate('Take the author quiz'); ?></a></p>
+			<div class="clear"></div>
+			<?php } ?>
+			<?php if(JO_Registry::forceGet('page_affiliate_program') == $this->page['id']) { ?>
+			<h2><?php echo $this->translate('Your Referral Links'); ?></h2>
+			<hr />
+			<p><?php echo $this->translate('Enter your username and paste any marketplace URL below to generate a referral link!'); ?></p>
+			<p><?php echo $this->translate('Or, if you know what you\'re doing, simply add <code>ref=username</code> to the URL\'s query string, replacing <code>username</code> with your own username. '); ?></p>
+			<form action="" method="post" class="form" style="margin-top: 15px;">
+				<p class="input">
+					<label class="label" for="username"><?php echo $this->translate('Your username'); ?></label>
+					<input type="text" value="" name="username" id="username" />
+				</p>
+				<p class="input">
+					<label class="label" for="url"><?php echo $this->translate('URL'); ?></label>
+					<input type="text" value="" name="url" id="url" />
+				</p>
+				<p class="submit">
+					<input type="submit" id="gerate_referral_link" value="<?php echo $this->translate('Generate'); ?>" style="margin-left: 40px;" />
+				</p>
+				<p class="input">
+					<label class="label" for="referral"><b><?php echo $this->translate('Referral link'); ?></b></label>
+					<input type="text" value="" name="url" id="referral" />
+				</p>
+			</form>
+			<div class="clear"></div>
+			<?php } ?>
+		</div>
+	</div>
+	<div id="sidebar">
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<?php if($this->subPages) { ?>
+					<h3 class="title"><?php echo $this->page['name']; ?></h3>
+					<p>
+						<label for="select-1"></label>
+						<select name="select-1" id="select-1">
+							<?php foreach($this->subPages as $subPage) { ?>
+							<option value="<?php echo $subPage['href']?>"<?php echo $subPage['is_selected'] ? ' selected="selected"' : ''; ?>><?php echo $subPage['name']?></option>
+							<?php } ?>
+						</select>
+					</p>
+					<?php } else { ?>
+					<h3 class="title"><?php echo $this->translate('Current Stats'); ?></h3>
+					<div class="rates">
+						<div class="column">
+							<h4><?php echo $this->usersCount?></h4>
+							<p class="label"><?php echo $this->usersCount; ?> <?php echo $this->usersCount > 1 ? $this->translate('members') : $this->translate('member'); ?></p>
+						</div>
+						<div class="column border">
+							<h4><?php echo $this->itemsCount?></h4>
+							<p class="label"><?php echo $this->itemsCount > 1 ? $this->translate('Items') : $this->translate('Item'); ?></p>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<?php } ?>
+				</div>	
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>	
+</div>
+
+<?php echo $this->footer_part; ?>

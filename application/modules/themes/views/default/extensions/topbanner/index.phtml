@@ -1,0 +1,92 @@
+<?php if($this->has_banner && $this->banner_info) { ?>
+<?php ob_start();?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#closeB').click(function() {
+		setCookie('clbanner', 'true', '<?php echo $this->banner_info['cookie']; ?>');
+		$("#topbanner").slideUp(500);
+		return false;
+	});
+
+	$('#topbanner').click(function(e) {
+		$.post('<?php echo $this->banner_info['ajax_url'];?>');
+	});
+});
+
+function setCookie(c_name,value,exdays) {
+	var exdate=new Date();
+	exdate.setDate(exdate.getDate() + exdays);
+	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+	document.cookie=c_name + "=" + c_value;
+}
+</script>
+<style type="text/css">
+/* topbanner */
+#topbanner {
+	position: relative;
+	display: block;
+	width: 100%;
+	<?php if($this->banner_info['height']) { ?>
+	height: <?php echo $this->banner_info['height'];?>px;
+	<?php } ?>
+	text-align: center;
+	<?php if($this->banner_info['photo'] || $this->banner_info['background']) { ?>
+	<?php if($this->banner_info['photo']) { ?>
+	background-image: url(uploads<?php echo $this->banner_info['photo'];?>); 
+	background-repeat: no-repeat; 
+	background-position: top center;
+	<?php } ?>
+	<?php if($this->banner_info['background']) { ?>
+	background-color: #<?php echo $this->banner_info['background'];?>;
+	<?php } ?>
+	<?php } ?>
+}
+
+#topbanner .wrap {
+	display: block;
+	<?php if($this->banner_info['height']) { ?>
+	height: <?php echo $this->banner_info['height'];?>px;
+	<?php } ?>
+	<?php if($this->banner_info['width']) { ?>
+	width: <?php echo $this->banner_info['width'];?>px;
+	<?php } ?>
+	position: relative;
+	overflow: hidden;
+	text-align: left;
+	margin: 0 auto;
+}
+
+#topbanner #closeB {
+	cursor: pointer;
+	position: absolute;
+	right: 15px;
+	top: 10px;
+	display: block;
+	background: #000000;
+	padding: 5px;
+	color: #cccccc;
+	border: 1px solid #000000;
+}
+
+#topbanner #closeB:hover {
+	background-color: #2b3940;
+}
+</style>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+<span id="topbanner">
+	<?php if($this->banner_info['photo']) { ?>
+	<a href="<?php echo $this->banner_info['url'];?>" onclick="this.target='_blank'">
+	<?php } ?>
+		<span class="wrap">
+		<?php if(!$this->banner_info['photo']) { ?>
+			<?php echo $this->banner_info['html'];?>
+		<?php } ?>
+		<?php if($this->banner_info['close'] == 'true') { ?>
+			<span id="closeB"><?php echo $this->translate('Close');?></span>
+		<?php } ?>
+		</span>
+	<?php if($this->banner_info['photo']) { ?>
+	</a> 
+	<?php } ?>
+</span>
+<?php } ?>

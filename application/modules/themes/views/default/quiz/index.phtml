@@ -1,0 +1,75 @@
+<?php echo $this->header_part; ?>
+
+<div id="content">
+	<div class="breadcrumb">
+		<?php $crumbs = array(); ?>
+		<p><?php foreach($this->crumbs as $crumb) { 
+			$crumbs[] = '<a href="'. $crumb['href'] .'">'. $crumb['name'] .'</a>';
+		}
+		
+		$crumbs[] = $this->page_name;
+		
+		echo implode(' &nbsp;&rsaquo;&nbsp; ', $crumbs);
+		?>
+	</div>
+	<div id="main" class="withhead">
+		<div class="viewall">
+			<p><?php echo $this->page_name; ?></p>
+		</div>
+		<div class="textbox">
+			<p><?php echo $this->translate('You have to answer all questions to sell you works'); ?></p>
+		</div>
+		<?php if($this->msg_success) { ?>
+		<p class="msg box-success"><?php echo $this->msg_success; ?></p>
+		<?php } ?>
+		<?php if($this->msg_error) { ?>
+		<p class="msg box-error"><?php echo $this->msg_error; ?></p>
+		<?php } ?>
+		<form action="" method="post" class="form">
+		<?php if($this->questions) { ?>
+		<?php foreach($this->questions as $n => $q) { ?>
+		<div class="check">
+			<h3><?php echo $this->translate('Question №'); ?> <?php echo $n+1;?>:</h3>
+			<p class="label"><?php echo $q['name']; ?></p>
+			<div class="pack">
+				<p>
+				<?php if(isset($this->answers[$q['id']])) { ?>
+				<?php foreach($this->answers[$q['id']] as $z => $a) { ?>
+					<input type="radio" id="answers_<?php echo $z .'_'. $a['id']; ?>" name="answers[<?php echo $q['id']; ?>]" value="<?php echo $a['id']; ?>" />
+					<label for="answers_<?php echo $z .'_'. $a['id']; ?>"><?php echo $a['name']; ?></label><br />
+				<?php } ?>
+				<?php } ?>
+				</p>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<?php } ?>
+		<p class="submit"><input type="submit" name="submit" value="<?php echo $this->translate('Check the quiz'); ?>" /></p>
+	   	<?php } ?>
+		</form>
+		<div class="clear"></div>
+	</div>
+	<div id="sidebar">
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Current Stats'); ?></h3>
+					<div class="rates">
+						<div class="column">
+							<h4><?php echo $this->usersCount?></h4>
+							<p class="label"><?php echo $this->usersCount; ?> <?php echo $this->usersCount > 1 ? $this->translate('members') : $this->translate('member'); ?></p>
+						</div>
+						<div class="column border">
+							<h4><?php echo $this->itemsCount?></h4>
+							<p class="label"><?php echo $this->itemsCount > 1 ? $this->translate('Items') : $this->translate('Item'); ?></p>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>	
+</div>
+
+<?php echo $this->footer_part; ?>

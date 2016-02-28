@@ -1,0 +1,158 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/contacts.png">
+		<?php echo $this->translate('Issue categories');?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<div class="fright mtop3">
+		<a class="button" href="<?php echo $module;?>/contactscategories/create/"><?php echo $this->translate('Add new category');?></a>
+	</div>
+	<div class="clear"></div>
+</div>
+
+
+<p class="info">
+	<?php echo $this->translate('Issue categories Manager');?>.<br>
+	<strong><?php echo $this->translate('Note: If you delete an entry, information will be lost.');?></strong>
+</p>
+
+
+<table cellspacing="0" cellpadding="0" class="display dragable_table" id="sort_order">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th width="20" class="left">#</th>
+			<th class="left"><?php echo $this->translate('Name');?></th>
+			<th width="20"><?php echo $this->translate('Visible');?></th>
+			<th width="20"><?php echo $this->translate('Edit');?></th>
+			<th width="20"><?php echo $this->translate('Delete');?></th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->categories) { ?>
+	<?php foreach($this->categories AS $category) { ?>
+		<tr id="<?php echo $category['id'];?>">
+			<td><?php echo $category['id'];?>.</td>
+			<td><?php echo $category['name'];?></td>
+
+			<td align="center">
+				<a href="javascript:void(0);" onclick="changeStatus(<?php echo $category['id'];?>);">
+					<img src="cms/<?php echo $module;?>/images/<?php echo ($category['visible'] == 'true' ? 'yes.png' : 'no.png');?>" class="tooltip"  alt="" title="<?php echo ($category['visible'] == 'true' ? $this->translate('Yes') : $this->translate('No'));?>" />
+				</a>
+			</td>
+			<td align="center"><a href="<?php echo $module;?>/contactscategories/edit/?id=<?php echo $category['id'];?>"><img title="<?php echo $this->translate('Edit');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/edit.png"></a></td>
+			<td align="center">
+				<a id="item_<?php echo $category['id'];?>" class="delete" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a>
+			</td>
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="5">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+
+<script type="text/javascript"> 
+// <![CDATA[
+
+
+
+changeStatus = function(id) {
+	$.ajax({
+        type: 'post',
+        url: "<?php echo $module;?>/contactscategories/changeStatus",
+        data: 'id=' + id,
+        beforeSend: function () {
+			$('#'+id).animate({
+                'backgroundColor': '#FFBFBF'
+            }, 400);
+        },
+        success: function () {
+        	$.get(window.location.href, function(data){
+        		$('#'+id).html($(data).find('#'+id).html());
+        		setTimeout(function(){
+        			$("#"+id+"").animate({'backgroundColor': 'transparent'}, 400).find('.tooltip').simpletooltip();
+        			deleteInit();
+        			dragdropInit();
+        		}, 500);
+        	});
+        }
+	});
+};
+
+$(document).ready(function(){
+	deleteInit();
+	dragdropInit();
+});
+
+function deleteInit() {
+	$('a.delete').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/contactscategories/delete",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+}
+
+function dragdropInit() {
+	$('.dragable_table').tableDnD({
+	    onDrop: function(table, row) {
+	        $.post('<?php echo $module;?>/contactscategories/sort_order/', $.tableDnD.serialize(), function(data){
+				if(data) {
+					if($("#fader").size()) {
+						$("#fader").remove();  
+					}
+					$('.info_line.top .title').after('<div id="fader" class="fleft mleft30"><div class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></div></div>');
+					setTimeout(function() {
+						$("#fader").customFadeOut("slow" ,    
+						function() {       
+							$("#fader").remove();  
+						});
+					},
+					2000);
+				}
+		    });
+	    }
+	});
+}
+// ]]>
+</script>

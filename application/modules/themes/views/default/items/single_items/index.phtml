@@ -1,0 +1,17 @@
+<div class="flip"><img src="<?php echo $this->item['thumbnail']; ?>" alt="<?php echo $this->item['name']; ?>" class="thumb" /></div>
+<?php if(!isset($this->item['no_items'])) { ?>
+<div class="data">
+	<h3 class="title-1"><a href="<?php echo $this->item['href']; ?>"><?php echo $this->item['name']; ?></a></h3>
+	<p class="meta"><?php echo $this->translate('by'); ?> <a href="<?php echo $this->item['userhref']?>"><?php echo $this->item['username']; ?></a></p>
+	<div class="sales">
+		<p class="total">
+		<?php if(($this->item['free_file']=='false')) { ?>
+		<?php echo $this->item['sales']; ?> <?php echo $this->item['sales'] == 1 ? $this->translate('sale') : $this->translate('sales'); ?>, <?php echo $this->item['price']; ?>
+		<?php } else { ?>
+		<?php echo $this->item['sales']; ?> <?php echo $this->item['sales'] == 1 ? $this->translate('download') : $this->translate('downloads'); ?>, <?php echo $this->translate('free'); ?>
+		<?php } ?></p>
+		<p class="stars"><?php echo $this->item['rating'] > 0 ? str_repeat('<img src="data/themes/images/star.png" alt="Star" />', $this->item['rating']) : ''?></p>
+	</div>
+	<p class="buttons"><a href="<?php echo $this->item['href']; ?>" class="button-blue"><?php echo $this->translate('Buy Now'); ?></a> <?php if(!empty($this->item['demo_url'])) { ?><a href="<?php echo $this->item['demo_url']; ?>" class="button-silver" rel="external"><?php echo $this->translate('View Demo'); ?></a><?php } ?></p>
+</div>
+<?php } ?>

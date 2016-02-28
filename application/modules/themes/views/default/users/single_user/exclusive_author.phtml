@@ -1,0 +1,17 @@
+<div id="main" class="withhead">
+	<h3 class="title-5"><?php echo $this->formtitle?></h3>
+	<?php if(isset($this->msg_success)) { ?>
+	<p id="msg" class="msg<?php echo isset($this->msg_success) ? ' box-success' : ''; ?>"><?php echo isset($this->msg_success) ? $this->msg_success : ''; ?></p>
+	<?php } ?>
+	<form action="" method="post" style="padding-top: 15px;" class="form">
+		<input type="hidden" name="exclusive_author" value="<?php echo $this->user['exclusive_author'] == 'true' ? 'false' : 'true' ?>" />
+		<p><?php echo $this->top_text; ?></p>
+		<br />
+			<p><?php echo $this->translate('Your account is set up as:'); ?></p>
+			<h3 class="social"><?php echo $this->formtitle?></h3>
+		<br />
+		<p><?php echo $this->bottom_text; ?></p>
+        <p class="submit"><input type="submit" value="<?php echo $this->button; ?>" /></p>
+	</form>
+</div>
+<?php echo $this->settings_box; ?>

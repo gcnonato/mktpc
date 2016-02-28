@@ -1,0 +1,211 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<form name="admin_form" id="admin_form" method="post" action="">
+<input type="hidden" name="Lat" value="<?php echo $this->Lat;?>" />
+<input type="hidden" name="Lng" value="<?php echo $this->Lng;?>" />
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/places.png">
+		<?php if($this->level == 1) { ?>
+		Управление на градове
+		<?php } else { ?>
+		Управление на квартали за "<?php echo $this->title;?>"
+		<?php } ?>
+	</h3>
+	
+	<span id="fader" class="fleft mleft30" style="display:none;">
+		<span class="msgError"><span>Грешка!</span><i class="error_text"></i></span>
+	</span>
+	
+	<div class="fright mtop3">
+		<input type="submit" value="Запис" class="button" name="submit">
+		<a class="button" href="<?php echo $this->cancel_action;?>">Отказ</a>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+
+	
+	<div class="tabs mtop3">
+		<ul>
+			<li><a href="#tab_data">Главни</a></li> 
+			<li><a href="#tab_general">Данни</a></li>
+		</ul> 
+		<div class="clear"></div>
+	</div>
+	
+	
+		<div id="tab_general">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>
+					<tr>
+						<td width="150">Снимка:</td>
+						<td>
+							<input type="hidden" name="image" value="<?php echo $this->image; ?>" id="image_input" />
+							<img id="preview" src="<?php echo $this->preview;?>" onclick="image_upload('image_input', 'preview');" />
+	        			</td>
+					</tr>
+					<tr>
+						<td width="150">SEO query: </td>
+						<td>
+							<input type="text" size="55" value="<?php echo $this->keyword;?>" class="inputbox" name="keyword" />
+			        		&nbsp;&nbsp; <img title="Линк който ще се използва за навигацията" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+			        	</td>
+					</tr>
+					<tr>
+						<td width="150">Статус:</td>
+						<td>
+							<select name="status" class="select">
+								<?php if($this->status) { ?>
+								<option selected="selected" value="1">Активен</option>
+								<option value="0">Неактивен</option>
+								<?php } else { ?>
+								<option value="1">Активен</option>
+								<option selected="selected" value="0">Неактивен</option>
+								<?php } ?>
+							</select>
+	        			</td>
+					</tr>
+					<?php if($this->level == 1) { ?>
+					<tr>
+						<td>Категория: </td>
+						<td>
+							<div class="scrollbox">
+								<?php if($this->options) { ?>
+								<?php foreach($this->options AS $key=>$option) { ?>
+								<div class="<?php echo ($key%2 ? 'odd' : 'even');?>">
+									<?php if(in_array($option['option_item_id'], $this->type)) { ?>
+									<label for="option_item_id<?php echo $option['option_item_id'];?>">
+										<input id="option_item_id<?php echo $option['option_item_id'];?>" type="checkbox" checked="checked" value="<?php echo $option['option_item_id'];?>" name="type[]"> <?php echo $option['title'];?>
+									</label>
+									<?php } else { ?>
+									<label for="option_item_id<?php echo $option['option_item_id'];?>">
+										<input id="option_item_id<?php echo $option['option_item_id'];?>" type="checkbox" value="<?php echo $option['option_item_id'];?>" name="type[]"> <?php echo $option['title'];?>
+									</label>
+									<?php } ?>
+								</div>
+								<?php } ?>
+								<?php } ?>   
+							</div>
+						</td>
+					</tr>
+					<?php } ?>
+				</tbody>
+			</table>
+		</div>
+		<div id="tab_data">
+			<table cellspacing="0" cellpadding="0" class="formtable">
+				<tbody>
+					<tr>
+						<td>
+							<div class="tabs mtop10">
+								<ul>
+									<?php foreach($this->languages AS $language) { ?>
+									<li>
+										<a href="#language<?php echo $language['language_id'];?>">
+											<img src="cms/images/flags/<?php echo $language['image'];?>" />
+											<?php echo $language['name'];?>
+										</a>
+									</li> 
+									<?php } ?>
+								</ul>
+								<div class="clear"></div>
+							</div>
+							
+							<?php foreach($this->languages AS $language) { ?>
+							<div id="language<?php echo $language['language_id'];?>">
+								<table cellspacing="0" cellpadding="0" class="formtable">
+									<tbody>
+										<tr>
+											<td width="150">Заглавие: <img title="Това поле е задължително" class="tooltip" alt="Това поле е задължително" src="cms/<?php echo $module;?>/images/required.gif"></td>
+											<td>
+												<input type="text" size="55" title="Моля въведете заглавие за <?php echo $language['name'];?>" value="<?php echo (isset($this->description[$language['language_id']]) ? $this->description[$language['language_id']]['title'] : '');?>" class="inputbox title_box_<?php echo $language['language_id'];?> required" name="description[<?php echo $language['language_id'];?>][title]" />
+						        				&nbsp;&nbsp; <img title="Това поле е задължително" class="tooltip" alt="Tip" src="cms/<?php echo $module;?>/images/sinfo.gif">
+						        			</td>
+										</tr>
+										<tr>
+											<td width="150">Мета заглавие:</td>
+											<td>
+												<input type="text" size="55" value="<?php echo (isset($this->description[$language['language_id']]) ? $this->description[$language['language_id']]['meta_title'] : '');?>" class="inputbox" name="description[<?php echo $language['language_id'];?>][meta_title]" />
+						        			</td>
+										</tr>
+										<tr>
+											<td width="150">Мета описание:</td>
+											<td>
+												<textarea rows="4" cols="53" name="description[<?php echo $language['language_id'];?>][meta_description]" class="valid"><?php echo (isset($this->description[$language['language_id']]) ? $this->description[$language['language_id']]['meta_description'] : '');?></textarea>
+						        			</td>
+										</tr>
+										<tr>
+											<td width="150">Мета думи:</td>
+											<td>
+												<textarea rows="4" cols="53" name="description[<?php echo $language['language_id'];?>][meta_keywords]" class="valid"><?php echo (isset($this->description[$language['language_id']]) ? $this->description[$language['language_id']]['meta_keywords'] : '');?></textarea>
+						        			</td>
+										</tr>
+										<tr>
+											<td width="150">Описание:</td>
+											<td>
+												<textarea rows="4" cols="53" name="description[<?php echo $language['language_id'];?>][description]" class="valid ckeditor_replace"><?php echo (isset($this->description[$language['language_id']]) ? $this->description[$language['language_id']]['description'] : '');?></textarea>
+						        			</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<?php } ?>
+							
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+
+		<div class="info_line bottom">
+			<div class="fright mtop3">
+				<input type="submit" value="Запис" class="button" name="submit">
+				<a class="button" href="<?php echo $this->cancel_action;?>">Отказ</a>
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+	</form>
+	
+
+	
+<script type="text/javascript"> 
+	$(document).ready(function(){
+		$(".tabs ul").idTabs(); 
+	});
+</script>
+
+<script type="text/javascript"><!--
+function image_upload(field, preview) {
+	$('#dialog').remove();
+	
+	$('#content').prepend('<div id="dialog" style="padding: 3px 0px 0px 0px;"><iframe src="<?php echo $module;?>/filemanager?field=' + encodeURIComponent(field) + '" style="padding:0; margin: 0; display: block; width: 100%; height: 100%;" frameborder="no" scrolling="auto"></iframe></div>');
+	
+	$('#dialog').dialog({
+		title: 'Файлов мениджър',
+		close: function (event, ui) {
+			if ($('#' + field).attr('value')) {
+				$.ajax({
+					url: '<?php echo $module;?>/filemanager/image',
+					type: 'POST',
+					data: 'image=' + encodeURIComponent($('#' + field).val()),
+					dataType: 'text',
+					success: function(data) {
+						$('#' + preview).replaceWith('<img src="' + data + '" alt="" id="' + preview + '" class="image" onclick="image_upload(\'' + field + '\', \'' + preview + '\');" />');
+					}
+				});
+			}
+		},	
+		bgiframe: false,
+		width: 800,
+		height: 400,
+		resizable: false,
+		modal: false
+	});
+};
+//--></script>

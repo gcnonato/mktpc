@@ -1,0 +1,100 @@
+<div id="main" class="withhead">
+	<h3 class="title-5"><?php echo $this->formtitle?></h3>
+	<?php if(isset($this->msg_success)) { ?>
+	<p id="msg" class="msg<?php echo isset($this->msg_success) ? ' box-success' : ''; ?>"><?php echo isset($this->msg_success) ? $this->msg_success : ''; ?></p>
+	<?php } ?>
+	<form action="<?php echo $this->upl_form_action; ?>" id="thumb_form" method="post" style="padding-top: 15px;" class="form" enctype="multipart/form-data">
+		<div class="newavatar">
+			<p class="label"><?php echo $this->translate('Avatar'); ?></p>
+			<div class="upload">
+				<p class="thumb"><img id="thumb_image_b" src="<?php echo $this->user['avatar']; ?>" alt="Avatar" /></p>
+				<div class="file">
+					<p class="text"><?php echo $this->translate('Upload new avatar'); ?>:</p>
+					<div class="attachment">
+						<div class="browse"><input type="file" name="file" id="fl" /></div>
+					</div>
+					<div id="progress" style="margin: 10px 0 0 0;">
+				        <div id="bar"></div >
+				        <div id="percent">0%</div >
+				    </div>
+				</div>	
+			</div>
+			<div class="clear"></div>	
+		</div>
+	</form>
+	<form action="" method="post" style="padding-top: 15px;" class="form">
+		<?php if(isset($this->error['firstname'])) { ?>
+		<p class="small errormessage"><?php echo $this->error['firstname'];?></p>
+		<?php } ?>
+		<p class="input">
+			<label for="f1" class="label"><?php echo $this->translate('First Name'); ?> *<br class="hide" /></label>
+			<input type="text" name="firstname" id="f1" value="<?php echo $this->user['firstname']; ?>" <?php echo isset($this->error['firstname']) ? 'class="errorborder" ' : '' ;?>/>
+		</p>
+		<?php if(isset($this->error['lastname'])) { ?>
+		<p class="small errormessage"><?php echo $this->error['lastname'];?></p>
+		<?php } ?>
+		<p class="input">
+			<label for="f2" class="label"><?php echo $this->translate('Sirname'); ?> *<br class="hide" /></label>
+			<input type="text" name="lastname" id="f2" value="<?php echo $this->user['lastname']; ?>" <?php echo isset($this->error['lastname']) ? 'class="errorborder" ' : '' ;?>/>
+		</p>
+		<?php if(isset($this->error['email'])) { ?>
+		<p class="small errormessage"><?php echo $this->error['email'];?></p>
+		<?php } ?>
+		<p class="input">
+			<label for="f3" class="label"><?php echo $this->translate('E-mail Address'); ?> *<br class="hide" /></label>
+			<input type="text" name="email" id="f3" value="<?php echo $this->user['email']; ?>" <?php echo isset($this->error['email']) ? 'class="errorborder" ' : '' ;?>/>
+		</p>
+		<p class="input">
+			<label for="f4" class="label"><?php echo $this->translate('Company Name'); ?><br class="hide" /></label>
+			<input type="text" name="firmname" id="f4" value="<?php echo $this->user['firmname']; ?>" />
+			<a href="#" class="tooltip" title="<?php echo $this->translate('If you want your invoices addressed to a company. Leave blank to use your full name.'); ?>">?</a>
+		</p>
+		<p class="input">
+			<label for="f5" class="label"><?php echo $this->translate('Lives in'); ?><br class="hide" /></label>
+			<input type="text" name="live_city" id="f5" value="<?php echo $this->user['live_city']; ?>" />
+			<a href="#" class="tooltip" title="<?php echo $this->translate('For Example: London'); ?>">?</a>
+		</p>
+		<p class="input">
+			<label for="f9" class="label"><?php echo $this->translate('Country'); ?> *<br class="hide" /></label>
+			<select name="country_id" id="f9">
+				<option value=""><?php echo $this->translate('Do not show the country I\'m from'); ?></option>
+				<?php if($this->countries) { ?>
+				<?php foreach($this->countries as $c) { ?>
+					<option value="<?php echo $c['id']; ?>"<?php echo $this->user['country_id'] == $c['id'] ? ' selected="selected"' : '';?>><?php echo $c['name']; ?></option>
+				<?php } ?>
+				<?php } ?>
+			</select>
+			<a href="#" class="tooltip" title="<?php echo $this->translate('Your country selection determines what flag appears in your badges'); ?>">?</a>
+		</p>
+		<div class="check">
+			<p class="label"><?php echo $this->translate('Login with Facebook'); ?></p>
+			<div class="pack">
+				<p><input type="checkbox" name="facebook" id="f9" value="1"<?php echo $this->user['fb_id'] != 0 ? ' checked="checked"' : ''; ?> /><label for="f9"><?php echo $this->translate('Enable'); ?></label></p>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="check">
+			<p class="label"><?php echo $this->translate('Available for freelance?'); ?></p>
+			<div class="pack">
+				<p><input type="checkbox" name="freelance" id="f6" value="1"<?php echo $this->user['freelance'] ? ' checked="checked"' : ''; ?> /><label for="f6"><?php echo $this->translate('Yes, I\'m available for freelance work'); ?></label></p>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="check">
+			<p class="label"><?php echo $this->translate('Item notification'); ?></p>
+			<div class="pack">
+				<p><input type="checkbox" name="item_note" id="f7" value="1"<?php echo $this->user['item_note'] ? ' checked="checked"' : ''; ?> /><label for="f7"><?php echo $this->translate('Send me an email when my items are approved or rejected'); ?></label></p>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="check">
+			<p class="label"><?php echo $this->translate('Daily summary email'); ?></p>
+			<div class="pack">
+				<p><input type="checkbox" name="daily" id="f8" value="1"<?php echo $this->user['daily'] ? ' checked="checked"' : ''; ?> /><label for="f8"><?php echo $this->translate('Send me a daily summary of all my sales'); ?></label></p>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<p class="submit"><input type="submit" value="<?php echo $this->translate('Save Changes'); ?>" /></p>
+	</form>
+</div>
+<?php echo $this->settings_box; ?>

@@ -1,0 +1,172 @@
+<?php echo $this->header_part; ?>
+
+<div id="content">
+	<div class="breadcrumb">
+		<p><a href="<?php echo $this->getRequest()->getBaseUrl(); ?>"><?php echo $this->translate('Home'); ?></a> &nbsp;&rsaquo;&nbsp; <?php echo $this->translate('Registration'); ?></p>
+	</div>
+	<div id="main" class="withhead">
+		<div class="textboard">
+			<h3>
+				<?php echo $this->translate('Registration');?> 
+				<a href="<?php echo $this->facebook_link; ?>" style="float: right;"><img src="data/themes/images/facebook_button1.jpg" alt="<?php echo $this->translate('Login with Facebook'); ?>"/></a>
+			</h3>
+			
+		</div>
+		<?php if($this->msg_error) { ?>
+		<p class="msg box-error"><?php echo $this->msg_error; ?></p>
+		<?php } ?>
+		<form action="" method="post" style="padding-top: 15px;" class="form">
+			<p class="hide"><input type="hidden" name="fb_id" value="<?php echo $this->user['fb_id']; ?>" /></p>
+			<h3><?php echo $this->translate('Profile details'); ?></h3>
+			<?php if(isset($this->error['efirstname'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['efirstname'];?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="f1" class="label"><?php echo $this->translate('Name'); ?> *<br class="hide" /></label>
+				<input type="text" name="firstname" id="f1" value="<?php echo $this->user['firstname'];?>" <?php echo isset($this->error['efirstname']) ? 'class="errorborder" ' : '' ;?>/>
+			</p>
+			<?php if(isset($this->error['elastname'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['elastname']; ?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="f2" class="label"><?php echo $this->translate('Last name'); ?> *<br class="hide" /></label>
+				<input type="text" name="lastname" id="f2" value="<?php echo $this->user['lastname'];?>" <?php echo isset($this->error['elastname']) ? 'class="errorborder" ' : '' ;?>/>
+			</p>
+			<?php if(isset($this->error['eemail'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['eemail']; ?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="f3" class="label"><?php echo $this->translate('E-mail'); ?> *<br class="hide" /></label>
+				<input type="text" name="email" id="f3" value="<?php echo $this->user['email'];?>" <?php echo isset($this->error['eemail']) ? 'class="errorborder" ' : '' ;?>/>
+			</p>
+			<?php if(isset($this->error['eemail_confirm'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['eemail_confirm']; ?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="f4" class="label"><?php echo $this->translate('Retype'); ?> *<br class="hide" /></label>
+				<input type="text" name="email_confirm" autocomplete="off" id="f4" value="<?php echo $this->user['email_confirm'];?>" <?php echo isset($this->error['eemail_confirm']) ? 'class="errorborder" ' : '' ;?>/>
+			</p>
+			<h3><?php echo $this->translate('Account information'); ?></h3>
+			<?php if(isset($this->error['eusername'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['eusername']; ?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="f5" class="label"><?php echo $this->translate('Username'); ?> *<br class="hide" /></label>
+				<input type="text" name="username" id="f5" value="<?php echo $this->user['username'];?>" onkeyup="javascript: checkAvailability();" <?php echo isset($this->error['eusername']) ? 'class="errorborder" ' : '' ;?>/>				
+				<div id="username_check" class="passcheck" style="display: none;">
+					<img src="data/themes/images/small_loader.gif"> <p><?php echo $this->translate('Check avaiblity'); ?></p>
+				</div>
+			</p>
+			<?php if(isset($this->error['epassword'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['epassword']; ?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="f6" class="label"><?php echo $this->translate('Password'); ?> *<br class="hide" /></label>
+				<input type="password" name="password" id="f6" value="<?php echo $this->user['password'];?>" <?php echo isset($this->error['epassword']) ? 'class="errorborder" ' : '' ;?>/>
+				<a href="#" class="tooltip" title="<?php echo $this->translate('Choose a secured password for your account. Passwords such as \'123456\', \'password\' and \'xxxxxx\' are not recommended!') ;?>">?</a>
+			</p>
+			<?php if(isset($this->error['epassword_confirm'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['epassword_confirm']; ?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="f7" class="label"><?php echo $this->translate('Retype'); ?> *<br class="hide" /></label>
+				<input type="password" name="password_confirm" id="f7" value="<?php echo $this->user['password_confirm'];?>" <?php echo isset($this->error['epassword_confirm']) ? 'class="errorborder" ' : '' ;?>/>
+			</p>
+			<?php if($this->terms) { ?>
+			<h3><?php echo $this->translate('TERMS OF USAGE'); ?></h3>
+			<div class="check">
+				<p class="label"></p>
+				<div class="scroll">
+					<?php echo $this->terms['text']; ?>
+				</div>
+				<div class="clear"></div>
+			</div>
+		    <?php } ?>
+			<div class="check">
+				<p class="label"></p>
+				<div class="pack">
+					<?php if(isset($this->error['eterms'])) { ?>
+					<p class="small errormessage"><?php echo $this->error['eterms']; ?></p>
+					<?php } ?>
+					<p>
+						<input type="checkbox" id="f8" name="terms" value="1" <?php echo $this->user['terms'] ? 'checked="checked" ' : ''; ?>/>
+						<label for="f8"><?php echo $this->translate('I declare that I agree with the website terms of usage'); ?></label>
+					</p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="check">
+				<p class="label"></p>
+				<div class="pack">
+					<p>
+						<input type="checkbox" id="f9" name="subscribed" value="1" <?php echo !isset($this->user['subscribet']) || $this->user['subscribed'] ? 'checked="checked" ' : ''; ?>/>
+						<label for="f9"><?php echo $this->translate('Add my email in the bulletins'); ?></label>
+					</p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="check">
+				<p class="label"></p>
+				<div class="pack">
+					<?php if(isset($this->error['ecaptcha'])) { ?>
+					<p class="small errormessage"><?php echo $this->error['ecaptcha']; ?></p>
+					<?php } ?>
+					<p><?php echo $this->recaptcha; ?></p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<p class="submit"><input type="submit" name="submit" value="<?php echo $this->translate('Create my account'); ?>" /></p>
+		</form>
+	</div>
+	<div id="sidebar">
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Current Stats'); ?></h3>
+					<div class="rates">
+						<div class="column">
+							<h4><?php echo $this->usersCount?></h4>
+							<p class="label"><?php echo $this->usersCount; ?> <?php echo $this->usersCount > 1 ? $this->translate('members') : $this->translate('member'); ?></p>
+						</div>
+						<div class="column border">
+							<h4><?php echo $this->itemsCount?></h4>
+							<p class="label"><?php echo $this->itemsCount > 1 ? $this->translate('Items') : $this->translate('Item'); ?></p>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<?php ob_start();?>
+<script type="text/javascript"> 
+var delay = 0; 
+function checkAvailability() {
+  clearTimeout(delay);
+  delay = setTimeout("$.ajax({data:{username: $('#f5').val()}, dataType:'script', type:'post', url:'<?php echo $this->checkAvaibility; ?>'}); $('#username_check').css('display', 'block');", 1000); 
+}
+
+$(document).ready(function() {
+	head.ready("pass", function(){
+		$.fn.shortPass = "<?php echo $this->translate('The password is too short'); ?>";
+		$.fn.badPass = "<?php echo $this->translate('The password is not strong enough. Please type a more complicated password') ?>";
+		$.fn.goodPass = "<?php echo $this->translate('The password is good'); ?>";
+		$.fn.strongPass = "<?php echo $this->translate('The password is complicated. Well done!'); ?>";
+		$.fn.samePassword = "<?php echo $this->translate('The password and the username are the same.') ?>";
+	
+	
+		$("#f6").parent().passStrength({
+			password: "#f6",
+			userid: "#f5",
+			noteDiv: ""
+		});
+	});
+});
+</script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+	
+
+<?php echo $this->footer_part; ?>

@@ -1,0 +1,147 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/comments.png">
+		<?php echo $this->translate('Reported comments');?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<div class="clear"></div>
+</div>
+
+
+<p class="info">
+	<?php echo $this->translate('Reported comments');?>.<br>
+	<strong><?php echo $this->translate('Note: If you delete an entry, information will be lost.');?></strong>
+</p>
+
+
+<table cellspacing="0" cellpadding="0" class="display dragable_table" id="sort_order">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th class="left"><?php echo $this->translate('Comment');?></th>
+			<th class="left"><?php echo $this->translate('Item');?></th>
+			<th class="left"><?php echo $this->translate('Reported by');?></th>
+			<th width="20"><?php echo $this->translate('Report previewed');?></th>
+			<th width="20"><?php echo $this->translate('Delete');?></th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->comments) { ?>
+	<?php foreach($this->comments AS $page) { ?>
+		<tr id="<?php echo $page['id'];?>">
+			<td><?php echo $page['comment'];?></td>
+			<td>
+				<a href="<?php echo $page['href'];?>" target="_blank"><?php echo $page['item_name'];?></a>
+			</td>
+			<td><?php echo $page['username'];?></td>
+
+			<td align="center">
+				<a id="report_<?php echo $page['id'];?>" class="reported" href="javascript:void(0);">
+					<img title="<?php echo $this->translate('Report previewed');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/yes.png">
+				</a>
+			</td>
+			<td align="center">
+				<a id="item_<?php echo $page['id'];?>" class="delete" href="javascript:void(0);">
+					<img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png">
+				</a>
+			</td>
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="5">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+<?php if($this->pagination) { ?>
+<br />
+<div class="fleft">
+<?php echo $this->translate('Page');?> <b><?php echo $this->page_num;?></b> <?php echo $this->translate('from');?> <b><?php echo $this->total_pages;?></b> (<b><?php echo $this->total_rows;?></b> <?php echo $this->translate('records');?>)
+</div>
+<div class="pagination fright">
+	<?php echo $this->pagination;?>
+</div>
+<div class="clear"></div>
+<?php } ?>
+
+<script type="text/javascript"> 
+// <![CDATA[
+
+$(document).ready(function(){
+	deleteInit();
+	previewedInit();
+});
+
+function deleteInit() {
+	$('a.delete').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/comments/delete",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+}
+
+function previewedInit() {
+	$('a.reported').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/comments/previewed",
+                data: 'id=' + $(this).attr('id').replace('report_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+}
+
+// ]]>
+</script>

@@ -1,0 +1,171 @@
+<?php echo $this->header_part; ?>
+
+<div id="content">
+	<div class="breadcrumb">
+		<p><?php
+			$output = array();
+			foreach($this->crumbs as $crumb) {
+				if(isset($crumb['href']))
+					$output[] = '<a href="'. $crumb['href'] .'">'. $crumb['name'] .'</a>';
+				else
+					$output[] = $crumb['name'];
+			}
+			
+			echo implode(' &nbsp;&rsaquo;&nbsp; ', $output);
+		?></p>
+	</div>
+	<?php echo $this->author_header; ?>
+	<div id="main" class="withhead">
+		<div class="textboard">
+			<h3 class="ntm"><?php echo $this->translate('Your balance'); ?></h3>
+			<p><?php echo $this->translate('Your total balance is')?>: <?php echo $this->user['total']; ?>. <?php echo $this->translate('This includes cash deposited through PayPal and earnings. You are only able to withdraw earnings.'); ?></p>	
+		</div>
+		<table cellpadding="0" cellspacing="0" border="0" class="table-1">
+			<tr>
+				<th colspan="2"><span class="silver"><?php echo $this->translate('Your balance'); ?></span></th>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Current Balance of Cash Deposited (Paid via PayPal)'); ?></td>
+				<td><?php echo $this->user['deposit_f']; ?></td>
+			</tr>
+			<tr class="last">
+				<td><?php echo $this->translate('Current Balance of Earnings (What you can withdraw)'); ?></td>
+				<td><?php echo $this->user['earning_f']; ?></td>
+			</tr>
+		</table>
+		<div class="textboard">
+			<h3><?php echo $this->translate('Make a Payment Request'); ?></h3>
+			<p><?php echo $this->translate('All withdrawals are issued on the 15th of the following month!'); ?><br /> <?php echo $this->translate('When the 15th falls on a weekend or public holiday, it is issued on the next business day.'); ?></p>
+		</div>
+		<?php if(isset($this->msg_success)) { ?>
+		<p id="msg" class="msg box-success"><?php echo $this->msg_success; ?></p>
+		<?php } ?>
+		<form action="" method="post" style="padding-top: 15px;" class="form">
+			<?php if(isset($this->error['amount'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['amount']; ?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="f1" class="label"><?php echo $this->translate('Amount'); ?><br class="hide" /></label>
+				<input type="text" name="amount" id="f1" value="<?php echo $this->user['earning']; ?>" <?php echo isset($this->error['amount']) ? 'class="errorborder" ' : '' ;?> />
+				<a href="#" class="tooltip" title="<?php echo $this->translate('You must still meet the minimum withdrawal amounts below. Your withdrawal request will not be processed unless it meets the minimum requirements.'); ?>">?</a>
+			</p>
+			<?php if(isset($this->error['service']) || isset($this->error['service2'])) { ?>
+			<p class="small errormessage"><?php if(isset($this->error['service'])) { echo $this->error['service']; } else { echo $this->error['service2']; }?></p>
+			<?php } ?>
+			<div class="check">
+				<p class="label"><?php echo $this->translate('Payment Method'); ?></p>
+				<div class="pack">
+					<p><input type="radio" name="service" id="f2" value="paypal" onclick="javascript: show_fields('#d1');" /><label for="f2">PayPal</label><span><a href="#" class="tooltip" title="<?php echo $this->translate('Minimum $50.00 for Moneybookers and PayPal'); ?>">?</a></span></p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="inv" id="d1">
+				<p class="input">
+					<label for="payment_email_address" class="label"><?php echo $this->translate('Paypal Address'); ?><br class="hide" /></label>
+					<input type="text" id="payment_email_address" name="payment_email_address" value="" />
+				</p>
+				<p class="input">
+					<label for="payment_email_address_confirmation" class="label"><?php echo $this->translate('Confirm address'); ?><br class="hide" /></label>
+					<input type="text" id="payment_email_address_confirmation" name="payment_email_address_confirmation" value="" />
+				</p>
+			</div>
+			<div class="check">
+				<p class="label"></p>
+				<div class="pack">
+					<p><input type="radio" name="service" id="f3" value="moneybookers" onclick="javascript: show_fields('#d2');" /><label for="f3">MoneyBookers</label><span><a href="#" class="tooltip" title="<?php echo $this->translate('Minimum $50.00 for Moneybookers and PayPal'); ?>">?</a></span></p>
+					</div>
+				<div class="clear"></div>
+			</div>
+			<div class="inv" id="d2">
+				<p class="input">
+					<label for="payment_email_address" class="label"><?php echo $this->translate('Moneybookers Address'); ?><br class="hide" /></label>
+					<input type="text" id="payment_email_address" name="payment_email_address" value="" />
+				</p>
+				<p class="input">
+					<label for="payment_email_address_confirmation" class="label"><?php echo $this->translate('Confirm address'); ?><br class="hide" /></label>
+					<input type="text" id="payment_email_address_confirmation" name="payment_email_address_confirmation" value="" />
+				</p>
+			</div>
+			<div class="check">
+				<p class="label"></p>
+				<div class="pack">
+					<p><input type="radio" name="service" id="f4" value="swift" onclick="javascript: show_fields('#d3');" /><label for="f4"><?php echo $this->translate('International Transfer'); ?></label><span><a href="#" class="tooltip" title="<?php echo $this->translate('Minimum $500.00 for International Money Transfer'); ?>">?</a></span></p>
+					</div>
+				<div class="clear"></div>
+			</div>
+			<div class="inv" id="d3">
+				<p class="input">
+					<label for="instructions_from_author" class="label"><?php echo $this->translate('Details'); ?><br class="hide" /></label>
+					<textarea name="instructions_from_author" id="instructions_from_author" rows="10" cols="50"></textarea>
+					<a href="#" class="tooltip" title="<?php echo nl2br($this->translate('Your Full Name:
+					You Full Address (including country):
+					Bank Account name (your full name that appears on your bank account statement):
+					Bank Account number:
+					SWIFT Code:
+					IBAN (if any):
+					Bank Name in Full:
+					Bank Branch Address:
+					Destination Country:')); ?>">?</a>
+				</p>
+			</div>
+			<?php if(false) { ?>
+			<div class="check">
+				<p class="label"><?php echo $this->translate('Taxation'); ?></p>
+				<div class="pack">
+					<p><input type="checkbox" name="taxable_australian_resident" value="true" id="f5" onclick="javascript: $('#d4').toggle(); $('#d5').hide();" /><label for="f5"><?php echo $this->translate('I am an Australian Resident for Taxation Purposes'); ?>.</label></p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="txt inv" id="d4">
+				<div class="check">
+					<p class="label"></p>
+					<div class="pack">
+						<p><input type="radio" name="hobbyist" id="hobbyist_true" value="true" onchange="javascript: $('#d5').hide();" /><label for="hobbyist_true"> <?php echo $this->translate('I am an author and this is my hobby.'); ?></label></p>
+						<p><input type="radio" name="hobbyist" id="hobbyist_false" value="false" onchange="javascript: $('#d5').show();" /><label for="hobbyist_true"> <?php echo $this->translate('I am an author and this is my main source of income.'); ?></label></p>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+			<div class="txt inv" id="d5">
+				<p class="input">
+					<label for="abn" class="label"><?php echo $this->translate('ABN'); ?><br class="hide" /></label>
+					<input type="text" id="abn" name="abn" value="" />
+				</p>
+				<p class="input">
+					<label for="acn" class="label"><?php echo $this->translate('ACN'); ?><br class="hide" /></label>
+					<input type="text" id="acn" name="acn" value="" />
+				</p>
+			</div>
+			<?php } ?>
+			<p class="submit"><input type="submit" value="Submit Request" /></p>
+		</form>
+	</div>
+	<div id="sidebar" class="withhead">
+		<div class="balance">
+			<h3><?php echo $this->translate('Current balance'); ?></h3>
+			<p class="total"><?php echo $this->user['total']; ?></p>
+		</div>
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<div class="text">
+						<p class="ntp"><?php echo $this->translate('This is current balance of earnings. What you can withdraw'); ?>!</p>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<?php ob_start(); ?>
+<script type="text/javascript">
+	function show_fields(div_id)
+	{
+		$('[class="inv"]').hide();
+		$(div_id).show();
+	}
+</script>
+<?php $this->placeholder('inhead', ob_get_clean());?>
+
+<?php echo $this->footer_part; ?>

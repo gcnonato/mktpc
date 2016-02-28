@@ -1,0 +1,157 @@
+<?php echo $this->header_part; ?>
+
+<div id="content">
+	<div class="breadcrumb">
+		<p><?php
+			$output = array();
+			foreach($this->crumbs as $crumb) {
+				if(isset($crumb['href']))
+					$output[] = '<a href="'. $crumb['href'] .'">'. $crumb['name'] .'</a>';
+				else
+					$output[] = $crumb['name'];
+			}
+			
+			echo implode(' &nbsp;&rsaquo;&nbsp; ', $output);
+		?></p>
+	</div>
+	<div class="titlehead inner">
+		<h2 class="title-3"><?php echo $this->item['name']; ?></h2>
+		<div class="clear"></div>
+	</div>
+	<div class="stats nomemberbox">
+		<p><a href="<?php echo $this->item_link; ?>"><?php echo $this->translate('Item Details'); ?></a> 
+			<?php if($this->faq_link) { ?>
+			<a href="<?php echo $this->faq_link; ?>"><?php echo $this->translate('Faq'); ?></a> 
+			<?php } ?>
+			<a href="<?php echo $this->comment_link; ?>" class="active"><?php echo $this->translate('Comments'); ?></a> 
+			<?php if($this->edit_link) { ?>
+			<a href="<?php echo $this->edit_link; ?>"><?php echo $this->translate('Edit'); ?></a> 
+			<?php } ?>
+			<?php if($this->delete_link) { ?>
+				<a href="#" onclick="javascript: if(confirm('<?php echo $this->translate('Are you sure you want to delete the item? Once deleted it can not ne restored again!'); ?>')){ window.location.href='<?php echo $this->delete_link; ?>';} return false;"><?php echo $this->translate('Delete'); ?></a>
+			<?php } ?>
+		</p>
+		<div class="clear"></div>
+	</div>
+	<div id="main" class="withhead" style="margin-top:12px;">
+		<?php if(isset($this->msg_success)) { ?>
+		<p id="msg" class="item_msg box-success mgnt20px"><?php echo $this->msg_success; ?></p>
+		<?php } ?>
+		<?php if(isset($this->msg_error)) { ?>
+		<p id="msg" class="item_msg box-error mgnt20px"><?php echo $this->msg_error; ?></p>
+		<?php } ?>
+		<div class="comments">
+			<?php if($this->comments) { ?>
+			<ul>
+				<?php $i = 0; ?>
+				<?php foreach($this->comments as $comment) { ?>
+				<li class="cmmnt" id='c_<?php echo $comment['id']; ?>'>
+					<p class="avatar ntm">
+						<a href="<?php echo $comment['userhref']; ?>"><img src="<?php echo $comment['avatar']; ?>" alt="<?php echo $comment['username']; ?>" /></a>
+						<?php if(!empty($comment['badges'])) { ?>
+						<span><?php foreach($comment['badges'] as $badg) { ?>
+							<img src="<?php echo $badg['photo']?>" alt="<?php echo $badg['name']?>" title="<?php echo $badg['name']?>" />
+							<?php }?></span>
+						<?php } ?>
+					</p>
+					<div class="comment">
+						<?php if($comment['user_id'] == $this->item['user_id']) { ?>
+						<p class="purchased"><span class="author_bg"><?php echo $this->translate('Author'); ?></span></p>
+						<?php } elseif($comment['is_buy']) { ?>
+						<p class="purchased"><span><?php echo $this->translate('Purchased'); ?></span></p>
+						<?php } ?>
+						<h4 class="name"><a href="<?php echo $comment['userhref']; ?>"><?php echo $comment['username']; ?></a> <?php echo $this->translate('SAID'); ?><br /> <?php echo $comment['datetime']; ?></h4>
+						<div class="text mgnb20px"><p><?php echo $comment['comment']; ?></p></div>
+						<?php if(JO_Session::get('user_id')) { ?>
+						<ul class="cat">
+							<?php if(JO_Session::get('username') != $comment['username']) { ?>
+							<li>
+								 <a href="<?php echo $comment['reporthref']; ?>"><?php echo $this->translate('Report'); ?></a>
+							</li>
+							<?php } ?>
+							<li class='cmmnt_btns'>
+								<a href="#" class="rply"><?php echo $this->translate('Replay'); ?></a>
+								<div class="dropdown">
+									<form action="<?php echo $comment['replyhref']; ?>" method="post" class="form" style="width: 335px;">
+										<div class="textarea">
+											<textarea name="comment_reply" class="cmmnt_reply" id="rply_<?php echo $i++; ?>" rows="10"></textarea>
+											<?php if(!empty($this->smiles)) { ?>
+											<div class="clear"></div>
+											<p class="mgnb20px"><?php echo $this->smiles; ?></p>
+											<? } ?>
+										</div>
+										<div class="clear"></div>
+										<p><input type="submit" name="submit" value="<?php echo $this->translate('Reply'); ?>" class="button-blue" /></p>
+									</form>
+								</div>
+							</li>
+						</ul>
+						<?php } ?>
+					</div>
+					<div class="clear"></div>
+					<?php  if(!empty($comment['reply'])) { ?>
+					<ul class="reply">
+						<?php foreach($comment['reply'] as $reply) { ?>
+						<li>
+							<div class="comment">
+								<?php if($reply['user_id'] == $this->item['user_id']) { ?>
+								<p class="purchased"><span class="author_bg"><?php echo $this->translate('Author'); ?></span></p>
+								<?php } elseif($reply['is_buy']) { ?>
+								<p class="purchased"><span><?php echo $this->translate('Purchased'); ?></span></p>
+								<?php } ?>
+								<p class="small_avatar"><a href="<?php echo $reply['userhref']; ?>"><img src="<?php echo $reply['avatar']; ?>" alt="<?php echo $reply['username']; ?>" /></a></p>
+								<h4 class="name">
+									<a href="<?php echo $reply['userhref']; ?>"><?php echo $reply['username']; ?></a> <?php echo $this->translate('SAID'); ?><br /> <?php echo $reply['datetime']; ?>
+									<?php if(!empty($comment['badges'])) { ?>
+									<br/><span><?php foreach($comment['badges'] as $badg) { ?>
+										<img src="<?php echo $badg['photo']?>" alt="<?php echo $badg['name']?>" title="<?php echo $badg['name']?>" />
+										<?php }?></span>
+									<?php } ?>
+								</h4>
+								<div class="text mgnb20px"><p><?php echo $reply['comment']; ?></p></div>
+								<?php if(JO_Session::get('user_id') && JO_Session::get('username') != $reply['username']) { ?>
+								<p class="cat"><a href="<?php echo $reply['reporthref']; ?>"><?php echo $this->translate('Report'); ?></a></p>
+								<?php } ?>
+							</div>
+							<div class="clear"></div>
+						</li>
+						<?php } ?>
+					</ul>
+					<div class="clear"></div>
+					<?php } ?>
+				</li>
+				<?php } ?>
+			</ul>
+			<?php } else { ?>
+				<div class="viewall ntp"><p><?php echo $this->translate('No comments for this item yet'); ?></p></div>
+			<?php } ?>
+			<?php if(JO_Session::get('user_id')) { ?>
+			<form name="comment_form" method="post" action="<?php echo $this->add_comment_link; ?>" class="form" style="margin-top: 15px;">
+				<div class="textarea">
+					<label for="comment" class="label" style="height:50px;"><?php echo $this->translate('Comment'); ?> *<br class="hide" /></label>
+					<textarea name="comment" id="comment" rows="10"></textarea>
+					<?php if(!empty($this->smiles)) { ?>
+					<div class="clear"></div>
+					<p class="small"><?php echo $this->smiles; ?></p>
+					<div class="clear"></div>
+					<? } ?>
+				</div>
+				<div class="check">
+					<p class="label"></p>
+					<div class="pack">
+						<p>
+							<input type="checkbox" name="reply_notification" value="1" id="reply_notification" /><label for="reply_notification"><?php echo $this->translate('Notify me when I recieve a reply');?></label>
+						</p>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<p class="submit"><input type="submit" value="<?php echo $this->translate('Add Comment'); ?>" /></p>
+			</form>
+			<?php } ?>
+		</div>
+	</div>
+	<?php echo $this->rightside; ?>
+	<div class="clear"></div>	
+</div>
+
+<?php echo $this->footer_part; ?>

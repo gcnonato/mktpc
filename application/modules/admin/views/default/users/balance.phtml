@@ -1,0 +1,117 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/cash.png">
+		<?php echo $this->translate('Balance');?> › <?php echo $this->username;?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<div class="fright mtop3">
+		<a class="button" href="<?php echo $this->back_href;?>"><?php echo $this->translate('Back');?></a>
+		<a class="button" href="<?php echo $this->createBalans;?>"><?php echo $this->translate('Add new balance');?></a>
+	</div>
+	
+	<div class="clear"></div>
+</div>
+
+
+
+<p class="info">
+	<?php echo $this->translate('Balance Manager');?>.<br>
+</p>
+
+<table cellspacing="0" cellpadding="0" class="display">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th class="left"><?php echo $this->translate('Balance');?></th>
+			<th class="left"><?php echo $this->translate('Paid');?></th>
+			<th class="left"><?php echo $this->translate('Date');?></th>
+			<th class="left"><?php echo $this->translate('From admin');?></th>
+			<th width="50"><?php echo $this->translate('Edit');?></th>
+			<th width="50"><?php echo $this->translate('Delete');?></th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->balances) { ?>
+	<?php foreach($this->balances AS $payment) { ?>
+		<tr>
+			<td><?php echo $payment['deposit'];?></td>
+			<td style="font-weight:bold;color: <?php echo ($payment['paid'] == 'true' ? '#48691d;' : '#bd2929');?>">
+				<?php echo ($payment['paid'] == 'true' ? $this->translate('Yes') : $this->translate('No'));?>
+			</td>
+			<td><?php echo $payment['datetime'];?></td>
+			<td style="font-weight:bold;color: <?php echo ($payment['from_admin'] ? '#48691d;' : '#bd2929');?>">
+				<?php echo ($payment['from_admin'] ? $this->translate('Yes') : $this->translate('No'));?>
+			</td>
+            
+			<td align="center">
+				<a href="<?php echo $payment['edit'];?>">
+					<img title="<?php echo $this->translate('Edit');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/edit.png">
+				</a>
+			</td>
+			<td align="center">
+					<a href="javascript:void(0);" class="delete" id="item_<?php echo $payment['id'];?>"><img src="cms/<?php echo $module;?>/images/delete.png" class="tooltip"  alt="" title="<?php echo $this->translate('Delete');?>"/></a>
+			</td>
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="6">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+
+<script type="text/javascript"> 
+// <![CDATA[
+$(document).ready(function () {
+	deleteInit();
+});
+
+function deleteInit() {
+	$('a.delete').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/users/deleteBalance/",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+}
+
+// ]]>
+</script>

@@ -1,0 +1,44 @@
+<?php 
+	$request = $this->getRequest();
+?>
+<script type="text/javascript">
+	$(function() {
+		$('.gl_link').click(function() {
+			var file_name = $(this).attr('rel');
+			$.post('<?php echo $this->ajax_link; ?>', 
+				{'item_id': <?php echo $this->item['id']; ?>, 'file': file_name}, 
+				function(data) {
+					$('#gallery_big_image').find('img').attr('src', data.src);
+				}, 'json'
+			);
+			
+			return false;
+		});
+	});
+</script>
+<div id="header-bar"> 
+	<p class="close-header">
+		<a href="<?php echo $this->itemhref; ?>"><span><?php echo $this->translate('Buy this item'); ?></span></a>
+		<?php if($this->site_logo) { ?>
+		<a href="<?php echo $request->getBaseUrl();?>" class="site-logo">
+			<img src="uploads/<?php echo $this->site_logo; ?>" alt="Logo"/>
+		</a>
+		<?php } else { ?>
+		<a href="<?php echo $request->getBaseUrl();?>" class="site-logo">
+			<img src="data/themes/images/logo.png" alt="Logo"/>
+		</a>
+		<?php } ?>
+	</p>
+</div>
+<div class="clear"></div>
+<?php if($this->screenshots_thumbs) { ?>
+<div id="gallery_thumbs">
+	<?php foreach($this->screenshots_thumbs as $thumb) { ?>
+	<a href="#" rel="<?php echo $thumb['file']; ?>" class="gl_link"><img src="<?php echo $thumb['thumb']; ?>" alt="" /></a>
+	<?php } ?>
+</div>
+<div class="clear"></div>
+<div id="gallery_big_image">
+	<img src="<?php echo $this->screenshots_file; ?>" alt="" />
+</div>
+<?php } ?>

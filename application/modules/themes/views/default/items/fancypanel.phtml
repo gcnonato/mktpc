@@ -1,0 +1,34 @@
+<div class="fancy_purchase box" style="width: 983px; display: none; z-index: 99;">
+  <div class="box_inner">
+      
+    <div class="buynow">
+
+      <h2 class="underlined"><a href="#" class="buynow-submit"><?php echo $this->translate('Buy now'); ?></a></h2>
+      <p><?php echo $this->translate('You will be redirected to the choice of payment method for '); ?>  <strong class="buynow-figure"><?php echo $this->item['price']; ?></strong>.<br/>
+      	<a href="#" class="buynow-submit"><img src="data/themes/images/common/paypal.jpg" alt="" height="27" width="202" /></a>
+      </p>
+
+      <form id="buynow-form" action="<?php echo $this->form_action; ?>" method="post">
+      <input type="hidden" name="licence" id="licence" value="regular" />
+      <input type="hidden" name="pay_method" value="paypal" />
+       <input type="submit" name="buy" value="<?php echo $this->translate('Buy'); ?>"/>
+      </form>
+    </div>
+    <div class="prepaid">
+      <h2 class="underlined"><a href="#" class="prepaid-submit"><?php echo sprintf($this->translate('Use Prepaid Deposits (Save %s)'), $this->item['your_profit']); ?></a></h2>
+      <p><?php echo $this->translate('Pay'); ?> <strong class="prepaid-figure"><?php echo $this->item['prepaid_price']; ?></strong> <?php echo $this->translate('from your account ballance'); ?>: <strong><?php echo $this->usertotal; ?></strong><br/>
+       <small>( <a href="<?php echo $this->deposit; ?>"><?php echo $this->translate('Make deposit'); ?> </a> )</small>
+      </p>
+      <form id="prepaid-form" action="<?php echo $this->item_href; ?>" method="post">
+        <input id="stored-item-name" type="hidden" value="<?php echo $this->item['name']; ?>">
+        <input type="hidden" name="licence" id="licence" value="regular" />
+      <input type="hidden" name="pay_method" value="deposit" />
+        <input type="submit" name="buy" value="<?php echo $this->translate('Buy'); ?>"/>
+      </form>
+    </div>
+    <img class="or" src="data/themes/images/common/buttons/or.png" width="41" height="38" alt="Or"/>
+    <a class="close" href="#"><img src="data/themes/images/common/buttons/delete.png" width="14" height="14" /></a>
+    
+    <div class="clr"></div>  
+  </div>
+</div>

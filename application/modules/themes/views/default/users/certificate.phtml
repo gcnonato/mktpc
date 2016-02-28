@@ -1,0 +1,29 @@
+<?php echo $this->translate('LICENCE CERTIFICATE:');?> <?php echo $this->domain;?>
+
+==============================================
+
+<?php echo $this->translate('This document certifies the purchase of:');?>
+
+<?php echo $this->licence;?>
+
+<?php echo $this->translate('as defined in the standard terms and conditions on the Marketplaces.');?>
+
+<?php echo $this->translate('Licensor\'s Author Username:');?> <?php echo $this->username;?>
+
+<?php echo $this->translate('Licensee:');?> <?php echo $this->userfirstlastname;?>
+
+<?php echo $this->translate('For the item:');?> 
+<?php echo $this->itemname;?> <?php if($this->main_file_info) { ?>(<?php echo $this->main_file_info;?>)<?php } ?>
+
+<?php echo $this->item_href;?>
+
+<?php echo $this->translate('Item ID:');?> <?php echo $this->item_id;?>
+
+<?php echo $this->translate('Licence Code:');?> LCN<?php echo $this->order_id;?>
+
+
+
+<?php echo $this->translate('For any queries related to this document or license please contact');?> <?php echo $this->admin_mail;?>.
+
+
+==== <?php echo $this->translate('THIS IS NOT A TAX RECEIPT OR INVOICE');?> ====

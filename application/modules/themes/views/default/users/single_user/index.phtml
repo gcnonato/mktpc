@@ -1,0 +1,87 @@
+<div class="titlehead inner">
+	<h2 class="title-3"><?php echo $this->user['username']; ?></h2>
+	<div class="clear"></div>
+</div>
+<div class="memberbox">
+	<div class="member">
+		<div class="column-1">
+			<p class="avatar"><img src="<?php echo $this->user['avatar']; ?>" id="user_avatar" alt="Avatar" /></p>
+			<?php if(isset($this->user['edit_link'])) { ?>
+			<p class="<?php echo $this->my_profile ? 'button silver' : 'button-blue'; ?>"><a href="<?php echo $this->user['edit_link']['href']; ?>" class="button-silver"><?php echo $this->user['edit_link']['name']; ?></a></p>
+			<?php } ?>
+		</div>
+		<div class="column-2">
+			<?php if($this->user['author_status']) { ?>
+			<h4 class="title"><?php echo $this->user['author_status']; ?> <a href="#" class="tooltip" title="<?php echo $this->user['author_status_description']; ?>">?</a></h4>
+			<?php } ?>
+			<ul class="data">
+				<?php if($this->user['country_name']) { ?>
+				<li><?php echo $this->translate('Lives in'); ?>: <span class="value"><?php echo $this->user['country_name']; ?></span></li>
+				<?php } ?>
+				<li><?php echo $this->translate('Member since'); ?>: <span class="value"><?php echo $this->user['register_datetime']; ?></span></li> 
+				<li><?php echo $this->translate('Freelance'); ?>: <span class="value"><?php echo $this->user['freelance'] == 'true' ? $this->translate('Available') :  $this->translate('Not available');?></span></li> 
+				<?php if($this->user['user_site']) { ?>
+				<li><?php echo $this->translate('Site'); ?>: <span class="value"><a href="http://<?php echo $this->user['user_site']; ?>" target="_blank"><?php echo $this->user['user_site']; ?></a></span></li>
+				<?php } ?>
+			</ul>
+			<?php if($this->user['social']) { ?>
+			<p class="socials"><?php echo $this->translate('Socials'); ?>: 
+			<?php $output = array();
+			foreach($this->user['social'] as $social) { 
+				$output[] = '<a href="'. $social['href'] .'">'. $social['name'] .'</a>';
+			}
+			echo implode(', ', $output);
+			 ?></p>
+			<?php } ?>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="box badges">
+		<div class="pad">
+			<h3 class="title"><?php echo $this->translate('Badges'); ?></h3>
+			<div class="list">
+				<ul id="badges">
+					<?php $cnt = count($this->badges);?>
+					<?php for($i = 0; $i < $cnt; $i++) { ?>
+					<li<?php echo ($i > 0 && !($i%6)) ? ' class="last"' : ''; ?>><img src="<?php echo $this->badges[$i]['photo']; ?>" alt="<?php echo $this->badges[$i]['name']; ?>"></li>
+					<?php } ?>
+				</ul>
+				<div class="clear"></div>
+			</div>
+			<p id="badges_name"><?php echo $cnt > 0 ? $this->badges[$cnt - 1]['name'] : ''; ?></p>
+		</div>
+	</div>
+	<div class="box rating">
+		<div class="pad">
+			<div class="votes">
+				<p class="stars"><?php
+					if($this->user['rating'])
+						echo str_repeat('<img src="data/themes/images/star.png" alt="Star" />', $this->user['rating']);
+				?>
+				</p>
+				<p class="total"><?php echo $this->user['votes']; ?> <?php echo $this->user['votes'] == 1 ? $this->translate('Vote') : $this->translate('Votes'); ?></p>
+			</div>
+			<h3 class="title"><?php echo $this->translate('Rating'); ?></h3>
+			<div class="rate">
+				<div class="items">
+					<p class="total"><?php echo $this->user['items']; ?></p>
+					<p class="label"><a href="#"><?php echo $this->user['items'] == 1 ? $this->translate('Item') : $this->translate('Items'); ?></a></p>
+				</div>
+				<div class="sales">
+					<p class="total"><?php echo $this->user['sales']; ?></p>
+					<p class="label"><?php echo $this->user['sales'] == 1 ? $this->translate('Sale') : $this->translate('Sales'); ?></p>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<div class="stats">
+	<?php if($this->my_profile) { ?>
+	<p><?php foreach($this->stats as $stat) { ?>
+	<a href="<?php echo $stat['href']; ?>"<?php echo $stat['is_selected'] ? ' class="active"' : ''; ?>><?php echo $stat['name']?></a> 
+	<?php } ?></p>
+	<?php } ?>
+	<div class="clear"></div>
+</div>

@@ -1,0 +1,123 @@
+<?php echo $this->header_part; ?>
+
+<div id="content">
+	<div class="breadcrumb">
+		<p><?php
+			$output = array();
+			foreach($this->crumbs as $crumb) {
+				if(isset($crumb['href']))
+					$output[] = '<a href="'. $crumb['href'] .'">'. $crumb['name'] .'</a>';
+				else
+					$output[] = $crumb['name'];
+			}
+			
+			echo implode(' &nbsp;&rsaquo;&nbsp; ', $output);
+		?></p>
+	</div>
+	<div class="titlehead inner">
+		<h2 class="title-3"><?php echo $this->headline; ?></h2>
+		<div class="clear"></div>
+	</div>
+	<div class="stats nomemberbox">
+		<?php $cnt = count($this->mainCategories); ?>
+		<p><?php for($i = 0; $i < $cnt; $i++) { ?>
+			<?php if((isset($this->sel_thread) && $this->sel_thread == $this->mainCategories[$i]['id']) || (!isset($this->sel_thread) && $i == 0)) { ?>
+			<a href="<?php echo $this->mainCategories[$i]['href']; ?>" class="active"><?php echo $this->mainCategories[$i]['name']; ?></a> 
+			<?php } else { ?>
+			<a href="<?php echo $this->mainCategories[$i]['href']; ?>"><?php echo $this->mainCategories[$i]['name']; ?></a> 
+			<?php } ?>
+			<?php } ?>	
+		</p>
+		<div class="clear"></div>
+	</div>
+	<div id="main" class="withhead" style="margin-top:12px;">
+		<?php if(isset($this->msg_success)) { ?>
+		<p id="msg" class="item_msg box-success mgnt20px"><?php echo $this->msg_success; ?></p>
+		<?php } ?>
+		<?php if(isset($this->error['msg_error'])) { ?>
+		<p id="msg" class="item_msg box-error mgnt20px"><?php echo $this->error['msg_error']; ?></p>
+		<?php } ?>
+		<?php if($this->pagination) { ?>
+		<div class="pagination">
+			<p><?php echo $this->pagination; ?></p>
+		</div>
+		<div class="clear"></div>
+		<?php } ?>
+		<div class="comments">
+			<?php if($this->threads) { ?>
+			<ul>
+				<?php $i = 0; ?>
+				<?php foreach($this->threads as $thread) { ?>
+				<li class="cmmnt" id='c_<?php echo $thread['id']; ?>'>
+					<div class="avatar ntm">
+						<div class="avt_div">
+							<a href="<?php echo $thread['userhref']; ?>"><img src="<?php echo $thread['avatar']; ?>" alt="<?php echo $thread['owner']; ?>" /></a>
+							<div class="avatar_tooltip">
+								<div>
+									<strong><?php echo $thread['username']; ?></strong>
+									<a href="<?php echo $thread['recent_link']; ?>"><?php echo $this->translate('Recent Posts'); ?></a>
+									<br/>
+									<a href="<?php echo $thread['threads_user_link']; ?>"><?php echo $this->translate('Threads Started'); ?></a>
+								</div>
+							</div>
+						</div>
+						<span><?php echo $thread['usr_posts']?> <?php echo $thread['usr_posts'] == 1 ? $this->translate('Post') : $this->translate('Posts'); ?></span>
+						<?php if(!empty($thread['badges'])) { ?>
+						<span><?php foreach($thread['badges'] as $badg) { ?>
+							<img src="<?php echo $badg['photo']?>" alt="<?php echo $badg['name']?>" title="<?php echo $badg['name']?>" />
+							<?php }?></span>
+						<?php } ?>
+					</div>
+					<div class="comment">
+						<h4 class="name"><a href="<?php echo $thread['userhref']; ?>"><?php echo $thread['username']; ?></a> <?php echo $this->translate('SAID'); ?><br /> <?php echo $thread['datetime']; ?></h4>
+						<div class="text mgnb20px"><p><?php echo $thread['comment_formated']; ?></p></div>
+						<?php if(JO_Session::get('username') && JO_Session::get('username') != $thread['owner']) { ?>
+						<ul class="cat">
+							<?php if(JO_Session::get('username') != $thread['username']) { ?>
+							<li>
+								<a href="<?php echo $thread['reporthref']; ?>"><?php echo $this->translate('Report'); ?></a>
+							</li>
+							<?php } ?>
+							<li class='cmmnt_btns'>
+								<a href="#" class="rply"><?php echo $this->translate('Replay with quote'); ?></a>
+								<div class="dropdown">
+									<form action="<?php echo $this->add_comment_link; ?>" method="post" class="form" style="width: 335px;">
+										<p class="hide"><input type="hidden" name="thread_id" value="<?php echo $this->threads[0]['thread_id']; ?>" /></p>
+										<p class="hide"><input type="hidden" name="topic_id" value="<?php echo $this->threads[0]['id']; ?>" /></p>
+										<p class="hide"><input type="hidden" name="cmmt_reply" value="1" /></p>
+										<div class="textarea">
+											<textarea name="comment" class="cmmnt_reply" id="rply_<?php echo $i++; ?>" rows="10">[quote]<?php echo $thread['comment']; ?>[/quote]</textarea>
+											<?php if(!empty($this->smiles)) { ?>
+											<div class="clear"></div>
+											<p class="mgnb20px"><?php echo $this->smiles; ?></p>
+											<? } ?>
+										</div>
+										<div class="clear mgnt20px"></div>
+										<p><input type="submit" name="submit" value="<?php echo $this->translate('Reply'); ?>" class="button-blue" /></p>
+									</form>
+								</div>
+							</li>
+						</ul>
+						<?php } ?>
+					</div>
+					<div class="clear"></div>
+				</li>
+				<?php } ?>
+			</ul>
+			<?php } else { ?>
+				<div class="viewall ntp"><p><?php echo $this->translate('No results found'); ?></p></div>
+			<?php } ?>
+			<div class="clear mgnt20px"></div>
+			<?php if($this->pagination) { ?>
+			<div class="pagination bottom">
+				<p><?php echo $this->pagination; ?></p>
+			</div>
+			<div class="clear mgnt20px"></div>
+			<?php } ?>
+		</div>
+	</div>
+	<?php echo $this->rightside; ?>
+	<div class="clear"></div>	
+</div>
+
+<?php echo $this->footer_part; ?>

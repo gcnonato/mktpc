@@ -1,0 +1,67 @@
+<?php echo $this->header_part; ?>
+
+<div id="content">
+	<div class="breadcrumb">
+		<p><?php $cnt = count($this->crumbs); ?>
+		<?php for($i = 0; $i < $cnt; $i++) { 
+			$crumbs[] = '<a href="'. $this->crumbs[$i]['href'] .'">'. $this->crumbs[$i]['name'] .'</a>';
+		?>
+		<?php } ?>
+		<?php echo implode(' &nbsp;&rsaquo;&nbsp; ', $crumbs); ?>
+		&nbsp;&rsaquo;&nbsp; <?php echo $this->category['name']; ?></p>
+	</div>
+	<div class="titlehead inner border">
+		<h2 class="title-3"><?php echo $this->category['name']; ?></h2>
+		<?php if($this->categories) { ?>
+		<div class="filter">
+			<ul>
+				<li class="last">
+					<a href="#" class="btn" onclick="javascript:void(0);return false;"><span class="arrow"><?php echo $this->all_categories_name; ?></span></a>
+					<div class="dropdown right">
+						<div class="columns">
+							<ul>
+								<?php if($this->categories) { ?>
+								<?php foreach($this->categories as $cat) { ?>
+								<li><a href="<?php echo $cat['href']; ?>"><?php echo $cat['name']?></a></li>
+								<?php } ?>
+								<?php } ?>
+							</ul>
+							<div class="clear"></div>
+						</div>
+					</div>
+				</li>
+			</ul>
+			<div class="clear"></div>
+		</div>
+		<?php } ?>
+		<div class="clear"></div>
+	</div>
+	<?php if($this->items) { ?>
+	<div class="options">	
+		<div class="sort">
+			<p><span class="label"><?php echo $this->translate('Sorted by')?>:</span> <a href="<?php echo $this->orders[0]['href']; ?>" class="up<?php echo $this->orders[0]['is_selected'] ? ' active' : ''; ?>"><?php echo $this->orders[0]['name']; ?></a> <a href="<?php echo $this->orders[1]['href']; ?>" class="down<?php echo $this->orders[1]['is_selected'] ? ' active' : ''; ?>"><?php echo $this->orders[1]['name']; ?></a> 
+			<?php foreach($this->sort_by as $sort) { ?>
+			<a href="<?php echo $sort['href']; ?>"<?php echo $sort['is_selected'] ? ' class="active"' : ''; ?>><?php echo $sort['name']; ?></a> 
+			<?php } ?></p>
+			<div class="clear"></div>
+		</div>
+		<div class="pagination">
+			<p><?php echo $this->pagination; ?></p>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="templates">
+		<?php foreach($this->items as $item) { ?>
+		<?php echo $item; ?>
+		<?php } ?>
+	</div>
+	<div class="clear" style="margin-top: 10px;"></div>
+	<div class="pagination bottom">
+		<p><?php echo $this->pagination; ?></p>
+	</div>
+	<?php } else { ?>
+	<div class="viewall"><p><?php echo $this->translate('No items in this category yet'); ?></p></div>
+	<?php } ?>
+</div>
+
+<?php echo $this->footer_part; ?>

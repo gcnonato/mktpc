@@ -1,0 +1,165 @@
+<?php 
+/* @var $request JO_Request */
+$request = $this->getRequest();
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="<?php echo JO_Registry::forceGet('config_language');?>" xml:lang="<?php echo JO_Registry::forceGet('config_language');?>">
+<head>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>INSTALLER v2.0 FOR ThemeClone</title>
+	<base href="<?php echo $request->getBaseUrl();?>" />
+	<link rel="stylesheet" type="text/css" href="http://cloneforest.com/scripts_data/updater/css/_styles.css"/>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script>!window.jQuery && document.write('<script src="http://code.jquery.com/jquery-1.4.2.min.js"><\/script>');</script>
+	
+</head>
+
+<body>
+
+	<div class="top-line">
+		<div class="wrap">
+			<div class="logo-holder left">
+				<img src="http://cloneforest.com/scripts_data/updater/images/logo.png" alt="" title=""/>
+				<div class="clr"></div>
+			</div>
+			
+			<div class="clr"></div>
+		</div><!--wrap-->
+
+	</div><!--top-line -->
+    	
+	<div class="clr"></div>
+	
+	<div class="wrap"> 
+
+		<?php if($this->msg_error) { ?>
+		<div class="box box-error">
+			<?php if(is_array($this->msg_error)) { ?>
+				<ul>
+				<?php foreach($this->msg_error as $msg) { ?>
+					<li><?php echo $msg; ?></li>
+				<?php } ?>
+				</ul>
+			<?php } else { ?>
+				<?php echo $this->msg_error; ?>
+			<?php } ?>
+		</div>
+		<?php } ?>
+		
+		<?php if($this->msg_success) { ?>
+		<div class="box box-success">
+			<?php if(is_array($this->msg_success)) { ?>
+				<ul>
+				<?php foreach($this->msg_success as $msg) { ?>
+					<li><?php echo $msg; ?></li>
+				<?php } ?>
+				</ul>
+			<?php } else { ?>
+				<?php echo $this->msg_success; ?>
+			<?php } ?>
+		</div>
+		<?php } ?>
+
+		<div class="clr"></div>
+
+		<div class="listing-holder left w981">
+		
+			<form id="upload-form" method="post" enctype="multipart/form-data">
+	    
+	    		<h2 class="title">INSTALLER v2.0 FOR ThemeClone</h2>
+				<?php if(!$this->msg_success) { ?>
+				<div class="p">
+					<h5 class="decorator">Db configuration</h5>
+					<br />
+					
+					<dl class="form-list">
+				        <dt class="large">Host:</dt>
+				        <dd class="middle">
+							<input type="text" class="big input" value="<?php echo $request->getPost('params[host]');?>" name="params[host]" />
+						</dd>
+				        <dt class="large">User:</dt>
+				        <dd class="middle">
+							<input type="text" class="big input" value="<?php echo $request->getPost('params[username]');?>" name="params[username]" />
+						</dd>
+				        <dt class="large">Password:</dt>
+				        <dd class="middle">
+							<input type="password" class="big input" value="<?php echo $request->getPost('params[password]');?>" name="params[password]" />
+						</dd>
+				        <dt class="large">BD name:</dt>
+				        <dd class="middle">
+							<input type="text" class="big input" value="<?php echo $request->getPost('params[dbname]');?>" name="params[dbname]" />
+						</dd>
+			      	</dl>
+					
+					<div class="clr"></div>
+				</div>
+				
+				<div class="p">
+					<h5 class="decorator">Administrator account</h5>
+					<br />
+					
+					<dl class="form-list">
+				        <dt class="large">Username:</dt>
+				        <dd class="middle">
+							<input type="text" class="big input" value="<?php echo $request->getPost('username');?>" name="username" />
+						</dd>
+				        <dt class="large">Password:</dt>
+				        <dd class="middle">
+							<input type="password" class="big input" value="<?php echo $request->getPost('password');?>" name="password" />
+						</dd>
+				        <dt class="large">Admin mail:</dt>
+				        <dd class="middle">
+							<input type="text" class="big input" value="<?php echo $request->getPost('admin_mail');?>" name="admin_mail" />
+							<small>On this email will comes all emails that is related to your system</small>
+						</dd>
+				        <dt class="large">Report mail:</dt>
+				        <dd class="middle">
+							<input type="text" class="big input" value="<?php echo $request->getPost('report_mail');?>" name="report_mail" />
+							<small>Email to reports from the system</small>
+						</dd>
+			      	</dl>
+					
+					<div class="clr"></div>
+				</div>
+				
+				<div class="p">
+					<h5 class="decorator">Demo data</h5>
+					<br />
+					
+					<dl class="form-list">
+				        <dt class="large" style="line-height:normal;">Install demo data</dt>
+				        <dd class="middle">
+							<input <?php echo ($request->getPost('demo') == 'yes' ? 'checked="checked"' : '');?> type="checkbox" value="yes" name="demo" /> Yes
+						</dd>
+			      	</dl>
+					
+					<div class="clr"></div>
+				</div>
+				
+				
+				<div style="margin: 0 auto;" class="w220">
+					<br />
+					<input type="hidden" name="install" value="yes" />
+					<a href="javascript: void(0);" onclick="$('#upload-form').submit();" class="btn-small w220">Install</a>
+				</div>
+				<?php } ?>
+				
+			</form>
+
+		</div> <!-- end of item-left -->
+
+		<div class="clr"></div>
+
+	</div> <!-- end of wrap -->
+	<div class="clr space20"></div>
+	
+	<div class="copyright">
+		<div class="wrap">
+			<p class="right"><a href="http://cloneforest.com" title="marketplace script" target="_blank">Marketplace script</a> from CloneForest</p>
+		</div><!--wrap -->            
+	</div><!--copyright -->
+
+
+</body>
+</html>

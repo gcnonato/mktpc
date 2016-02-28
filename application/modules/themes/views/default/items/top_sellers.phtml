@@ -1,0 +1,113 @@
+<?php echo $this->header_part; ?>
+
+
+<div class="wrap">
+    <div class="content w981">		
+  	 <div class="clr"></div>   
+  	 <div class="left w728p">
+  	    <h2 class="title left"><?php echo $this->translate('Weekly Top Sellers'); ?></h2>
+		<div class="right" style="line-height: 25px;">
+			  <a href="<?php echo $this->prevDate; ?>" class="left"><img src="data/themes/images/left-arrow.png" alt="" style="margin-top:21px; margin-right: 5px;"/></a>
+			  <p class="left" style="line-height:50px;"> <?php echo $this->translate('Week Ending'); ?>  <?php echo $this->endDate; ?> </p>			  
+			  
+			  <?php if($this->nextDate): ?>
+			  	<a href="<?php echo $this->nextDate; ?>" class="right"><img src="data/themes/images/right-arrow.png" alt=""  style="margin-top:21px; margin-left: 5px;"/></a>
+			  <?php else: ?>
+			  	<a href="javascript: void(0);" class="right"><img src="data/themes/images/right-arrow.png" alt=""   style="margin-top:21px; margin-left: 5px;" /></a>
+			  <?php endif; ?>
+			</div>
+			</div>
+			<div class="sidebar">
+			<a class="blue-btn left mr10 list-btn active" href="javascript: void(0);" id="blist"><span><?php echo $this->translate('List'); ?></span></a>
+    	<a class="blue-btn left grid-btn" href="javascript: void(0);" id="bgrid"><span><?php echo $this->translate('Grid'); ?></span></a>
+        </div>
+			<div class="clr"></div>
+		<div class="left w728p">
+		<div class="listing-holder">
+		
+
+			
+      <div class="clr"></div>
+  			<?php if($this->topSellItems): ?>
+  			<?php $position = '0'; ?>
+				<?php foreach($this->topSellItems as $i): ?>
+				
+				<?php echo $i;?>
+					<?php endforeach; ?>
+			<?php else: ?>
+				<div class="box-info"><?php echo $this->translate('No items found'); ?></div>
+			<?php endif; ?>
+			<div class="clr"></div>
+			<br /><br />
+       
+         </div>
+       
+  	    <h2 class="title left"><?php echo $this->translate('Top Sellers - 3 months ending '); ?> <?php echo $this->endMonthlyDate; ?></h2>
+		
+		
+			
+
+  		<div class="clr"></div>
+  			<?php if($this->topSellItems){ ?>
+  			<div class="listing-holder">
+		
+
+			
+      <div class="clr"></div>
+				<?php foreach($this->topSellItems as $i) { ?>
+				<?php echo $i;?>
+				<?php } ?>
+				    </div>
+			<?php } else { ?>
+				<div class="box-info"><?php echo $this->translate('No items found'); ?></div>
+			<?php } ?>
+			<div class="clr"></div>
+			<br /><br />
+       
+     
+
+  	    <h2 class="title left"><?php echo $this->translate('Top Sellers - 3 months ending '); ?> <?php echo $this->endMonthlyDate; ?></h2>
+		
+
+			
+
+  		<div class="clr"></div>
+	  		<div class="listing-holder">
+	  		<?php if($this->topMonthlyItems) { ?>
+				<?php foreach($this->topMonthlyItems as $i) { ?>
+				<?php echo $i;?>
+				<?php } ?>
+			<?php } else { ?>
+				<div class="box-info"><?php echo $this->translate('No items found'); ?></div>
+			<?php } ?>
+  		
+			</div>
+		</div> <!-- end of list-left -->
+		
+			<div class="sidebar" style="margin-top: 0px;">
+
+			<div class="box-title">
+				<div class="box_inner">
+					<?php echo $this->translate('Top authors in'); ?> <?php echo $this->monthList[$this->month]; ?>
+				</div>
+			</div> <!-- end of box-title -->
+			<?php if($this->featuredAuthors): ?>
+			<?php foreach($this->featuredAuthors as $u): ?> 
+				<div class="box box-to-top">
+					<div class="box_inner2 tcenter w176">
+						<a href="<?php echo $u['href']; ?>" class="thumbnail">
+							<img alt="<?php echo $u['username']; ?>" class="" src="<?php echo $u['avatar']; ?>" />
+						</a>
+						<br />
+						<strong><a href="<?php echo $u['href']; ?>"><?php echo $u['username']; ?></a></strong>
+					</div>
+				</div> <!-- end of box -->            				
+		    <?php endforeach; ?>
+		  <?php endif;?>			
+		</div> <!-- end of list-right -->
+		
+		<div class="clr"></div>
+		</div>
+		</div>
+
+<?php echo $this->footer_part; ?>

@@ -1,0 +1,538 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+	ob_start();
+?>
+<script type="text/javascript" src="cms/admin/assets/highcharts/highcharts.js"></script>
+<script type="text/javascript" src="cms/admin/assets/flot/jquery.flot.min.js"></script>
+
+<script type="text/javascript">
+				
+	var finance_chart, sales_chart;
+	$(document).ready(function() {
+		finance_chart = new Highcharts.Chart({
+			credits: {
+				enabled: false
+			},
+			chart: {
+				renderTo: 'finance_chart', 
+				defaultSeriesType: 'area'
+			},				
+			title: {
+				text: ''
+			},
+			xAxis: {
+				type: 'datetime'
+			},
+			yAxis: {
+				title: {
+					text: ''
+				},
+				min: 0,
+		         labels: {
+		            formatter: function() {
+		               return formatNumber(this.value, <?php echo $this->currency['decimal_place'];?>, '<?php echo $this->currency['thousand_point'];?>', '<?php echo $this->currency['decimal_point'];?>', '<?php echo $this->currency['symbol_left'];?>', '<?php echo $this->currency['symbol_right'];?>')
+		            }
+		         }
+			},
+			plotOptions: {
+				area: {
+					pointStart: 1,
+					marker: {
+						enabled: false,
+						symbol: 'circle',
+						radius: 2,
+						states: {
+							hover: {
+								enabled: true
+							}
+						}
+					}
+				}
+			},
+			tooltip: {
+				formatter: function() {
+					return '' + this.x +' <?php echo JO_Date::getInstance(null,'MM yy')->toString();?> : '+ this.point.name;
+				}
+			},
+			series: <?php echo $this->finance_array;?>
+		});
+
+		sales_chart = new Highcharts.Chart({
+			credits: {
+				enabled: false
+			},
+			chart: {
+				renderTo: 'sales_chart', 
+				defaultSeriesType: 'line'
+			},				
+			title: {
+				text: ''
+			},
+			xAxis: {
+				categories: <?php echo $this->days;?>
+			},
+			yAxis: {
+				title: {
+					text: ''
+				},
+				min: 0
+			},
+			tooltip: {
+				formatter: function() {
+					return '' + this.x +' <?php echo JO_Date::getInstance(null,'MM yy')->toString();?> : '+ this.y;
+				}
+			},
+			series: <?php echo $this->sales_array;?>
+		});
+	});
+
+
+	function formatNumber(num, dec, thou, pnt, simbol_left, simbol_right) {
+		dec = parseInt(dec);
+	    var x = Math.round(num * Math.pow(10, dec));
+	    var y = ('' + Math.abs(x)).split('');
+	    var z = y.length - dec;
+	    if (z < 0) z--;
+	    for (var i = z; i < 0; i++) y.unshift('0');
+	    if (z < 0) z = 1;
+	    y.splice(z, 0, pnt);
+	    if (y[0] == pnt) y.unshift('0');
+	    while (z > 3) {
+	        z -= 3;
+	        y.splice(z, 0, thou);
+	    }
+	    var r = simbol_left + y.join('') + simbol_right;
+	    return r;
+	}
+	
+</script>
+
+<?php $this->placeholder('scipts', ob_get_clean());?>
+<?php /* ?>
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/home2.png">
+		<?php echo $this->translate('Home');?>
+	</h3>
+	
+	<div class="clear"></div>
+</div>
+<div class="clear"></div>
+<?php */ ?>
+
+<div class="fleft" style="width: 49%;">
+	<div class="info_line top">
+		<h3 class="title">
+			<img alt="" src="cms/<?php echo $module;?>/images/cash.png">
+			<?php echo $this->translate('Finance chart');?>
+		</h3>
+	</div>
+	<div id="finance_chart"></div>
+</div>
+<div class="fleft" style="width: 49%;margin-left: 1%;">
+	<div class="info_line top">
+		<h3 class="title">
+			<img alt="" src="cms/<?php echo $module;?>/images/cash.png">
+			<?php echo $this->translate('Sales chart');?>
+		</h3>
+	</div>
+	<div id="sales_chart"></div>
+</div>
+
+<div class="clear"></div>
+<br />
+
+<div class="fleft" style="width: 49%;">
+	<div class="info_line top">
+		<h3 class="title fleft">
+			<img alt="" src="cms/<?php echo $module;?>/images/cash.png">
+			<?php echo $this->translate('Finance');?>
+		</h3>
+		<div class="fright mtop3">
+			<a class="button" href="<?php echo $this->finance_href;?>"><?php echo $this->translate('Reports');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<?php if($this->sales || $this->sales2) { ?>
+	<table cellspacing="0" cellpadding="0" class="display">
+		<?php if($this->sales) { ?>
+		<tr>
+			<td><strong><?php echo $this->translate('This month website profit');?></strong></td>
+			<td class="ta-right"></td>
+			<td class="right"><strong style="color: <?php echo ($this->sales['win'] ? 'green' : 'red');?>;"><?php echo $this->sales['win_f'];?></strong></td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('This month users profit');?></td>
+			<td class="ta-right"></td>
+			<td class="right"><?php echo $this->sales['receive_f'];?></td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('This month referral earnings');?></td>
+			<td class="ta-right"></td>
+			<td class="right"><?php echo $this->sales['referal_f'];?></td>
+		</tr>
+		<?php } ?>
+		<?php if($this->sales2) { ?>
+		<tr>
+			<td><strong><?php echo $this->translate('Total website profit');?></strong></td>
+			<td class="ta-right"></td>
+			<td class="right"><strong style="color: <?php echo ($this->sales2['win'] ? 'green' : 'red');?>;"><?php echo $this->sales2['win_f'];?></strong></td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('Total users profit');?></td>
+			<td class="ta-right"></td>
+			<td class="right"><?php echo $this->sales2['receive_f'];?></td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate('Total referral earnings');?></td>
+			<td class="ta-right"></td>
+			<td class="right"><?php echo $this->sales2['referal_f'];?></td>
+		</tr>
+		<?php } ?>
+	</table>
+	<?php } ?>
+</div>
+<div class="fleft" style="width: 49%;margin-left: 1%;">
+	<div class="info_line top">
+		<h3 class="title fleft">
+			<img alt="" src="cms/<?php echo $module;?>/images/cash.png">
+			<?php echo $this->translate('Sales');?>
+		</h3>
+		<div class="fright mtop3">
+			<a class="button" href="<?php echo $this->sales_href;?>"><?php echo $this->translate('Sales');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<table cellspacing="0" cellpadding="0" class="display">
+		<?php if($this->sales) { ?>
+		<tr>
+			<td><?php echo $this->translate('This month sales');?></td>
+			<td class="ta-right"><a href="<?php echo $module;?>/orders/?filter_from=<?php echo JO_Date::getInstance(null, '01.mm.yy', true)->toString();?>&filter_to=<?php echo JO_Date::getInstance(null, 't.mm.yy', true)->toString();?>&filter_type=buy"><?php echo $this->sales['num'];?></a></td>
+			<td class="ta-right"><?php echo $this->sales['total_f'];?></td>
+		</tr>
+		<?php } ?>
+		<tr>
+			<td><?php echo $this->translate('This month users');?></td>
+			<td class="ta-right"><a href="<?php echo $module;?>/users/"><?php echo $this->users['month'];?></a></td>
+			<td class="ta-right"></td>
+		</tr>
+		<?php if($this->withdraw['no']) { ?>
+		<tr>
+			<td><?php echo $this->translate('Sums for paying out this month');?></td>
+			<td class="ta-right"><a href="<?php echo $module;?>/gainpayingup/"><?php echo $this->withdraw['no']['num'];?></a></td>
+			<td class="ta-right"><?php echo $this->withdraw['no']['total_f'];?></td>
+		</tr>
+		<?php } ?>
+		<?php if($this->withdraw['paid']) { ?>
+		<tr>
+			<td><?php echo $this->translate('Paid out sums this month');?></td>
+			<td class="ta-right"><a href="<?php echo $module;?>/gainpayingup/"><?php echo $this->withdraw['paid']['num'];?></a></td>
+			<td class="ta-right"><?php echo $this->withdraw['paid']['total_f'];?></td>
+		</tr>
+		<?php } ?>
+		<?php if($this->total) { ?>
+		<tr>
+			<td><?php echo $this->translate('Totals sales');?></td>
+			<td class="ta-right"><a href="<?php echo $module;?>/orders/"><?php echo $this->total['num'];?></a></td>
+			<td class="ta-right"><?php echo $this->total['total_f'];?></td>
+		</tr>
+		<?php } ?>
+		<tr>
+			<td><?php echo $this->translate('Total users');?></td>
+			<td class="ta-right"><a href="<?php echo $module;?>/users/"><?php echo $this->users['total'];?></a></td>
+			<td class="ta-right"></td>
+		</tr>
+	</table>
+</div>
+<div class="clear"></div>
+<br />
+
+<div class="fleft" style="width: 49%;">
+	<div class="info_line top">
+		<h3 class="title fleft">
+			<img alt="" src="cms/<?php echo $module;?>/images/gallery-sml.png">
+			<?php echo $this->translate('Top Authors');?>
+		</h3>
+		<div class="fright mtop3">
+			<a class="button" href="<?php echo $this->users_href;?>"><?php echo $this->translate('Users');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<?php if($this->topAuthors) { ?>
+	<table cellspacing="0" cellpadding="0" class="display">
+		<tr>
+			<th class="left"><?php echo $this->translate('Name');?></th>
+			<th><?php echo $this->translate('Items');?></th>
+			<th class="right"><?php echo $this->translate('Sales profit');?></th>
+		</tr>
+		<?php foreach($this->topAuthors AS $ta) { ?>
+		<tr>
+			<td><a href="<?php echo $module;?>/users/edite/?id=<?php echo $ta['user_id'];?>" title=""><?php echo $ta['username'];?></a></td>
+			<td align="center"><a href="<?php echo $module;?>/items/?filter_user_id=<?php echo $ta['user_id'];?>"><?php echo $ta['items'];?></a></td>
+			<td class="right"><?php echo $ta['sold'];?></td>
+		</tr>
+		<?php } ?>
+	</table>
+	<?php } ?> 
+</div>
+<div class="fleft" style="width: 49%;margin-left: 1%;">
+	<div class="info_line top">
+		<h3 class="title fleft">
+			<img alt="" src="cms/<?php echo $module;?>/images/payout.png">
+			<?php echo $this->translate('Withdrawals');?>
+		</h3>
+		<div class="fright mtop3">
+			<a class="button" href="<?php echo $this->gainpayingup_href;?>"><?php echo $this->translate('Withdrawals');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<?php if($this->withdraws) { ?>
+	<table cellspacing="0" cellpadding="0" class="display">
+		<tr>
+			<th class="left"><?php echo $this->translate('User');?></th>
+			<th><?php echo $this->translate('Amount');?></th>
+			<th><?php echo $this->translate('Paid');?></th>
+		</tr>
+		<?php foreach($this->withdraws AS $payment) { ?>
+		<tr>
+			<td>
+				<?php if($payment['paid'] != 'true') { ?>
+				<a href="<?php echo $module;?>/gainpayingup/edit/?id=<?php echo $payment['id'];?>">
+					<?php echo $payment['username'];?>
+				</a>
+				<?php } else { ?>
+					<?php echo $payment['username'];?>
+				<?php } ?>
+			</td>
+			<td align="center"><?php echo $payment['amount'];?></td>
+			<td style="text-align:center;font-weight:bold;color: <?php echo ($payment['paid'] == 'true' ? '#48691d;' : '#bd2929');?>"><?php echo ($payment['paid'] == 'true' ? $this->translate('Yes') : $this->translate('No'));?></td>
+		</tr>
+		<?php } ?>
+	</table>
+	<?php } ?> 
+</div>
+<div class="clear"></div>
+<br />
+
+<div class="fleft" style="width: 49%;">
+	<div class="info_line top">
+		<h3 class="title fleft">
+			<img alt="" src="cms/<?php echo $module;?>/images/items.png">
+			<?php echo $this->translate('Items for approval');?>
+		</h3>
+		<div class="fright mtop3">
+			<a class="button" href="<?php echo $this->approval_href;?>"><?php echo $this->translate('Queue Items');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<table cellspacing="0" cellpadding="0" class="display">
+		<?php if($this->items) { ?>
+		<?php foreach($this->items AS $i) { ?>
+		<tr>
+			<td><a href="<?php echo $module;?>/queueitems/edit/?m=<?php echo $i['module'];?>&id=<?php echo $i['id'];?>" title=""><?php echo $i['name'];?></a></td>
+		</tr>
+		<?php } ?>
+		<?php } else {  ?>
+		<tr>
+			<td>
+				<span class="msgAlert"><span><?php echo $this->translate('Attention!')?></span><i class="error_text"><?php echo $this->translate('No items for approval');?></i></span>
+			</td>
+		</tr>
+		<?php } ?>
+	</table>
+</div>
+<div class="fleft" style="width: 49%;margin-left: 1%;">
+	<div class="info_line top">
+		<h3 class="title fleft">
+			<img alt="" src="cms/<?php echo $module;?>/images/items.png">
+			<?php echo $this->translate('Queue updated');?>
+		</h3>
+		<div class="fright mtop3">
+			<a class="button" href="<?php echo $this->queue_href;?>"><?php echo $this->translate('Queue Updated Items');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<table cellspacing="0" cellpadding="0" class="display">
+		<?php if($this->updated_items) { ?>
+		<?php foreach($this->updated_items AS $i) { ?>
+		<tr>
+			<td><a href="<?php echo $module;?>/queueupdateditems/edit/?m=<?php echo $i['module'];?>&id=<?php echo $i['id'];?>" title=""><?php echo $i['name'];?></a></td>
+		</tr>
+		<?php } ?>
+		<?php } else {  ?>
+		<tr>
+			<td>
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+		<?php } ?>
+	</table>
+</div>
+<div class="clear"></div>
+<br />
+
+<?php if($this->contacts) { ?>
+<div>
+	<div class="info_line top">
+		<h3 class="title fleft">
+			<img alt="" src="cms/<?php echo $module;?>/images/contacts.png">
+			<?php echo $this->translate('Recent contacts');?>
+		</h3>
+		<div class="fright mtop3">
+			<a class="button" href="<?php echo $this->contacts_href;?>"><?php echo $this->translate('Contacts');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<table cellspacing="0" cellpadding="0" class="display">
+		<thead>
+			<tr class="nodrop nodrag">
+				<th class="left"><?php echo $this->translate('Name');?></th>
+				<th class="left"><?php echo $this->translate('E-mail');?></th>
+				<th class="left"><?php echo $this->translate('Issue');?></th>
+				<th class="left"><?php echo $this->translate('Date');?></th>
+				<th class="left"><?php echo $this->translate('Answer Date');?></th>
+				<th width="50"><?php echo $this->translate('Has response');?></th>
+				<th width="50"><?php echo $this->translate('View');?></th>
+				<th width="50"><?php echo $this->translate('Delete');?></th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php foreach($this->contacts AS $contact) { ?>
+			<tr id="contact_row_<?php echo $contact['id'];?>">
+				<td><?php echo $contact['name'];?></td>
+				<td><?php echo $contact['email'];?></td>
+				<td><?php echo $contact['issue'];?></td>
+				<td><?php echo $contact['datetime'];?></td>
+				<td><?php echo $contact['answer_datetime'];?></td>
+				<td align="center"><img title="<?php echo ($contact['has_response'] ? $this->translate('Yes') : $this->translate('No'));?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/<?php echo ($contact['has_response'] ? 'yes' : 'no');?>.png"></td>
+				<td align="center"><a href="<?php echo $module;?>/contacts/edit/?id=<?php echo $contact['id'];?>&page=<?php echo $this->page_num;?>"><img title="<?php echo $this->translate('View');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/view.png"></a></td>
+				<td align="center"><a id="contact_<?php echo $contact['id'];?>" class="delete_contact" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a></td>
+			</tr>
+		<?php } ?>
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript"> 
+// <![CDATA[
+$(document).ready(function(){
+	$('a.delete_contact').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/contacts/delete",
+                data: 'id=' + $(this).attr('id').replace('contact_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+});
+// ]]>
+</script>
+<?php } ?>
+<div class="clear"></div>
+<br />
+
+<?php if($this->tags) { ?>
+<div>
+	<div class="info_line top">
+		<h3 class="title fleft">
+			<img alt="" src="cms/<?php echo $module;?>/images/gallery-sml.png">
+			<?php echo $this->translate('Tags for approval');?>
+		</h3>
+		<div class="fright mtop3">
+			<a class="button" href="<?php echo $this->tags_href;?>"><?php echo $this->translate('Tags');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<table cellspacing="0" cellpadding="0" class="display">
+		<thead>
+			<tr class="nodrop nodrag">
+				<th class="left"><?php echo $this->translate('Tag');?></th>
+				<th width="50"><?php echo $this->translate('Visible');?></th>
+				<th width="50"><?php echo $this->translate('Edit');?></th>
+				<th width="50"><?php echo $this->translate('Delete');?></th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php foreach($this->tags AS $tag) { ?>
+			<tr id="tag_row_<?php echo $tag['id'];?>">
+				<td><?php echo $tag['name'];?></td>
+
+				<td align="center">
+					<a href="javascript:void(0);" onclick="changeStatusTag(<?php echo $tag['id'];?>);">
+						<img src="cms/<?php echo $module;?>/images/<?php echo ($tag['visible'] == 'true' ? 'yes.png' : 'no.png');?>" class="tooltip"  alt="" title="<?php echo ($tag['visible'] == 'true' ? $this->translate('Yes') : $this->translate('No'));?>" />
+					</a>
+				</td>
+				<td align="center"><a href="<?php echo $module;?>/tags/edit/?id=<?php echo $tag['id'];?>"><img title="<?php echo $this->translate('Edit');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/edit.png"></a></td>
+				<td align="center"><a id="tag_<?php echo $tag['id'];?>" class="delete_tag" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a></td>
+			</tr>
+		<?php } ?>
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript"> 
+// <![CDATA[
+$(document).ready(function() {       
+	deleteInitTag();
+});
+
+function deleteInitTag() {
+	$('a.delete_tag').unbind('click').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/tags/delete/",
+                data: 'id=' + $(this).attr('id').replace('tag_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+}
+
+changeStatusTag = function(id) {
+	$.ajax({
+        type: 'post',
+        url: "<?php echo $module;?>/tags/changeStatus",
+        data: 'id=' + id,
+        beforeSend: function () {
+			$('#tag_row_'+id).animate({
+                'backgroundColor': '#FFBFBF'
+            }, 400);
+        },
+        success: function () {
+        	$.get(window.location.href, function(data){
+        		$('#tag_row_'+id).html($(data).find('#tag_row_'+id).html());
+        		setTimeout(function(){
+        			$("#tag_row_"+id+"").animate({'backgroundColor': 'transparent'}, 400).find('.tooltip').simpletooltip();
+        			deleteInitTag();
+        		}, 500);
+        	});
+        }
+	});
+};
+
+// ]]>
+</script>
+<?php } ?>

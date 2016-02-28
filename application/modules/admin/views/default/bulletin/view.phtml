@@ -1,0 +1,66 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<form name="admin_form" id="admin_form" method="post" action="">
+
+	<div class="info_line top">
+		<h3 class="fleft title">
+			<img alt="" src="cms/<?php echo $module;?>/images/contacts.png">
+			<?php echo $this->translate('Bulletin');?>
+		</h3>
+		
+		<span id="fader" class="fleft mleft30" style="display:none;">
+			<span class="msgError"><span><?php echo $this->translate('Error!')?></span><i class="error_text"></i></span>
+		</span>
+		
+		<div class="fright mtop3">
+			<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+			<a class="button" href="<?php echo $module;?>/bulletin/?page=<?php echo $this->page_num;?>"><?php echo $this->translate('Cancel');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+
+	<div class="clear"></div>
+	
+	<table cellspacing="0" cellpadding="0" class="formtable">
+		<tbody>
+			<tr>
+				<td width="150"><?php echo $this->translate('Name');?>: </td>
+				<td>
+					<?php echo $this->info['name'];?>
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Send');?>: </td>
+				<td>
+					<?php echo $this->info['datetime'];?>
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Send to');?>: </td>
+				<td>
+					<?php echo $this->info['readed'];?>
+        		</td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate('Text');?>: </td>
+				<td>
+					<?php echo $this->info['text'];?>
+        		</td>
+			</tr>
+			
+			
+		</tbody>
+	</table>
+	
+		
+	<div class="info_line bottom">
+		<div class="fright mtop3">
+			<input type="submit" value="<?php echo $this->translate('Save');?>" class="button" name="submit">
+			<a class="button" href="<?php echo $module;?>/bulletin/?page=<?php echo $this->page_num;?>"><?php echo $this->translate('Cancel');?></a>
+		</div>
+		<div class="clear"></div>
+	</div>
+		
+</form>

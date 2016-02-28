@@ -1,0 +1,186 @@
+<?php echo $this->extensions_top; ?>
+<?php 
+$request = $this->getRequest();
+?>
+<div id="overtop">
+	<div class="content">
+		<div class="nav lft">
+			<ul>
+				<?php if($this->languages) { ?>
+				<li><a href="#" onclick="javascript: void(0); return false;"><span class="arrow"><img src="<?php echo $this->current_language['image']; ?>" alt="" /><?php echo $this->current_language['name']; ?></span></a>
+					<form action="" method="post" id="language_form">
+						<p class="hide"><input type="hidden" id="language_select_hidden" value="" name="language_id" /></p>
+					</form>
+					<div class="dropdown">
+						<div class="columns">
+							<ul>
+								<?php foreach($this->languages as $lang) { ?>
+								<li><a href="#" onclick="javascript: $('#language_select_hidden').val(<?php echo $lang['id']; ?>);$('#language_form').submit(); return false;"<?php echo isset($lang['active']) ? ' class="active"' : ''; ?>><img src="<?php echo $lang['image']; ?>" alt="" /><?php echo $lang['name']; ?></a></li>	
+								<?php } ?>
+							</ul>
+							<div class="clear"></div>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</li>
+				<?php } ?>
+				<?php if($this->currencies) { ?>
+				<li><a href="#" onclick="javascript: void(0); return false;"><span class="arrow"><?php echo $this->translate('Currency'); ?></span></a>
+					<form action="" method="post" id="currency_form">
+						<p class="hide"><input type="hidden" id="currency_select_hidden" value="" name="currency" /></p>
+					</form>
+					<div class="dropdown">
+						<div class="columns">
+							<ul>
+								<?php foreach($this->currencies as $currency) { ?>
+								<li><a href="#" onclick="javascript: $('#currency_select_hidden').val('<?php echo $currency['code']; ?>');$('#currency_form').submit(); return false;" title="<?php echo $currency['title']; ?>"<?php echo $currency['active'] ? ' class="active"' : ''; ?>><?php echo $currency['title']; ?></a></li>	
+								<?php } ?>
+							</ul>
+							<div class="clear"></div>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</li>
+				<?php } ?>
+			</ul>
+		</div>
+		<div class="nav">
+			<ul>
+				<?php if(isset($this->forum_link)) { ?>
+				<li>
+					<a href="<?php echo $this->forum_link; ?>"><span class="arrow"><?php echo $this->translate('Forum'); ?></span></a>
+					<div class="dropdown">
+						<div class="columns">
+							<ul>
+							<?php foreach($this->threads as $thread) { ?>
+								<li><a href="<?php echo $thread['href']; ?>"><?php echo $thread['name']; ?></a></li>
+							<?php } ?>
+							</ul>
+							<div class="clear"></div>
+						</div>
+					</div>
+				</li>
+				<?php } ?>
+				<?php if(isset($this->menuPages[0])) { ?>
+				<?php $i = 0; $cnt = count($this->menuPages[0]) - 1; ?>
+				<?php foreach ($this->menuPages[0] as $p) { ?>
+				<li<?php echo $i == $cnt ? ' class="last"' : ''; ?>><a href="<?php echo $p['href']; ?>"<?php echo ($p['url'] ? ' rel="external"' : ''); ?>><span<?php echo isset($this->menuPages[$p['id']]) ? ' class="arrow"' : '';?>><?php echo $p['name']; ?></span></a>
+				<?php if(isset($this->menuPages[$p['id']])) { ?>
+					<div class="dropdown">
+						<div class="columns">
+							<ul>
+							<?php foreach($this->menuPages[$p['id']] as $sp) { ?>
+							<li><a href="<?php echo $sp['href']; ?>"<?php echo ($sp['url'] ? ' rel="external"' : ''); ?>><?php echo $sp['name']; ?></a></li>
+							<?php } ?>
+							</ul>
+							<div class="clear"></div>
+						</div>
+					</div>
+				<?php } ?>
+				</li>
+				<?php $i++; } ?>
+				<?php } ?>
+			</ul>
+		</div>
+	</div>
+</div>
+<div id="top">
+	<div class="bgr">
+		<div id="header">
+			<p class="logo">
+				<a href="<?php echo $request->getBaseUrl();?>"><img src="<?php echo ($this->site_logo ? 'uploads/'. $this->site_logo : 'data/themes/images/logo.png'); ?>" alt="Logo" /></a>
+			</p>
+			<div class="nav">
+				<ul>
+					<?php if(isset($this->user)) { ?>
+					<li>
+						<a href="#" onclick="javascript: void(0);return false;"><span class="arrow"><?php echo $this->user['username']; ?>, <?php echo $this->user['total']?></span></a>
+						<div class="dropdown">
+							<div class="columns">
+								<ul>
+								<?php $i = 0;?>
+								<?php foreach($this->options as $option) { ?>
+								<?php if($i == 5) { ?>
+								<li><div class="line"></div></li>
+								<?php } ?>
+								<li><a href="<?php echo $option['href']; ?>" class="<?php echo $option['css']; ?>"><?php echo $option['name']; ?></a></li>
+								<?php $i++; } ?>
+								</ul>
+								<div class="clear"></div>
+							</div>
+						</div>
+					</li>
+					<li><a href="<?php echo $this->user_logout;?>"><span><?php echo $this->translate('Logout'); ?></span></a></li>
+					<?php } else { ?>
+					<li class="silver"><a href="<?php echo $this->user_registration; ?>"><span><?php echo $this->translate('Create Account'); ?></span></a></li>
+					<li id="lgn">
+						<a href="#" id="login_btn"><span class="arrow"><?php echo $this->translate('Sign in'); ?></span></a>
+						<div class="dropdown rght" id="lgn_form">
+							<div class="columns trnsp">
+								<form action="<?php echo $this->user_login; ?>" method="post" class="smallform" id="smallform">
+									<p><input type="text" name="username" autocomplete="off" value="<?php echo mb_strtoupper($this->translate('Username'), 'UTF-8'); ?>" /></p>
+									<p><input id="passtxt" type="text" name="passtxt" value="<?php echo mb_strtoupper($this->translate('Password'), 'UTF-8'); ?>" /></p>
+									<p><input id="password" type="password" name="password" value="" style="display: none;" /></p>
+									<div class="clear"></div>
+									<p><input type="submit" name="login" value="<?php echo $this->translate('Login'); ?>" /></p>
+									<p><a href="<?php echo $this->facebook_link; ?>"><img src="data/themes/images/facebook_button3.jpg" alt="<?php echo $this->translate('Login with Facebook'); ?>"/></a></p>
+									<div class="clear"></div>
+									<p><?php echo $this->translate('Forgotten'); ?> <a href="<?php echo $this->user_lost_username; ?>"><?php echo $this->translate('Username'); ?></a> | <a href="<?php echo $this->user_reset_password; ?>"><?php echo $this->translate('Password'); ?></a></p>
+								</form>
+								<div class="clear"></div>
+							</div>
+						</div>
+					</li>
+					<?php } ?>
+				</ul>
+				<div class="clear"></div>
+			</div>
+			<form action="<?php echo $this->search; ?>" method="get" class="search">
+				<p>
+					<label for="keyword" class="hide"><?php echo $this->translate('Keyword'); ?>:<br /></label>
+					<input type="text" name="keyword" id="keyword" value="<?php echo $this->translate('Search'); ?>" />
+				</p>
+				<p class="submit"><input type="submit" value="Search" /></p>
+			</form>
+			<ul class="submenu">
+				<li>
+					<a href="#" class="btn" onclick="javascript: void(0); return false;"><span class="arrow"><?php echo $this->translate('All Files'); ?></span></a>
+					<div class="dropdown">
+						<div class="columns">
+							<ul>
+								<li><a href="<?php echo $this->recent_href; ?>"><?php echo $this->translate('Recent Files'); ?></a></li>
+								<li><a href="<?php echo $this->top_sellers_href; ?>"><?php echo $this->translate('Popular Files'); ?></a></li>
+						        <li><a href="<?php echo $this->feature_href; ?>"><?php echo $this->translate('Featured Files'); ?></a></li>
+						        <li><a href="<?php echo $this->collections_href; ?>"><?php echo $this->translate('Public Collections'); ?></a></li>
+						       	<li><a href="<?php echo $this->top_href; ?>"><?php echo $this->translate('Top Authors'); ?></a></li>
+								<li><a href="<?php echo $this->all_authors_href; ?>"><?php echo $this->translate('All Authors'); ?></a></li>
+							</ul>
+							<div class="clear"></div>
+						</div>
+					</div>
+				</li>
+				<?php if(isset($this->mainCategories)) { ?>
+	    		<?php $cnt = count($this->mainCategories);?>
+	    		<?php for($i = 0; $i < $cnt; $i++) { ?>
+	        	<li<?php echo ($i == ($cnt - 1) ? ' class="last"' : '');?>>
+	        		<a href="<?php echo $this->mainCategories[$i]['href']; ?>" class="btn"<?php echo $this->mainCategories[$i]['href'] != '#' ? '' : ' onclick="javascript: void(0); return false"'; ?>><span class="arrow"><?php echo $this->mainCategories[$i]['name'];?></span></a>
+	        		<?php if($this->mainCategories[$i]['sub_cats']) { ?>
+	        		<div class="dropdown">
+						<div class="columns">
+							<ul>
+	        		    	<?php foreach($this->mainCategories[$i]['sub_cats'] as $sc) { ?>
+	        		    	<li><a href="<?php echo $sc['href']?>"><?php echo $sc['name']?></a></li>
+	        		    	<?php } ?>
+	        		    	</ul>
+	        		    	<div class="clear"></div>
+	        		    </div>
+	        		</div>
+	        		<?php } ?>
+	        	</li>	
+	        	<?php } ?>
+	    		<?php } ?>
+			</ul>
+		</div>
+	</div>
+</div>
+	

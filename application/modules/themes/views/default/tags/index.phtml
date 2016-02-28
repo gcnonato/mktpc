@@ -1,0 +1,98 @@
+        
+<?php echo $this->header_part; ?>
+<?php if(isset($this->categoriesList)): ?>
+
+
+  <div class="p20">
+  <div class="all-categories">
+		<?php echo $this->categoriesList; ?> 
+		<div class="clear"></div>
+	</div>
+	</div>
+
+<?php else: ?>
+
+
+    <div class="title-line">
+		<div class="wrap">
+            <h1>	<?php echo $this->category['name']; ?></h1>
+		</div><!--wrap -->            
+    </div><!--title-line -->
+    
+
+	<div class="wrap">
+    <div class="content">
+<form class="left order" method="get" action="">
+				<p class="left mr10"><?php echo $this->translate('Order by')?>:</p>
+				<select name="sort_by" onchange="this.form.submit()">
+    			<option value="published_at"<?php if($this->getRequest()->getRequest('sort_by')=='published_at'): ?>selected="selected"<?php endif; ?>><?php echo $this->translate('Date'); ?></option>
+					<option value="name"<?php if($this->getRequest()->getRequest('sort_by')=='name'): ?>selected="selected"<?php endif; ?>><?php echo $this->translate('Title'); ?></option>
+					<option value="root_category"<?php if($this->getRequest()->getRequest('sort_by')=='root_category'): ?>selected="selected"<?php endif; ?>><?php echo $this->translate('Category'); ?></option>
+					<option value="average_rating"<?php if($this->getRequest()->getRequest('sort_by')=='average_rating'): ?>selected="selected"<?php endif; ?>><?php echo $this->translate('Rating'); ?></option>
+					<option value="sales_count"<?php if($this->getRequest()->getRequest('sort_by')=='sales_count'): ?>selected="selected"<?php endif; ?>><?php echo $this->translate('Sales'); ?></option>
+					<option value="cost"<?php if($this->getRequest()->getRequest('sort_by')=='cost'): ?>selected="selected"<?php endif; ?>><?php echo $this->translate('Price'); ?></option>
+				</select>
+				<a href="javascript: void(0);" onclick="submitOrder(this);" title="" class="arrow-<?php if($this->getRequest()->getRequest('order')=='asc'): ?>up<?php else: ?>down<?php endif; ?>"><img src="data/themes/images/arrow_<?php if($this->getRequest()->getRequest('order')=='asc'): ?>up<?php else: ?>down<?php endif; ?>.png"  alt="" /></a>
+	      <input id="order-type" name="order" type="hidden" value="<?php if($this->getRequest()->getRequest('order')=='asc'): ?>asc<?php else: ?>desc<?php endif; ?>" />
+			</form>
+  <div class="pagination">
+        <ul>
+            <?php echo $this->pagination; ?>
+        </ul>
+        </div><!--pagination -->
+        <div class="clr"></div>      
+		<div class="listing-holder left">
+			
+	
+			
+		<?php if($this->items) { ?>
+			<?php foreach($this->items as $foo => $i) { ?>
+			<?php echo $i;?>	
+			<?php } ?>
+		<?php } else { ?>
+			<div class="box-info"><?php echo $this->translate('No items found'); ?></div>
+		<?php } ?>
+			
+				
+        
+        <div class="pagination mt10">
+        <ul>
+          <?php echo $this->pagination; ?>
+        </ul>
+        </div><!--pagination -->
+        <div class="clr"></div>
+        
+    </div><!--content -->
+			
+			<div class="clear"></div>	
+			
+		</div> <!-- end of list-left -->
+		
+		
+		<div class="sidebar">
+    	<a class="blue-btn left mr10 list-btn active" href="javascript: void(0);" id="blist"><span><?php echo $this->translate('List'); ?></span></a>
+    	<a class="blue-btn left grid-btn" href="javascript: void(0);" id="bgrid"><span><?php echo $this->translate('Grid'); ?></span></a>
+        <div class="clr"></div>
+        
+        <?php if($this->discount) { ?>
+			<div class="user-details mt10">
+				<div class="box_inner" style="padding: 10px">
+					<a href="<?php echo $this->user_deposit;?>" title="">
+						<h2 class="left mr5" style="line-height: 19px;"><?php echo $this->discount;?></h2>
+						<p><?php echo $this->translate('off any item when you use prepaid deposits!');?></p>
+					</a>
+					<div class="clr"></div>
+				</div> <!-- end of two-off -->		
+			</div>
+			<?php } ?>
+		
+			
+			<div class="clr"></div>
+    </div><!--sidebar -->
+
+	<div class="clr"></div>
+	</div><!--wrap -->
+
+<?php endif; ?>
+
+<?php echo $this->footer_part; ?>

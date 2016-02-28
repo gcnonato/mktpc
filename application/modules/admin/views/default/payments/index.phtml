@@ -1,0 +1,67 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/cash.png">
+		<?php echo $this->translate('Payments');?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	
+	<div class="clear"></div>
+</div>
+
+
+
+<p class="info">
+	<?php echo $this->translate('Payments Manager');?>.<br>
+</p>
+
+<table cellspacing="0" cellpadding="0" class="display">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th class="left"><?php echo $this->translate('Payment');?></th>
+			<th class="left"><?php echo $this->translate('Status');?></th>
+			<th class="left"><?php echo $this->translate('Sort');?></th>
+			<th width="50"><?php echo $this->translate('Edit');?></th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->payments) { ?>
+	<?php foreach($this->payments AS $payment) { ?>
+		<tr>
+			<td><?php echo $payment['name'];?></td>
+			<td><?php echo $payment['status'];?></td>
+			<td><?php echo $payment['sort'];?></td>
+            
+			<td align="center"><a href="<?php echo $payment['edit'];?>"><img title="<?php echo $this->translate('Edit');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/edit.png"></a></td>
+			
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="4">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>

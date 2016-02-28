@@ -1,0 +1,297 @@
+<?php echo $this->header_part; ?>
+
+<div id="content">
+	<div class="breadcrumb">
+		<p><?php
+			$output = array();
+			foreach($this->crumbs as $crumb) {
+				if(isset($crumb['href']))
+					$output[] = '<a href="'. $crumb['href'] .'">'. $crumb['name'] .'</a>';
+				else
+					$output[] = $crumb['name'];
+			}
+			
+			echo implode(' &nbsp;&rsaquo;&nbsp; ', $output);
+		?></p>
+	</div>
+	<div class="titlehead inner">
+		<h2 class="title-3"><?php echo $this->d['name']; ?></h2>
+		<div class="clear"></div>
+	</div>
+	<div class="stats nomemberbox">
+		<p><a href="<?php echo $this->item_link; ?>"><?php echo $this->translate('Item Details'); ?></a> 
+			<?php if($this->faq_link) { ?>
+			<a href="<?php echo $this->faq_link; ?>"><?php echo $this->translate('Faq'); ?></a> 
+			<?php } ?>
+			<a href="<?php echo $this->comment_link; ?>"><?php echo $this->translate('Comments'); ?></a> 
+			<?php if($this->edit_link) { ?>
+			<a href="<?php echo $this->edit_link; ?>" class="active"><?php echo $this->translate('Edit'); ?></a> 
+			<?php } ?>
+			<?php if($this->delete_link) { ?>
+				<a href="#" onclick="javascript: if(confirm('<?php echo $this->translate('Are you sure you want to delete the item? Once deleted it can not ne restored again!'); ?>')){ window.location.href='<?php echo $this->delete_link; ?>';} return false;"><?php echo $this->translate('Delete'); ?></a>
+			<?php } ?>
+		</p>
+		<div class="clear"></div>
+	</div>
+	<div id="main" class="withhead">
+		<h3 class="title-5"><?php echo $this->translate('Item Edit'); ?></h3>
+		<?php if(isset($this->error['msg_error'])) { ?>
+		<p id="msg" class="msg box-error err"><?php echo $this->error['msg_error']; ?></p>
+		<?php } ?>
+		<form method="post" action="<?php echo $this->action_upload; ?>" class="form" style="margin-top: 15px;">
+			<p class="hide"><input type="hidden" name="item_id" value="<?php echo $this->d['id']; ?>" /></p>
+			<p class="hide"><input type="hidden" name="category_id" value="<?php echo $this->sel_category; ?>" /></p>
+			<?php if(isset($this->error['ename'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['ename']; ?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="name" class="label"><?php echo $this->translate('Name'); ?> *<br class="hide" /></label>
+				<input type="text" name="name" id="name" value="<?php echo $this->d['name']; ?>" <?php echo isset($this->error['ename']) ? 'class="errorborder" ' : '' ;?>/>
+				<a href="#" class="tooltip" title="<?php echo $this->translate('Max 50 symbols'); ?>">?</a>
+			</p>
+			<?php if(isset($this->error['edescription'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['edescription']; ?></p>
+			<?php } ?>
+			<div class="textarea">
+				<label for="description_editor" class="label"><?php echo $this->translate('Description'); ?> *<br class="hide" /></label>
+				<textarea name="description" id="description_editor" rows="10"><?php echo $this->d['description']; ?></textarea>
+				<a href="#" class="tooltip" title="<?php echo $this->translate('The field is used for search, so please be descriptive!'); ?>">?</a>
+			</div>
+			<div class="clear"></div>
+			<h3 class="title-2"><?php echo $this->translate('Files'); ?></h3>
+			<div class="upload">
+				<p class="label"></p>
+				<div class="attachment">
+					<div class="browse_item">
+						<div class="browse"><input type="file" value="" name="file" id="zip" /></div>
+					</div>
+					<div id="progress">
+				        <div id="bar"></div >
+				        <div id="percent">0%</div>
+				    </div>
+				</div>
+			</div>
+			<?php if(isset($this->error['etheme_preview'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['etheme_preview']; ?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="theme_preview" class="label"><?php echo $this->translate('Thumbnail'); ?> *<br class="hide" /></label>
+				<select name="theme_preview" id="theme_preview">
+					<option value=""></option>
+					<?php if($this->uploaded_files) { ?>
+		  			<?php for($i = 0; $i < count($this->uploaded_files); $i++) { ?>
+		  				<option value="<?php echo $this->uploaded_files[$i][0]['filename']; ?>"<?php echo ($this->d['theme_preview'] == $this->uploaded_files[$i][0]['filename']) ?' selected="selected"' : ''; ?>><?php echo $this->uploaded_files[$i][0]['name']; ?></option>
+		  			<?php } ?>
+			  		<?php } ?>
+				</select>
+				<a href="#" class="tooltip" title="<?php echo $this->translate('Image (png/jpg) for display on the site'); ?>">?</a>
+			</p>
+			<?php if(isset($this->error['etheme_preview_zip'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['etheme_preview_zip']; ?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="theme_preview_zip" class="label"><?php echo $this->translate('Theme Preview'); ?> *<br class="hide" /></label>
+				<select name="theme_preview_zip" id="theme_preview_zip">
+					<option value=""></option>
+					<?php if($this->uploaded_arhives) { ?>
+		  			<?php for($i = 0; $i < count($this->uploaded_arhives); $i++) { ?>
+		  				<option value="<?php echo $this->uploaded_arhives[$i][0]['filename']; ?>"<?php echo ($this->d['theme_preview_zip'] == $this->uploaded_arhives[$i][0]['filename']) ?' selected="selected"' : ''; ?>><?php echo $this->uploaded_arhives[$i][0]['name']; ?></option>
+		  			<?php } ?>
+			  		<?php } ?>
+				</select>
+				<a href="#" class="tooltip" title="<?php echo $this->translate('ZIP file of images (png/jpg) w/ optional text descriptions for display on the site'); ?>">?</a>
+			</p>
+			<?php if(isset($this->error['emain_file'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['emain_file']; ?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="main_file" class="label"><?php echo $this->translate('Main File(s)'); ?> *<br class="hide" /></label>
+				<select name="main_file" id="main_file">
+					<option value=""></option>
+					<?php if($this->uploaded_arhives) { ?>
+		  			<?php for($i = 0; $i < count($this->uploaded_arhives); $i++) { ?>
+		  				<option value="<?php echo $this->uploaded_arhives[$i][0]['filename']; ?>"<?php echo ($this->d['main_file'] == $this->uploaded_arhives[$i][0]['filename']) ?' selected="selected"' : ''; ?>><?php echo $this->uploaded_arhives[$i][0]['name']; ?></option>
+		  			<?php } ?>
+			  		<?php } ?>
+				</select>
+				<a href="#" class="tooltip" title="<?php echo $this->translate('ZIP - All Files For Download'); ?>">?</a>
+			</p>
+			<div class="clear"></div>
+			<div class="shadowbox nsh">
+				<div class="pad">
+					<div class="content">
+						<p class="center"><?php echo $this->translate('File size up to 500 MB'); ?></p>
+					</div>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<h3 class="title-2"><?php echo $this->translate('Category & Attribute'); ?></h3>
+			<?php if(isset($this->error['ecategory'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['ecategory']; ?></p>
+			<?php } ?>
+			<p class="check">
+				<p class="label"><?php echo $this->translate('Category'); ?> *</p>
+				<div class="pack scroll" style="width: 315px;">
+					<?php foreach($this->categoriesSelect as $category) { ?>
+					<?php if(!empty($category['id'])) { ?>
+					<p><input type="checkbox" value="<?php echo $category['id']; ?>" name="category[<?php echo $category['id']; ?>]" id="custom_categories_<?php echo $category['id']; ?>"<?php echo in_array($category['id'], $this->d['selected_categories']) ? ' checked="checked"' : '' ?> /><label for="custom_categories_<?php echo $category['id']; ?>"><?php echo $category['name']; ?></label></p>
+					<?php } ?>
+					<?php } ?>
+				</div>
+			</p>
+			<?php if(isset($this->error['edemo_url'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['edemo_url']; ?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="demo_url" class="label"><?php echo $this->translate('Demo URL'); ?><br class="hide" /></label>
+				<input type="text" name="demo_url" id="demo_url" value="<?php echo $this->d['demo_url']; ?>"<?php echo isset($this->error['edemo_url']) ? ' class="errorborder"' : ''; ?> />
+				<a href="#" class="tooltip" title="<?php echo $this->translate('*Optional* link for a live preview on your own hosting(i.e. http://my-site.com/demo/).'); ?>">?</a>
+			</p>
+			<?php if($this->attributes) { ?>
+			<?php if(isset($this->error['eattributes'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['eattributes']; ?></p>
+			<?php } ?>
+			<?php $cnt = count($this->attributes); $name = ''; ?>
+			<?php for($i = 0; $i < $cnt; $i++) { ?>
+			<?php if($this->attributes[$i]['type'] == 'check' || $this->attributes[$i]['type'] == 'radio') { ?>
+			<div class="check">
+				<p class="label"><?php if($name != $this->attributes[$i]['head_name']) { echo $this->attributes[$i]['head_name']; if($this->attributes[$i]['required'] == 1) echo ' *'; $name = $this->attributes[$i]['head_name']; } ?></p>
+				<div class="pack">
+					<p><input type="<?php echo $this->attributes[$i]['type'] == 'check' ? 'checkbox' : 'radio'; ?>" value="<?php echo $this->attributes[$i]['id']; ?>" name="attributes[<?php echo $this->attributes[$i]['head_id']; ?>][<?php echo $this->attributes[$i]['id']; ?>]" id="custom_attributes_<?php echo $this->attributes[$i]['id']; ?>"<?php echo in_array($this->attributes[$i]['id'], $this->d['selected_attributes']) ? ' checked="checked"' : '' ?> /><label for="custom_attributes_<?php echo $this->attributes[$i]['id']; ?>"><?php echo $this->attributes[$i]['name']; ?></label></p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<?php } elseif($this->attributes[$i]['type'] == 'select') { ?>
+			<p class="input">
+				<label for="custom_attributes_<?php echo $this->attributes[$i]['head_id'];?>" class="label"><?php echo $this->attributes[$i]['head_name']; if($this->attributes[$i]['required'] == 1) echo ' *'?><br class="hide" /></label>
+				<select name="attributes[<?php echo $this->attributes[$i]['head_id']; ?>]" id="custom_attributes_<?php echo $this->attributes[$i]['head_id'];?>">
+					<?php for(; $i < $cnt; $i++) { ?>
+					<option value="<?php echo $this->attributes[$i]['id']; ?>"<?php echo $this->d['attributes'][$this->attributes[$i]['head_id']] == $this->attributes[$i]['id'] ? ' selected="selected"' : ''; ?>><?php echo $this->attributes[$i]['name']; ?></option>
+					<?php if($this->attributes[$i]['head_name'] != $this->attributes[$i + 1]['head_name']) break; ?>
+					<?php } ?>
+				</select>
+			</p>
+			<?php } else { ?>
+			<p class="input">
+				<label for="custom_attributes_<?php echo $this->attributes[$i]['head_id'];?>" class="label"><?php echo $this->attributes[$i]['head_name']; if($this->attributes[$i]['required'] == 1) echo ' *'; ?><br class="hide" /></label>
+				<input type="text" name="attributes[<?php echo $this->attributes[$i]['head_id']; ?>]" id="custom_attributes_<?php echo $this->attributes[$i]['head_id'];?>" value="<?php echo isset($this->d['attributes'][$this->attributes[$i]['head_id']]) ? $this->d['attributes'][$this->attributes[$i]['head_id']] : ''; ?>" />
+			</p>
+			<?php } ?>
+			<?php } ?>
+			<?php } ?>
+			<h3 class="title-5"><?php echo $this->translate('Tags'); ?></h3>
+			<?php if(isset($this->error['etags'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['etags']; ?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="tags" class="label"><?php echo $this->translate('Tags'); ?> *<br class="hide" /></label>
+				<input type="text" autocomplete="off" name="tags" id="tags" value="<?php echo $this->d['selected_tags']; ?>"<?php echo isset($this->error['etags']) ? ' class="errorborder"' : '' ?> />
+				<a href="#" class="tooltip" title="<?php echo $this->translate('eg photography, designer, fashion, PHP'); ?>">?</a>
+			</p>
+			<div class="shadowbox nsh">
+				<div class="pad">
+					<div class="content">
+						<p class="center"><?php echo $this->translate('Enter up to 15 tags accross all categories.'); ?></p>
+					</div>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<h3 class="title-2"><?php echo $this->translate('Message to item reviewer'); ?></h3>
+			<div class="textarea">
+				<label for="comments_to_reviewer" class="label"><?php echo $this->translate('Comment'); ?><br class="hide" /></label>
+				<textarea name="reviewer_comment" id="comments_to_reviewer" rows="10"><?php echo $this->d['reviewer_comment']; ?></textarea>
+				<a href="#" class="tooltip" title="<?php echo $this->translate('Here you can enter the amount you would like to sell your product. Note that this price will be reviewed by our administrator and he will decide the final price of your product.'); ?>">?</a>
+			</div>
+			<div class="clear nsh"></div>
+			<?php if(isset($this->error['esuggested_price'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['esuggested_price']; ?></p>
+			<?php } ?>
+			<p class="input">
+				<label for="suggested_price" class="label"><?php echo $this->translate('Suggested price'); ?> *<br class="hide" /></label>
+				<input type="text" name="suggested_price" id="suggested_price" value="<?php echo $this->d['suggested_price']; ?>"<?php echo isset($this->error['esuggested_price']) ? ' class="errorborder"' : '' ?> />
+				<a href="#" class="tooltip" title="<?php echo $this->translate('Here you can enter the amount you would like to sell your product. Note that this price will be reviewed by our administrator and he will decide the final price of your product.'); ?>">?</a>
+			</p>
+			<?php if(isset($this->error['esource_license'])) { ?>
+			<p class="small errormessage"><?php echo $this->error['esource_license']; ?></p>
+			<?php } ?>
+			<div class="check">
+				<p class="label"></p>
+				<div class="pack">
+					<p>
+						<input type="checkbox" name="source_license" id="source_license"<?php echo isset($this->d['source_license']) ? ' checked="checked"' : '' ?> /><label for="source_license"><?php echo $this->translate('Terms'); ?></label>
+						<span><a href="#" class="tooltip" title="<?php echo $this->translate('Any images / sounds / video / code / flash used which are not my own work have been appropriately licensed for resale. Other than these items, this work is entirely my own and I have full rights to sell it on website.'); ?>">?</a></span>
+					</p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="check">
+				<p class="label"></p>
+				<div class="pack">
+					<p>
+						<input type="checkbox" name="free_request" value="true" id="free_request" <?php echo isset($this->d['free_file']) && $this->d['free_file'] == 'true' ? 'checked="checked"' : ''; ?> /><label for="free_request"><?php echo $this->translate('Free file'); ?></label>
+					</p>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<p class="submit"><input type="submit" value="<?php echo $this->translate('Save Changes'); ?>" /></p>
+		</form>
+		<form id="form_zip" method="post" action="<?php echo $this->file_upload; ?>" enctype="multipart/form-data">
+			<p id="fi2" class="hide"></p>
+		</form>
+	</div>
+	<div id="sidebar" class="withhead">
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Select category'); ?></h3>
+					<p>
+						<label for="select-2"></label>
+						<select name="category" id="select-2">
+							<?php foreach($this->categories as $category) { ?>
+							<option value="<?php echo $category['href']?>"<?php echo $category['id'] == $this->sel_category ? ' selected="selected"' : ''?>><?php echo $category['name']?></option>
+							<?php } ?>
+						</select>
+					</p>
+				</div>	
+			</div>
+		</div>
+		<?php if($this->page_upload_item) { ?>
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Help'); ?></h3>
+					<p><?php echo $this->translate('Read more on how to upload and edit your product:'); ?> <a href="<?php echo $this->page_upload_item['href']; ?>"><?php echo $this->page_upload_item['name']; ?></a></p>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Current Rate'); ?></h3>
+					<div class="rates">
+						<div class="column">
+							<h4><?php echo $this->percent['percent'];?>%</h4>
+							<p class="label"><?php echo $this->translate('Rates'); ?></p>
+							<p class="tip"><a href="#" class="tooltip" title="<?php echo $this->translate('Your rates are determined based on whether you are selling items exclusively on the Marketplaces and on your volume of sales.'); ?>">?</a></p>
+						</div>
+						<div class="column border">
+							<h4><?php echo (int)$this->total_sales_cnt; ?></h4>
+							<p class="label"><?php echo $this->translate('Total Sales'); ?></p>
+						</div>
+						<div class="clear"></div>
+					</div>
+					</ul>
+				</div>	
+			</div>
+		</div>
+		<div class="balance">
+			<h3><?php echo $this->translate('Current balance'); ?></h3>
+			<p class="total"><?php echo $this->total_balance; ?></p>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<script>var autoPath = '<?php echo $this->autocomplete; ?>'; </script>
+
+<?php echo $this->footer_part; ?>

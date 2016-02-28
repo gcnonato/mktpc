@@ -1,0 +1,127 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/payout.png">
+		<?php echo $this->translate('Withdrawals');?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<div class="clear"></div>
+</div>
+
+
+
+<p class="info">
+	<?php echo $this->translate('Gain paying up');?>.<br>
+</p>
+
+<table cellspacing="0" cellpadding="0" class="display">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th class="left"><?php echo $this->translate('User');?></th>
+			<th class="left"><?php echo $this->translate('Currenet ballance');?></th>
+			<th class="left"><?php echo $this->translate('Amount');?></th>
+			<th class="left"><?php echo $this->translate('Payment Method');?></th>
+			<th class="left"><?php echo $this->translate('Text');?></th>
+			<th class="left"><?php echo $this->translate('Request date');?></th>
+			<th width="50"><?php echo $this->translate('Paid');?></th>
+			<th width="50"><?php echo $this->translate('Paid Date');?></th>
+			<th width="50"><?php echo $this->translate('Pay out');?></th>
+			<th width="50"><?php echo $this->translate('Delete');?></th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->withdraws) { ?>
+	<?php foreach($this->withdraws AS $payment) { ?>
+		<tr>
+			<td><?php echo $payment['username'];?></td>
+			<td><?php echo $payment['earning'];?></td>
+			<td><?php echo $payment['amount'];?></td>
+			<td><?php echo $payment['method'];?></td>
+			<td><?php echo $payment['text'];?></td>
+			<td><?php echo $payment['datetime'];?></td>
+			<td style="text-align:center;font-weight:bold;color: <?php echo ($payment['paid'] == 'true' ? '#48691d;' : '#bd2929');?>">
+				<?php echo ($payment['paid'] == 'true' ? $this->translate('Yes') : $this->translate('No'));?>
+			</td>
+            <td><?php echo $payment['paid_datetime'];?></td>
+			<td align="center">
+				<?php if($payment['paid'] != 'true') { ?>
+				<a href="<?php echo $module;?>/gainpayingup/edit/?id=<?php echo $payment['id'];?>&page=<?php echo $this->page_num;?>">
+					<img title="<?php echo $this->translate('Pay out');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/edit.png">
+				</a>
+				<?php } ?>
+			</td>
+			<td align="center">
+				<?php if($payment['paid'] != 'true') { ?>
+				<a href="javascript:void(0);" class="delete" id="item_<?php echo $payment['id'];?>"><img src="cms/<?php echo $module;?>/images/delete.png" class="tooltip"  alt="" title="<?php echo $this->translate('Delete');?>"/></a>
+				<?php } ?>
+			</td>
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="10">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+
+<script type="text/javascript"> 
+// <![CDATA[
+$(document).ready(function () {
+	deleteInit();
+});
+
+function deleteInit() {
+	$('a.delete').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/gainpayingup/delete/",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function (result) {
+                	if(result == '1') {
+	                    parent.fadeOut(400, function () {
+	                        parent.remove();
+	                    });
+                	} else {
+                		parent.animate({
+                            'backgroundColor': 'transparent'
+                        }, 400);
+                	}
+                }
+            });
+        }
+    });
+}
+
+// ]]>
+</script>

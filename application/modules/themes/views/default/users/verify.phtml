@@ -1,0 +1,45 @@
+<?php echo $this->header_part; ?>
+
+<div id="content">
+	<div id="main">
+		<div class="breadcrumb">
+			<p><a href="/"><?php echo $this->translate('Home'); ?></a> &nbsp;&rsaquo;&nbsp; <?php echo $this->title; ?></p>
+		</div>
+		<div class="textpage">
+			<div class="viewall"><p><?php echo $this->status; ?></p></div>
+			<div class="textbox">
+				<p><?php echo $this->description; ?></p>
+				<?php if($this->options) { ?>
+				<ul>
+				<?php foreach($this->options as $option) { ?>
+					<li><a href="<?php echo $option['href']; ?>"><?php echo $option['name'] ?></a></li>
+				<?php } ?>
+				</ul>
+				<?php } ?>
+			</div>
+		</div>
+	</div>
+	<div id="sidebar">
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Current Stats'); ?></h3>
+					<div class="rates">
+						<div class="column">
+							<h4><?php echo $this->usersCount?></h4>
+							<p class="label"><?php echo $this->usersCount; ?> <?php echo $this->usersCount > 1 ? $this->translate('members') : $this->translate('member'); ?></p>
+						</div>
+						<div class="column border">
+							<h4><?php echo $this->itemsCount?></h4>
+							<p class="label"><?php echo $this->itemsCount > 1 ? $this->translate('Items') : $this->translate('Item'); ?></p>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<?php echo $this->footer_part; ?>

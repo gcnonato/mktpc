@@ -1,0 +1,32 @@
+<?php 
+$request = $this->getRequest();
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?php echo $this->placeholder('title');?></title>
+<link href="<?php echo $request->getBaseUrl();?>data/themes/favicon.ico" rel="shortcut icon"/>
+<meta name="description" content="<?php echo $this->placeholder('description');?>" />
+<meta name="keywords" content="<?php echo $this->placeholder('keywords');?>" />
+
+	<base href="<?php echo $request->getBaseUrl();?>" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="data/themes/js/libs/head.min.js"></script>
+	<script type="text/javascript" src="data/themes/js/libs/bbc/jquery.bbedit.min.js"></script>
+	<script type="text/javascript" src="data/themes/js/main.js"></script>
+
+	<?php echo $this->placeholder('inhead');?>
+	
+	<?php echo $this->placeholder('google_analytics');?>
+	<style type="text/css">#tm {display:none;}</style>
+</head>
+
+<body>
+<div id="tm">
+<?php echo $this->placeholder('content');?>
+</div>
+</body>
+</html>
+	

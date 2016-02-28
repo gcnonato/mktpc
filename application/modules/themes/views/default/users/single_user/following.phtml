@@ -1,0 +1,18 @@
+<div class="row rowauthor">
+	<div class="author">
+		<?php if(isset($this->user['follow_href'])) { ?>
+		<p class="follow"><a href="<?php echo $this->user['follow_href']; ?>" class="button-silver"><?php echo $this->user['follow_href_name']; ?></a></p>
+		<?php } ?>
+		<p class="avatar"><a href="<?php echo $this->user['portfolio_href']; ?>"><img src="<?php echo $this->user['avatar']; ?>" alt="<?php echo $this->user['username']; ?>" /></a></p>
+		<h3><?php echo $this->user['username']; ?></h3>
+		<p class="desc"><?php echo $this->translate('Author has'); ?> <?php echo $this->user['items']; ?> <?php echo $this->translate('items for sale and has racked up'); ?> <?php echo $this->user['sales']; ?> <?php echo $this->translate('sales'); ?>!</p>
+		<p class="more"><a href="<?php echo $this->user['portfolio_href']; ?>"><?php echo $this->translate('View portfolio'); ?></a></p>
+	</div>
+	<?php if($this->user_items) {
+		$cnt = count($this->user_items); 
+		for($i = 0; $i < $cnt; $i++)
+			echo '<div class="box'. ($i == ($cnt - 1) ? ' last' : '') .'">'. $this->user_items[$i] .'</div>'; 
+	} ?>
+	<div class="clear"></div>
+	<span class="pad"><span class="bg"><span class="end"></span></span></span>
+</div>

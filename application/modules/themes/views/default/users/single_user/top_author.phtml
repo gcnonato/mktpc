@@ -1,0 +1,28 @@
+<div class="row">
+	<p class="thumb"><a href="<?php echo $this->user['portfolio_href']; ?>"><img src="<?php echo $this->user['avatar']; ?>" alt="Avatar" /></a><?php if($this->list_type == 'top') { ?><span class="position"><?php echo $this->user['position']; ?></span><?php } ?></p>
+	<div class="authorinfo">
+		<h4 class="title"><a href="<?php echo $this->user['portfolio_href']; ?>"><?php echo $this->user['username']; ?></a></h4>
+		<div class="badges">
+			<p class="icons"><?php $cnt = count($this->badges);?>
+			<?php for($i = 0; $i < $cnt; $i++) { ?>
+			<a href="#" class="tooltip" title="<?php echo $this->badges[$i]['name']; ?>"><img src="<?php echo $this->badges[$i]['photo']; ?>" alt="<?php echo $this->badges[$i]['name']; ?>" /></a>
+			<?php } ?></p>	
+			<div class="totalitems">
+				<p class="p-1"><?php echo $this->user['aitems']; ?> <?php echo $this->user['aitems'] == 1 ? $this->translate('Item') : $this->translate('Items'); ?></p>
+				<p><a <?php echo $this->user['followers'] == 0 ? 'href="#" onclick="javascript:void(0);return false;"' : 'href="'. $this->user['followers_href'] .'"'; ?>><?php echo $this->user['followers']; ?> <?php echo $this->user['followers'] == 1 ? $this->translate('Follower') : $this->translate('Followers'); ?></a>, <a <?php echo $this->user['following'] == 0 ? 'href="#" onclick="javascript:void(0);return false;"' : 'href="'. $this->user['following_href'] .'"'; ?>><?php echo $this->user['following']; ?> <?php echo $this->translate('Following'); ?></a></p>
+				<p><?php echo $this->user['freelance'] == 'true' ? $this->translate('Available for freelance work') :  $this->translate('Not available for freelance work');?></p>
+			</div>
+			<div class="sales">
+				<p class="stars"><?php
+					if($this->user['rating'])
+						echo str_repeat('<img src="data/themes/images/star.png" alt="Star" />', $this->user['rating']);
+				?></p>
+				<p class="total"><?php echo $this->user['sales']; ?> <span><?php echo $this->user['sales'] == 1 ? $this->translate('Sale') : $this->translate('Sales'); ?></span></p>
+				<p class="buttons"><a href="<?php echo $this->user['portfolio_href']; ?>" class="button-silver"><?php echo $this->translate('Portfolio'); ?></a><?php if(isset($this->user['follow_href'])) { ?> <a href="<?php echo $this->user['follow_href']; ?>" class="button-blue"><?php echo $this->user['follow_name']; ?></a><?php } ?></p>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<span class="pad"><span class="bg"><span class="end"></span></span></span>
+</div>

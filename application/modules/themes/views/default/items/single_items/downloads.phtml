@@ -1,0 +1,25 @@
+<div class="row">
+	<p class="thumb"><a href="<?php echo  $this->item['href']; ?>"><img src="<?php echo $this->item['thumbnail']; ?>" alt="<?php echo $this->item['name']; ?>" /></a></p>
+	<div class="info">
+		<h4 class="title"><?php echo $this->item['name']; ?></h4>
+		<p class="meta"><a href="<?php echo $this->item['regular_href']; ?>"><?php echo $this->item['extended'] == 'false' ? $this->translate('Regular Licence') : $this->translate('Full Licence'); ?></a> | <a href="<?php echo $this->item['licence_href']; ?>"><?php echo $this->translate('Licence Sertificate') ?></a></p>
+		<div class="price">
+			<p class="total"><?php echo $this->item['votes']; ?> <?php echo $this->item['votes'] == 1 ? $this->translate('Vote') : $this->translate('Votes'); ?></p>
+			<p class="stars">
+			<?php if($this->item['rate'] && JO_Session::get('user_id')) { ?>
+			<?php echo $this->item['rating'] > 0 ? str_repeat('<img src="data/themes/images/star.png" alt="Star" />', $this->item['rating']) : ''?>
+			<?php } ?></p>
+			<p class="buttons"><a href="<?php echo $this->item['download_href']; ?>" class="button-blue"><?php echo $this->translate('download'); ?></a></p>
+			<?php  if(!$this->item['rate'] && JO_Session::get('user_id')) { ?>
+			<div class="clear"></div>
+			<a href="<?php echo $this->rate_link;?>" id="basic_href" class="hide"></a>
+			<div class="basic" id="5_<?php echo $this->item['id']?>"></div>
+			<?php } ?>
+		</div>
+	</div>
+	<?php if(isset($this->item['delete_href'])) { ?>
+	<a href="#" onclick="javascript: if(confirm('<?php echo $this->item['delete_txt']; ?>')){ window.location.href='<?php echo $this->item['delete_href']; ?>';} return false;" class="close">X</a>
+	<?php } ?>
+	<div class="clear"></div>
+	<span class="pad"><span class="bg"><span class="end"></span></span></span>
+</div>

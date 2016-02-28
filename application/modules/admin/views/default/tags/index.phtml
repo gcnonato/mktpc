@@ -1,0 +1,217 @@
+<?php 
+	$module = $this->getRequest()->getModule();
+?>
+
+<div class="info_line top">
+	<h3 class="fleft title">
+		<img alt="" src="cms/<?php echo $module;?>/images/gallery-sml.png">
+		<?php echo $this->translate('Tags');?>
+	</h3>
+	
+	<?php if($this->successfu_edite) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgOk"><span><?php echo $this->translate('Successfully!');?></span><?php echo $this->translate('Information was successfully changed!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<?php if($this->tag_exists) { ?>
+	<span id="fader" class="fleft mleft30"><span class="msgError"><span><?php echo $this->translate('Error!');?></span><?php echo $this->translate('This tag already exists!');?></span></span>
+	<script type="text/javascript"> 
+	// <![CDATA[
+	$(document).ready(function() {       
+		setTimeout(function() {
+			$("#fader").customFadeOut("slow" ,    
+			function() {       
+				$("#fader").remove();  
+			});
+		},
+		4000);
+	});
+	// ]]>
+	</script>
+	<?php } ?>
+	
+	<div class="fright mtop3">
+		<a class="button" href="<?php echo $module;?>/tags/create/<?php echo ($this->page_num ? '?page=' . $this->page_num : '');?>"><?php echo $this->translate('Add new');?></a>
+	</div>
+	<div class="clear"></div>
+</div>
+
+
+
+<p class="info">
+	<?php echo $this->translate('Tags Manager');?>.<br>
+	<strong><?php echo $this->translate('Note: If you delete an entry, information will be lost.');?></strong>
+</p>
+<form action="<?php echo $module;?>/tags/" method="get" id="testtt">
+<table cellspacing="0" cellpadding="0" class="display">
+	<thead>
+		<tr class="nodrop nodrag">
+			<th width="20" class="left">#</th>
+			<th class="left"><?php echo $this->translate('Tag');?></th>
+			<th width="50"><?php echo $this->translate('Visible');?></th>
+			<th width="50"><?php echo $this->translate('Edit');?></th>
+			<th width="50"><?php echo $this->translate('Delete');?></th>
+		</tr>
+		<tr class="search">
+			<th class="left">
+				<input class="inputbox" type="text" name="filter_id" value="<?php echo $this->filter_id;?>" size="4" />
+			</th>
+			<th class="left">
+				<input class="inputbox item_title" type="text" name="filter_name" value="<?php echo $this->filter_name;?>" size="30" />
+			</th>
+			
+			<th class="left">
+				<select name="filter_visible" class="inputbox" style="width: 60px;">
+					<?php if($this->filter_visible == 'true') { ?>
+					<option value=""></option>
+					<option selected="selected" value="true"><?php echo $this->translate('Yes');?></option>
+					<option value="false"><?php echo $this->translate('No');?></option>
+					<?php } elseif($this->filter_visible == 'false') { ?>
+					<option value=""></option>
+					<option value="true"><?php echo $this->translate('Yes');?></option>
+					<option selected="selected" value="false"><?php echo $this->translate('No');?></option>
+					<?php } else { ?>
+					<option value=""></option>
+					<option value="true"><?php echo $this->translate('Yes');?></option>
+					<option value="false"><?php echo $this->translate('No');?></option>
+					<?php } ?>
+				</select>
+			</th>
+			<th colspan="2">
+					<input type="submit" value="<?php echo $this->translate('Filter');?>" class="button">
+					&nbsp; <a href="<?php echo $module;?>/tags/"><img src="cms/<?php echo $module;?>/images/reload.png" class="tooltip"  alt="" title="<?php echo $this->translate('Reset');?>" /></a>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php if($this->tags) { ?>
+	<?php foreach($this->tags AS $tag) { ?>
+		<tr id="<?php echo $tag['id'];?>">
+			<td><?php echo $tag['id'];?>.</td>
+			<td>
+				<?php echo $tag['name'];?> 
+			</td>
+
+			<td align="center">
+				<a href="javascript:void(0);" onclick="changeStatus(<?php echo $tag['id'];?>);">
+					<img src="cms/<?php echo $module;?>/images/<?php echo ($tag['visible'] == 'true' ? 'yes.png' : 'no.png');?>" class="tooltip"  alt="" title="<?php echo ($tag['visible'] == 'true' ? $this->translate('Yes') : $this->translate('No'));?>" />
+				</a>
+			</td>
+            
+			<td align="center"><a href="<?php echo $module;?>/tags/edit/?id=<?php echo $tag['id'];?><?php echo ($this->page_num ? '&page=' . $this->page_num : '');?>"><img title="<?php echo $this->translate('Edit');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/edit.png"></a></td>
+			<td align="center">
+				<a id="item_<?php echo $tag['id'];?>" class="delete" href="javascript:void(0);"><img title="<?php echo $this->translate('Delete');?>" alt="" class="tooltip" src="cms/<?php echo $module;?>/images/delete.png"></a>
+			</td>
+		</tr>
+	<?php } ?>
+	<?php } else { ?>
+		<tr class="nodrop nodrag">
+			<td colspan="5">
+				<div class="msgAlert"><span><?php echo $this->translate('Attention!');?></span><?php echo $this->translate('No records found ...');?></div>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
+</form>
+<?php if($this->pagination) { ?>
+<br />
+<div class="fleft">
+<?php echo $this->translate('Page');?> <b><?php echo $this->page_num;?></b> <?php echo $this->translate('from');?> <b><?php echo $this->total_pages;?></b> (<b><?php echo $this->total_rows;?></b> <?php echo $this->translate('records');?>)
+</div>
+<div class="pagination fright">
+	<?php echo $this->pagination;?>
+</div>
+<div class="clear"></div>
+<?php } ?>
+<script type="text/javascript"> 
+// <![CDATA[
+$(document).ready(function(){
+	var cache = {},
+	lastXhr;
+	$( ".item_title" ).autocomplete({
+		minLength: 2,
+		source: function( request, response ) {
+			var term = request.term;
+			if ( term in cache ) {
+				response( cache[ term ] );
+				return;
+			}
+	
+			lastXhr = $.getJSON( "<?php echo $module;?>/tags/liveSearch/", request, function( data, status, xhr ) {
+				cache[ term ] = data;
+				if ( xhr === lastXhr ) {
+					response( data );
+				}
+			});
+		}
+	});
+});
+//]]>
+</script>
+<script type="text/javascript"> 
+// <![CDATA[
+
+changeStatus = function(id) {
+	$.ajax({
+        type: 'post',
+        url: "<?php echo $module;?>/tags/changeStatus",
+        data: 'id=' + id,
+        beforeSend: function () {
+			$('#'+id).animate({
+                'backgroundColor': '#FFBFBF'
+            }, 400);
+        },
+        success: function () {
+        	$.get(window.location.href, function(data){
+        		$('#'+id).html($(data).find('#'+id).html());
+        		setTimeout(function(){
+        			$("#"+id+"").animate({'backgroundColor': 'transparent'}, 400).find('.tooltip').simpletooltip();
+        			deleteInit();
+        		}, 500);
+        	});
+        }
+	});
+};
+
+function deleteInit() {
+	$('a.delete').unbind('click').click(function (e) {
+        if (confirm(lang.confirm)) {
+            e.preventDefault();
+            var parent = $(this).parents('tr');
+            $.ajax({
+                type: 'post',
+                url: "<?php echo $module;?>/tags/delete/",
+                data: 'id=' + $(this).attr('id').replace('item_', ''),
+                beforeSend: function () {
+                    parent.animate({
+                        'backgroundColor': '#FFBFBF'
+                    }, 400);
+                },
+                success: function () {
+                    parent.fadeOut(400, function () {
+                        parent.remove();
+                    });
+                }
+            });
+        }
+    });
+}
+
+$(document).ready(function() {       
+	deleteInit();
+});
+// ]]>
+</script>

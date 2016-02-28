@@ -1,0 +1,285 @@
+<div id="sidebar" class="withhead">
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<?php if($this->item['free_file'] == 'true') { ?>
+					<h3 class="title"><?php echo $this->translate('Free file'); ?></h3>
+					<div class="license">
+						<p><?php echo $this->translate('This file is marked as free. Every user has one personal license for free private use.'); ?></p>
+						<div class="clear mgnt20px"></div>
+						<p class="buynow"><a href="<?php echo $this->free_link; ?>" class="button-blue"><?php echo $this->translate('Download'); ?></a></p>
+					</div>
+					<?php } else { ?>
+					<ul id="accordion">
+						<?php if(isset($this->user['license']['personal'])) { ?>
+						<li>
+							<h3 class="title"><?php echo $this->translate('Personal use license'); ?></h3>
+							<div class="license">
+								<p><?php echo $this->translate('You can use this item in a website (commercial, personal, client), or intranet site project.'); ?></p>
+								<div class="price">
+									<p class="sum"><?php echo $this->item['price']; ?></p>
+									<?php if(JO_Session::get('user_id')) { ?>
+									<?php if(!$this->owner) { ?>
+									<p class="buynow"><a href="#" id="buy_now_lnk" class="button-blue"><?php echo $this->translate('Buy Now'); ?></a></p>
+									<?php } ?>
+									<?php } else { ?>
+									<p class="buynow"><a href="<?php echo $this->login_link; ?>" class="button-blue"><?php echo $this->translate('Buy Now'); ?></a></p>
+									<?php } ?>
+									<div class="clear"></div>
+								</div>
+								<?php if(!$this->owner) { ?>
+								<?php if($this->prepaid_price) { ?>
+								<p class="prepaid"><a href="#" class="tooltip" title="<?php echo sprintf($this->translate('With our deposit system not only will purchasing be much faster, but we\'ll also take %s of the price!'), $this->your_profit); ?>">?</a> <?php echo $this->translate('Prepaid customers pay just'); ?> <?php echo $this->prepaid_price; ?></p>
+								<?php } ?>
+								<?php } else { ?>
+								<p class="prepaid"><?php echo $this->item['is_buyed']; ?></p>
+								<?php } ?>
+								<?php } ?>
+								<?php if(isset($this->user['license']['extended'])) { ?>
+								<p class="full"><a href="#" id="full"><?php echo $this->translate('Full license'); ?> – <?php echo $this->item['extended_price']; ?></a></p>
+								<?php } ?>
+							</div>
+						</li>
+						<?php if(isset($this->user['license']['extended'])) { ?>
+						<li>
+							<h3 class="title"><?php echo $this->translate('Extended license'); ?></h3>
+							<div class="license">
+								<p><?php echo $this->translate('a template for a Web Service such as WPMU, or as part of a Software Package for sale'); ?></p>
+								<div class="price">
+									<p class="sum"><?php echo $this->item['extended_price']; ?></p>
+									<?php if(JO_Session::get('user_id')) { ?>
+									<?php if(!$this->owner) { ?>
+									<p class="buynow"><a href="#" id="buy_now_lnk_full" class="button-blue"><?php echo $this->translate('Buy Now'); ?></a></p>
+									<?php } ?>
+									<?php } else { ?>
+									<p class="buynow"><a href="<?php echo $this->login_link; ?>" class="button-blue"><?php echo $this->translate('Buy Now'); ?></a></p>
+									<?php } ?>
+									<div class="clear"></div>
+								</div>
+								<?php if($this->owner) { ?>
+								<p class="prepaid"><?php echo $this->item['is_buyed']; ?></p>
+								<?php } ?>
+								<?php if(isset($this->user['license']['personal'])) { ?>
+								<p class="full"><a href="#" id="personal"><?php echo $this->translate('Personal license'); ?> – <?php echo $this->item['price']; ?></a></p>
+								<?php } ?>
+							</div>
+						</li>
+						<?php } ?>
+					</ul>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
+		<?php if(JO_Session::get('user_id') != $this->item['user_id']) { ?>
+		<?php if(isset($this->item['is_buyed']) && $this->item['free_file'] != 'true') { ?>
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Download'); ?></h3>
+					<div class="license">
+						<p><?php echo $this->item['is_buyed']; ?></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+		<?php } ?>
+		<div class="box rating">
+			<div class="pad">
+				<div class="content">
+					<div class="votes">
+						<p class="stars"><?php
+							if($this->item['rating'])
+								echo str_repeat('<img src="data/themes/images/star.png" alt="Star" />', $this->item['rating']);
+						?></p>
+						<p class="total"><?php echo $this->item['votes']?> <?php echo $this->item['votes'] == 1 ? $this->translate('Vote') : $this->translate('Votes'); ?></p>
+					</div>
+					<h3 class="title"><?php echo $this->translate('Rating'); ?></h3>
+					<div class="rate">
+						<div class="sales noborder">
+							<p class="total"><?php echo $this->item['sales']?></p>
+							<p class="label"><?php echo $this->item['sales'] == 1 ? $this->translate('Sale') : $this->translate('Sales'); ?></p>
+						</div>
+						<div class="comments">
+							<p class="total"><?php echo $this->item['comments']?></p>
+							<?php if($this->comment_link) { ?>
+							<p class="label"><a href="<?php echo $this->comment_link; ?>"><?php echo $this->item['comments'] == 1 ? $this->translate('Comment') : $this->translate('Comments'); ?></a></p>
+							<?php } else { ?>
+							<p class="label"><?php echo $this->item['comments'] == 1 ? $this->translate('Comment') : $this->translate('Comments'); ?></p>
+							<?php } ?>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Characteristics') ?></h3>
+					<div class="chars">
+						<table cellpadding="0" cellspacing="0" border="0">
+							<tr>
+								<td class="caption"><?php echo $this->translate('Created'); ?></td>
+								<td><?php echo $this->item['datetime']; ?></td>
+							</tr>
+							<?php if($this->attributes || $this->attributes_pic) { ?>
+							<?php $cnt = count($this->attributes); $name = '';?>
+							<?php for($i = 0; $i < $cnt; $i++) { ?>
+							<tr>
+								<td class="caption"><?php if($name != $this->attributes[$i]['category']) { echo $this->attributes[$i]['category']; $name =  $this->attributes[$i]['category']; } ?></td>
+								<td><?php if(isset($this->attributes[$i + 1]['category']) && $this->attributes[$i]['category'] == $this->attributes[$i + 1]['category']) {
+									$output = array();
+									for(; $i < $cnt; $i++) {
+										if($this->attributes[$i]['search'] == 'true') {
+											$output[] = '<a href="'. $this->attributes[$i]['href'] .'">'. $this->attributes[$i]['name'] .'</a>';
+										} else {
+											$output[] = $this->attributes[$i]['name'];
+										}
+										if($this->attributes[$i]['category'] != $this->attributes[$i + 1]['category']) {
+											break;
+										}
+									}
+									echo implode(', <br />', $output);
+								} else {
+									if($this->attributes[$i]['search'] == 'true') {
+										echo '<a href="'. $this->attributes[$i]['href'] .'">'. $this->attributes[$i]['name'] .'</a>';
+									} else {
+										echo $this->attributes[$i]['name'];
+									}
+								} ?></td>
+							</tr>
+							<?php } ?>
+							<?php $cnt = count($this->attributes_pic); ?>
+							<?php $name = ''; ?>
+							<?php for($i = 0; $i < $cnt; $i++) { ?>
+							<tr>
+								<td class="caption"><?php if($name != $this->attributes_pic[$i]['category']) { echo $this->attributes_pic[$i]['category']; $name =  $this->attributes_pic[$i]['category']; } ?></td>
+								<td class="ntp nrp"><?php if(isset($this->attributes_pic[$i + 1]['category']) && $this->attributes_pic[$i]['category'] == $this->attributes_pic[$i + 1]['category']) {
+									$output = array();
+									for(; $i < $cnt; $i++) {
+										$output[] = '<a '. ($this->attributes_pic[$i]['search'] == 'false' ? 'href="#" onclick="javascript:void(0);return false;"' : 'href="#"') .' class="filesicon"><img src="'. $this->attributes_pic[$i]['photo'] .'" alt="'. $this->attributes_pic[$i]['name'] .'" /></a>';
+										
+										if(isset($this->attributes_pic[$i + 1]['category']) && $this->attributes_pic[$i]['category'] != $this->attributes_pic[$i + 1]['category']) {
+											break;
+										}
+									}
+									echo implode(' ', $output);
+								} else {
+									if($this->attributes_pic[$i]['search'] == 'true') {
+										echo '<a href="'. $this->attributes_pic[$i]['href'] .'" class="filesicon"><img src="'. $this->attributes_pic[$i]['photo'] .'" alt="'. $this->attributes_pic[$i]['name'] .'" /></a>';
+									} else {
+										echo '<img src="'. $this->attributes_pic[$i]['photo'] .'" alt="'. $this->attributes_pic[$i]['name'] .'" />';
+									}
+									
+								} ?></td>
+							</tr>
+							<?php } ?>
+							<?php } ?>
+						</table>
+					</div>
+				</div>	
+			</div>
+		</div>
+		<div class="author">
+			<div class="content">
+				<h3 class="title"><?php echo $this->translate('Author’s info'); ?></h3>
+				<div class="info">
+					<p class="avatar mgnl17px"><a href="<?php echo $this->user['userhref']; ?>"><img src="<?php echo $this->user['avatar']?>" alt="<?php echo $this->user['username']; ?>" /></a></p>
+					<div class="portfolio">
+						<h4 class="name"><a href="<?php echo $this->user['userhref']; ?>"><?php echo $this->user['username']; ?></a></h4>
+						<p class="btn"><a href="<?php echo $this->user['userhref']; ?>" class="button-silver"><?php echo $this->translate('View Portfolio'); ?></a></p>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<?php if($this->user_badges) { ?>
+				<ul class="badges">
+					<?php foreach($this->user_badges as $badg) { ?>
+					<li style="background-image:url(<?php echo $badg['photo']; ?>);"><?php echo $badg['name']; ?></li>
+					<?php } ?>
+				</ul>
+				<?php } ?>
+			</div>
+		</div>
+		<?php if(JO_Session::get('user_id') && $this->is_index) { ?>
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Bookmarks'); ?></h3>
+					<form action="<?php echo $this->bookmark_link?>" id="bookmark" method="post" class="upload">
+					<input type="hidden" name="item_id" value="<?php echo $this->item['id']?>" />
+					<p>
+						<label for="slct"></label>
+						<select name="collection_id" id="slct">
+							<?php foreach($this->bookcollections as $bookmark) { ?>
+							<option value="<?php echo $bookmark['id']; ?>"><?php echo $bookmark['name']; ?></option>
+							<?php } ?>
+						</select>
+					</p>
+					</form>
+					<form action="<?php echo $this->upload_link; ?>" method="post" class="dropform hide" enctype="multipart/form-data" id="collection">
+						<input type="hidden" name="item_id" value="<?php echo $this->item['id']?>" />
+						<p>
+							<label for="col-1" class="hide"><?php echo $this->translate('Title'); ?><br /></label>
+							<input type="text" name="name" id="col-1" value="<?php echo $this->translate('Title'); ?>" />
+						</p>
+						<p>
+							<label for="col-2" class="hide"><?php echo $this->translate('Description'); ?><br /></label>
+							<textarea id="col-2" name="description" cols="50" rows="5"><?php echo $this->translate('Description'); ?></textarea>
+						</p>
+						<p class="upload">
+							<span class="thumb"><?php echo $this->translate('Add cover image'); ?></span>
+							<a href="#" class="button-silver" onclick="javascript:$('#file_upload').trigger('click'); void(0); return false;">Browse</a>
+							<input type="file" name="file_upload" id="file_upload" value="" />
+							<br class="clear" />
+						</p>
+						<p>
+							<input type="checkbox" id="col-3" name="publically_visible" /><label for="col-3"><?php echo $this->translate('Make Public'); ?></label>
+						</p>
+						<p class="submit"><input type="submit" value="<?php echo $this->translate('Save'); ?>" /></p>
+					</form>
+					<p class="submit"><input type="submit" value="Bookmark" class="bookmark" onclick="javascript: $('#bookmark').submit();" /> <a href="#" class="button-silver newcollection nmrg" onclick="javascript: $('#collection').toggle();return false;"><?php echo $this->translate('New Collection'); ?></a></p>
+				</div>	
+			</div>
+		</div>
+		<?php } ?>
+		<?php if($this->tags) { ?>
+		<div class="tags">
+			<?php foreach($this->tags as $tag) { ?>
+			<a href="<?php echo $tag['href']; ?>"><span><?php echo $tag['name']; ?></span></a> 
+			<?php } ?>
+			<div class="clear"></div>
+		</div>
+		<?php } ?>
+		<?php if($this->is_index) { ?>
+		<div class="box">
+			<div class="pad">
+				<div class="content">
+					<h3 class="title"><?php echo $this->translate('Spread to World'); ?></h3>
+					<ul class="socials">
+						<li class="first">
+							<p class="label"><?php echo $this->translate('Like on') ?> Facebook</p>
+							<div class="button"><iframe src="//www.facebook.com/plugins/like.php?locale=en_US&amp;href=<?php echo $this->full_url; ?>&amp;send=false&amp;layout=button_count&amp;width=150&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:150px; height:21px;" allowTransparency="true"></iframe></div>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<p class="label"><?php echo $this->translate('Share on'); ?> Tweeter</p>
+							<div class="button"><a href="https://twitter.com/share" class="twitter-share-button">Tweet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<p class="label"><?php echo $this->translate('Vote on'); ?> Google+</p>
+							<div class="button"><script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script><g:plusone></g:plusone></div>
+							<div class="clear"></div>
+						</li>
+						<li>
+							<p class="label"><?php echo $this->translate('Pin on'); ?> Pinterest</p>
+							<div class="button"><a href="http://pinterest.com/pin/create/button/?url=<?php echo $this->base_url;?>&media=<?php echo $this->full_url; ?>%2F<?php echo $this->base_url.$this->item['big_image']; ?>&description=<?php echo $this->item['short_description']; ?>"><img src="http://passets-lt.pinterest.com/images/about/buttons/pinterest-button.png" width="80" height="28" alt="Follow Me on Pinterest" /></a></div>
+							<div class="clear"></div>
+						</li>
+					</ul>
+				</div>	
+			</div>
+		</div>
+		<?php } ?>
+	</div>
